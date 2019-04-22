@@ -13,7 +13,15 @@ subsection simulation control
   set output frequency        = 1
   set subdivision             = 3
 end
-
+#---------------------------------------------------
+# Force
+#---------------------------------------------------
+subsection forces
+    set verbosity           = verbose
+    set force name          = force
+    set torque name         = torque
+    set output frequency    = 1
+end
 #---------------------------------------------------
 # FEM
 #---------------------------------------------------
@@ -34,7 +42,8 @@ end
 #---------------------------------------------------
 subsection mesh
     set type                 = gmsh
-    set file name            = vonKarman_structured_fine.msh
+    set file name            = cylinder_structured.msh
+
 end
 
 # --------------------------------------------------
@@ -80,7 +89,7 @@ end
 # Non-Linear Solver Control
 #---------------------------------------------------
 subsection non-linear solver
-  set tolerance               = 1e-6
+  set tolerance               = 1e-4
   set max iterations          = 10
 end
 
@@ -88,17 +97,12 @@ end
 # Linear Solver Control
 #---------------------------------------------------
 subsection linear solver
-  set pressure rhs              = false  # This is a work in progress
-  set method                    = amg
-  set max iters                 = 200
-  set relative residual         = 1e-3
-  set minimum residual          = 1e-7
-  set ilu fill                  = 1
-  set ilu absolute tolerance    = 1e-8
-  set ilu relative tolerance    = 1.00
-  set amg aggregation threshold = 1e-14  # Aggregation
-  set amg n cycles              = 2      # Number of AMG cycles
-  set amg w cycles              = true  # W cycles, otherwise V cycles
-  set amg smoother sweeps       = 2      # Sweeps
-  set amg smoother overlap      = 1      # Overlap
+  set pressure rhs            = false  # This is a work in progress
+  set method                  = gmres
+  set max iters               = 5000
+  set relative residual       = 1e-4
+  set minimum residual        = 1e-9
+  set ilu fill               = 1
+  set ilu absolute tolerance = 1e-5
+  set ilu relative tolerance = 1.00
 end
