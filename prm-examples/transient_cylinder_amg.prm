@@ -9,7 +9,8 @@ subsection simulation control
   set method                  = backward
   set time step               = 0.01
   set time end                = 200
-  set output name             = transientVonKarman_
+  set output path           = output/
+  set output name             = transientcylinder
   set output frequency        = 10
   set subdivision             = 1
 end
@@ -38,15 +39,15 @@ end
 # FEM
 #---------------------------------------------------
 subsection FEM
-    set velocity order            = 2
-    set pressure order            = 2
+    set velocity order            = 1
+    set pressure order            = 1
 end
 
 #---------------------------------------------------
 # Physical Properties
 #---------------------------------------------------
 subsection physical properties
-    set kinematic viscosity            = 0.00025
+    set kinematic viscosity            = 0.02500
 end
 
 #---------------------------------------------------
