@@ -1,6 +1,6 @@
 // Define a variable
-L=3;
-H=1;
+L=32;
+H=16;
 y0=0;
 y1=H;
 
@@ -9,16 +9,16 @@ x1 =L;
 //nr=30;
 //nt=30;
 //nl=150;
-nr=50;
-nt=50;
-nl=200;
+nr=60;
+nt=60;
+nl=150;
 
-xc=1;
-yc=0.5;
-r=0.025;
+xc=8;
+yc=8;
+r=0.5;
 srq=1.414213562/2.*r;
 
-Ls=15*r;
+Ls=10*r;
 ss=1.414213562/2.*Ls;
 
 xs0=xc-ss;
@@ -26,7 +26,7 @@ xs1=xc+ss;
 ys0=yc-ss;
 ys1=yc+ss;
 
-lc = 0.04;
+lc = 0.20;
 
 Point(0) = {x0, y0, 0, lc};
 Point(1) = {x0, y1, 0, lc};
@@ -97,7 +97,7 @@ Line(53)={21,31};
 Transfinite Line {3,22,4,10,34,20,32,13,40,41,42,43} = Ceil(nt) Using Progression 1.0;
 // Radial direction
 Transfinite Line {50,51,52,53} = Ceil(nr) Using Progression 1.05;
-Transfinite Line {5,21,23,6} = Ceil(nl) Using Progression 1.005;
+Transfinite Line {5,21,23,6} = Ceil(nl) Using Progression 1.00;
 
 //
 //
