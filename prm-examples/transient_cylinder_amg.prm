@@ -36,6 +36,16 @@ subsection timer
 end
 
 #---------------------------------------------------
+# Initial condition
+#---------------------------------------------------
+subsection initial conditions
+    set type = viscous
+    set viscosity = 1
+    subsection uvw
+            set Function expression = 1; 0;
+    end
+end
+#---------------------------------------------------
 # FEM
 #---------------------------------------------------
 subsection FEM

@@ -31,6 +31,16 @@ subsection FEM
 end
 
 #---------------------------------------------------
+# Initial condition
+#---------------------------------------------------
+subsection initial conditions
+    set type = viscous
+    set viscosity = 1
+    subsection uvw
+            set Function expression = 1; 0;
+    end
+end
+#---------------------------------------------------
 # Physical Properties
 #---------------------------------------------------
 subsection physical properties
