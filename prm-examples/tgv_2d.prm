@@ -7,20 +7,20 @@
 #---------------------------------------------------
 subsection simulation control
   set method                  = backward
-  set time step               = 0.01    # Time step
+  set time step               = 0.005    # Time step
     set number mesh adapt     = 0       # If steady, nb mesh adaptation
   set time end                = 1.00      # End time of simulation
   set output path             = output/ # Path to where the output results are made
   set output name             = tgv # Prefix for VTU outputs
   set output frequency        = 1       # Frequency of simulation output
-  set subdivision             = 1       # Mesh subdivision when outputend
+  set subdivision             = 4       # Mesh subdivision when outputend
 end
 #---------------------------------------------------
 # FEM
 #---------------------------------------------------
 subsection FEM
-    set velocity order            = 1
-    set pressure order            = 1
+    set velocity order            = 2
+    set pressure order            = 2
 end
 
 
@@ -37,14 +37,14 @@ end
 subsection initial conditions
     set type = L2projection
     subsection uvwp
-            set Function expression = cos(x)*sin(y); +sin(x)*cos(y); -1./4*(cos(2*x)+cos(2*y));
+            set Function expression = cos(x)*sin(y); -sin(x)*cos(y); -1./4*(cos(2*x)+cos(2*y));
     end
 end
 #---------------------------------------------------
 # Physical Properties
 #---------------------------------------------------
 subsection physical properties
-    set kinematic viscosity            = 0.100
+    set kinematic viscosity            = 1.000
 end
 
 #---------------------------------------------------
