@@ -8,7 +8,7 @@ c=len(arr1[0])
 h=arr1[1][0]-arr1[0][0];
 kerate=0.0
 Enrate=0.0
-n=0.01                      #kinematic viscosity
+n=0.000625                      #kinematic viscosity
 l2=[]
 l3=[]
 for i in range(0,r):
