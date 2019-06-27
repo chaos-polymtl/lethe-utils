@@ -30,7 +30,7 @@ t_ike,ike=np.loadtxt(fname_ke,skiprows=1,unpack=True)
 t_ens,ens=np.loadtxt(fname_ens,skiprows=1,unpack=True)
 t_ref,ref=np.loadtxt(fname_ref,skiprows=1,unpack=True)
 
-ens=ens*viscosity * 2
+ens=ens*viscosity*2 
 
 
 plt.plot(t_ike,ike,label="Kinetic energy dissipation")

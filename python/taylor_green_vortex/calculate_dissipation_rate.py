@@ -26,15 +26,15 @@ h=arr1[1][0]-arr1[0][0];
 kerate=0.0
 l2=[]
 for i in range(0,r):
-   if i==0:
-      kerate=-(arr1[1][1]-arr1[0][1])/h
-      l2.append(kerate)
-   elif i==r-1:
-      kerate=-(arr1[i-1][1]-arr1[i][1])/(h)
-      l2.append(kerate)
-   else:
-      kerate=-(arr1[i+1][1]-arr1[i-1][1])/(2*h)
-      l2.append(kerate)
+    if i==0:
+       kerate=-(arr1[1][1]-arr1[0][1])/h
+    elif i==r-1:
+       kerate=(arr1[i-1][1]-arr1[i][1])/(h)
+    elif (i==1) or (i==(r-2)):
+       kerate=-(arr1[i+1][1]-arr1[i-1][1])/(2*h)
+    else:
+       kerate=-(1./12 * arr1[i-2][1]  - 2./3. *arr1[i-1][1] + 2./3. * arr1[i+1][1]- 1./12.*arr1[i+2][1])/h
+    l2.append(kerate)
 DataOut = np.column_stack((t,l2))
 
 np.savetxt('KErate_3D.dat',DataOut)
