@@ -23,7 +23,7 @@ viscosity=args.viscosity
 fname_ke=args.kinetic_rate
 fname_ens=args.enstrophy
 
-prefix_ref="/reference/jacobs_rateE_256.dat"
+prefix_ref="/reference/wang_2013.dat"
 fname_ref=os.path.dirname(os.path.realpath(__file__))+prefix_ref
 
 t_ike,ike=np.loadtxt(fname_ke,skiprows=1,unpack=True)
