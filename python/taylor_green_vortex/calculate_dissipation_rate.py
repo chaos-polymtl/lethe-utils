@@ -11,9 +11,11 @@ import numpy as np
 
 parser = argparse.ArgumentParser(description='Arguments for calculation of the dissipation rate')
 parser.add_argument("-i", "--input", type=str, help="Name of the input file", required=True)
+parser.add_argument("-o", "--output", type=str, default="ke_rate.dat",  help="Name of the output file", required=False)
 args, leftovers=parser.parse_known_args()
 
 fname=args.input
+outname=args.output
 
 arr1=np.loadtxt(fname,skiprows=1)
 
@@ -37,4 +39,4 @@ for i in range(0,r):
     l2.append(kerate)
 DataOut = np.column_stack((t,l2))
 
-np.savetxt('KErate_3D.dat',DataOut)
+np.savetxt(outname,DataOut)

@@ -22,10 +22,10 @@ import re
 #********************************
 #   OPTIONS AND USER PARAMETERS
 #********************************
-skip=100
+skip=30
 png=True
 pdf=False
-tminFFT=200.
+tminFFT=50.
 #Figure size
 plt.rcParams['figure.figsize'] = 10, 7
 

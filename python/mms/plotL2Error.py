@@ -18,7 +18,7 @@ from matplotlib import rcParams
 # User parameter
 outputPDF=False
 outputPNG=True
-showGraphic=True
+showGraphic=False
 
 
 # Modify font of the graphic
