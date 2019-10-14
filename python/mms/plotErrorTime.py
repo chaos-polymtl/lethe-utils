@@ -51,27 +51,55 @@ def rsquared(x, y):
 #================================
 syms = ["^","o","s", ">"]
 labels = ["P1","P2","P3", "P4"]
+
+# Error vs Time
+
 fig = plt.figure()
 ax = fig.add_subplot(111) # Create plot object
 ax.set_yscale('log')
 ax.set_xscale('log')
 plt.ylabel('$\Vert e \Vert_2 $')
 plt.xlabel('Simulation time [s]')
-
 for i in range(0,len(sys.argv)-1):
 
     fname = sys.argv[i+1]
 
     #Input file
     print ("R-> %s" %fname)
-    mat = numpy.loadtxt(fname)
-    time=mat[:,2]
-    uL2E=mat[:,1]
+    mat = numpy.loadtxt(fname,skiprows=1,usecols=(1,3))
+    uL2E=mat[:,0]
+    time=mat[:,1]
     ax.plot(time,uL2E,"-"+syms[i],label=labels[i])
 
 ax.legend()
 plt.tight_layout()
-if (outputPNG): plt.savefig("./L2ErrorTiming.png",dpi=300)
-if (outputPDF): plt.savefig("./L2ErrorTiming.pdf")
+if (outputPNG): plt.savefig("./L2Error-vs-Timing.png",dpi=300)
+if (outputPDF): plt.savefig("./L2Error-vs-Timing.pdf")
 if (showGraphic): plt.show()
+
+# Time vs Error
+
+fig = plt.figure()
+ax = fig.add_subplot(111) # Create plot object
+ax.set_yscale('log')
+ax.set_xscale('log')
+plt.xlabel('$\Vert e \Vert_2 $')
+plt.ylabel('Simulation time [s]')
+for i in range(0,len(sys.argv)-1):
+
+    fname = sys.argv[i+1]
+
+    #Input file
+    print ("R-> %s" %fname)
+    mat = numpy.loadtxt(fname,skiprows=1,usecols=(1,3))
+    uL2E=mat[:,0]
+    time=mat[:,1]
+    ax.plot(uL2E,time,"-"+syms[i],label=labels[i])
+
+ax.legend()
+plt.tight_layout()
+if (outputPNG): plt.savefig("./Timing-vs-L2Error.png",dpi=300)
+if (outputPDF): plt.savefig("./Timing-vs-L2Error.pdf")
+if (showGraphic): plt.show()
+
 

@@ -54,12 +54,12 @@ fname = sys.argv[1]
 
 #Input file
 print ("R-> %s" %fname)
-mat = numpy.loadtxt(fname)
-nx=mat[:,0]
+mat = numpy.loadtxt(fname,skiprows=1, usecols=(0, 1))
+n=mat[:,0]
 uL2E=mat[:,1]
 #nx, uL2E = numpy.loadtxt(fname, unpack=True)
 
-dx=2**nx
+dx=(n)**0.5
 fig = plt.figure()
 
 ax = fig.add_subplot(111) # Create plot object
