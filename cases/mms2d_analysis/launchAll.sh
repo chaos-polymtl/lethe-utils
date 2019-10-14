@@ -1,7 +1,7 @@
 solver=$1
 nproc=$2
 
-declare -a arr=("O1" "O2" "O3" "O4")
+declare -a arr=("O1" "O2" "O3" "O4" "O5")
 
 for i in "${arr[@]}"
 do
@@ -15,5 +15,5 @@ do
     sleep 3
 done
 
-python3 ../../python/mms/plotErrorTime.py  O1.dat O2.dat O3.dat O4.dat
+python3 ../../python/mms/plotErrorTime.py  O1.dat O2.dat O3.dat O4.dat O5.dat
 
