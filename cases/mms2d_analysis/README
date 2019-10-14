@@ -1,0 +1,5 @@
+Usage:
+--------
+- Launch the test case with the solver of your choice with the number of processor of your choice
+   bash launchAll.sh $SOLVER $NP
+   example : bash launchAll glsNS2d 8 

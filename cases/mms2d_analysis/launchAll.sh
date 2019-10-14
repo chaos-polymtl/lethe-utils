@@ -15,3 +15,5 @@ do
     sleep 3
 done
 
+python3 ../../python/mms/plotErrorTime.py  O1.dat O2.dat O3.dat O4.dat
+
