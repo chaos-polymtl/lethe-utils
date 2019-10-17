@@ -32,7 +32,7 @@ end
 #---------------------------------------------------
 subsection FEM
     set velocity order            = 5
-    set pressure order            = 5
+    set pressure order            = 4
 end
 # --------------------------------------------------
 # Boundary Conditions
