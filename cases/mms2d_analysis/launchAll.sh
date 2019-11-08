@@ -1,7 +1,7 @@
 solver=$1
 nproc=$2
 
-declare -a arr=("O1" "O2" "O3" "O4" "O5")
+declare -a arr=("O2" "O3" "O4" "O5")
 
 for i in "${arr[@]}"
 do
