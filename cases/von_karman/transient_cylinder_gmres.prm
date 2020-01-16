@@ -6,21 +6,37 @@
 # Simulation Control
 #---------------------------------------------------
 subsection simulation control
-  set method                  = backward
-  set time step               = 0.01
-  set time end                = 20
-  set output name             = transientVonKarman_
-  set output frequency        = 1
-  set subdivision             = 3
+  set method                  = sdirk3
+  set time step               = 0.025
+  set time end                = 200
+  set output name             = vk_cylinder
+  set output path             = output/
+  set output frequency        = 10
+  set subdivision             = 2
 end
 #---------------------------------------------------
 # Force
 #---------------------------------------------------
 subsection forces
     set verbosity           = verbose
+    set calculate forces      = true
     set force name          = force
     set torque name         = torque
     set output frequency    = 1
+end
+
+subsection restart
+  # Enable checkpointing
+  set checkpoint = true
+
+  # Prefix for the filename of checkpoints
+  set filename   = restart
+
+  # Frequency for checkpointing
+  set frequency  = 100
+
+  # Frequency for checkpointing
+  set restart    = true
 end
 #---------------------------------------------------
 # FEM
@@ -34,17 +50,17 @@ end
 # Initial condition
 #---------------------------------------------------
 subsection initial conditions
-    set type = viscous
-    set viscosity = 1
-    subsection uvw
-            set Function expression = 1; 0;
+    set type = L2projection
+    set viscosity = 100
+    subsection uvwp
+            set Function expression = 1; 0; 0;
     end
 end
 #---------------------------------------------------
 # Physical Properties
 #---------------------------------------------------
 subsection physical properties
-    set kinematic viscosity            = 0.0002
+    set kinematic viscosity            = 0.005
 end
 
 #---------------------------------------------------
@@ -94,12 +110,20 @@ subsection mesh adaptation
   set fraction refinement     = 0.200
   set fraction coarsening     = 0.10
 end
-
+#----------------------------------------------------
+# Timer
+#----------------------------------------------------
+subsection timer
+  # Clock monitoring methods Choices are <none|iteration|end>.
+  set type = iteration
+end
 # --------------------------------------------------
 # Non-Linear Solver Control
 #---------------------------------------------------
 subsection non-linear solver
-  set tolerance               = 1e-4
+  set solver                  = skip_newton
+  set skip iterations         = 6
+  set tolerance               = 1e-3
   set max iterations          = 10
 end
 
@@ -107,12 +131,19 @@ end
 # Linear Solver Control
 #---------------------------------------------------
 subsection linear solver
-  set pressure rhs            = false  # This is a work in progress
-  set method                  = gmres
-  set max iters               = 5000
+  set method                  = amg
+  set max iters               = 2000
   set relative residual       = 1e-4
-  set minimum residual        = 1e-9
-  set ilu fill               = 1
-  set ilu absolute tolerance = 1e-5
-  set ilu relative tolerance = 1.00
+  set minimum residual        = 1e-6
+  set ilu preconditioner fill               = 2
+  set ilu preconditioner absolute tolerance = 1e-15
+  set ilu preconditioner relative tolerance = 1.00
+  set amg aggregation threshold                 = 1e-10
+  set amg n cycles                              = 1
+  set amg preconditioner ilu absolute tolerance = 1e-8
+  set amg preconditioner ilu fill               = 3
+  set amg preconditioner ilu relative tolerance = 1.00
+  set amg smoother overlap                      = 1
+  set amg smoother sweeps                       = 2
+  set amg w cycles                              = false
 end

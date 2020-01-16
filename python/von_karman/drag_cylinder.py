@@ -25,7 +25,7 @@ import re
 skip=30
 png=True
 pdf=False
-tminFFT=50.
+tminFFT=100.
 #Figure size
 plt.rcParams['figure.figsize'] = 10, 7
 
@@ -90,7 +90,8 @@ axfftp.grid(b=True, which='minor', color='grey', linestyle='--')
 axfftp.grid(b=True, which='major', color='k', linestyle='--')
 if (pdf): plt.savefig("./fftcylinder.pdf")
 if (png): plt.savefig("./fftcylinder.png")
-
+strouhalt_index = np.where(spectrum1 == np.amax(spectrum1))
+strouhalt=f1[strouhalt_index]
 
 ax = plt.figure("Drag coefficient") #Create window
 axp=ax.add_subplot(111)
@@ -107,6 +108,7 @@ print ("Amplitude CD:\t", (np.max(fx1[index])-np.min(fx1[index]))/2)
 
 print ("Amplitude CL:\t", (np.max(fy1[index])-np.min(fy1[index]))/2)
 print ("Average CL:\t", np.average(fy1[index]))
+print ("Strouhalt :\t", strouhalt)
 axp.grid(b=True, which='major', color='k', linestyle='--')
 plt.axis((0,300,-1,1.5))
 if (pdf): plt.savefig("./dragcylinder.pdf")
