@@ -20,12 +20,10 @@ end
 # Mesh
 #---------------------------------------------------
 subsection mesh
-    set type                 = primitive
-    set primitive type       = hyper_cube
-    set arg1                 = -1
-    set arg2                 = 1
+    set type                 = dealii
+    set grid type            = hyper_cube
+    set grid arguments       = -1 : 1 : false
     set initial refinement   = 4
-
 end
 #---------------------------------------------------
 # FEM
@@ -105,7 +103,7 @@ subsection linear solver
   set ilu preconditioner absolute tolerance    = 1e-14
   set ilu preconditioner relative tolerance    = 1.00
   set amg aggregation threshold = 1e-14  # Aggregation
-  set amg preconditioner ilu fill                  = 1
+  set amg preconditioner ilu fill                  = 0
   set amg preconditioner ilu absolute tolerance    = 1e-12
   set amg preconditioner ilu relative tolerance    = 1.00
   set amg aggregation threshold = 1e-14  # Aggregation
@@ -113,4 +111,5 @@ subsection linear solver
   set amg w cycles              = false  # W cycles, otherwise V cycles
   set amg smoother sweeps       = 2      # Sweeps
   set amg smoother overlap      = 1      # Overlap
+  set verbosity               = verbose
 end

@@ -67,4 +67,5 @@ if (zoom):
 plt.tight_layout()
     
 plt.savefig("dissipation_comparison.png",dpi=300)
+plt.savefig("dissipation_comparison.pdf")
 plt.show()

@@ -28,15 +28,10 @@ end
 subsection restart
   # Enable checkpointing
   set checkpoint = true
-
   # Prefix for the filename of checkpoints
   set filename   = restart
-
-  # Frequency for checkpointing
   set frequency  = 100
-
-  # Frequency for checkpointing
-  set restart    = true
+  set restart    = false
 end
 #---------------------------------------------------
 # FEM
