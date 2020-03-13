@@ -45,9 +45,9 @@ ens=ens*viscosity*2
 fig = plt.figure(facecolor='white')
 
 ax = fig.add_subplot(111)
-plt.plot(t_ike,ike,label="Kinetic energy dissipation",color=colors[0],lw=2)
-plt.plot(t_ens,ens,label="Enstrophy energy dissipation",color=colors[1],lw=2)
-plt.plot(t_ref,ref,label="Reference",color=colors[2],lw=2)
+plt.plot(t_ike,ike,label="Kinetic energy dissipation",color=colors[1],lw=2.)
+plt.plot(t_ens,ens,label="Enstrophy energy dissipation",color=colors[0],lw=2.)
+plt.plot(t_ref,ref,'--',label="Reference",color="black",lw=2.)
 plt.xlabel('Time [s]')
 plt.ylabel('Energy dissipation [W]')
 plt.legend(loc=4)
@@ -56,13 +56,13 @@ if (zoom):
     #this is an inset axes over the main axes
     inset_axes = inset_axes(ax, 
                     width="25%", # width = 30% of parent_bbox
-                    height=1.0, # height : 1 inch
+                    height=1.4, # height : 1 inch
                     loc=1)
     # the main axes is subplot(111) by default
-    plt.plot(t_ike,ike,label="Kinetic energy dissipation",color=colors[0],lw=2)
-    plt.plot(t_ens,ens,label="Enstrophy energy dissipation",color=colors[1],lw=2)
-    plt.plot(t_ref,ref,label="Reference",color=colors[2],lw=2)
-    plt.axis([8.5,9.5,0.012,0.013])
+    plt.plot(t_ike,ike,label="Kinetic energy dissipation",color=colors[1],lw=2)
+    plt.plot(t_ens,ens,label="Enstrophy energy dissipation",color=colors[0],lw=2)
+    plt.plot(t_ref,ref,'--',label="Reference",color="black",lw=2)
+    plt.axis([8.0,10.0,0.011,0.013])
 
 plt.tight_layout()
     
