@@ -76,7 +76,7 @@ for i in range(0,len(sys.argv)-1):
     dx=(n)**0.5
     a,b = numpy.polyfit(numpy.log(dx),numpy.log(uL2E),1)
     #color = next(ax._get_lines.prop_cycler)['color']
-    ax.plot(dx,uL2E,syms[i],color=colors[i],label='$\Vert e_{\mathbf{u}}\Vert_{2}$')
+    ax.plot(dx,uL2E,syms[i],color=colors[i],label=labels[i] + ' - $\Vert e_{\mathbf{u}}\Vert_{2}$')
     ax.plot(dx,numpy.exp(b)*dx**a,'-',color=colors[i],label="$\mathcal{O} (\Delta x^{%3.1f})$" %(a))
 
 #ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05),
@@ -108,7 +108,7 @@ for i in range(0,len(sys.argv)-1):
     time=mat[:,1]
     ax.plot(uL2E,time,"-"+syms[i],label=labels[i],color=colors[i])
 
-ax.grid(b=True, which='minor', color='grey', linestyle='--')
+ax.grid(b=True, which='minor', color='grey',alpha=0.5, linestyle='--')
 ax.grid(b=True, which='major', color='k', linestyle='-')
 ax.legend()
 plt.tight_layout()
