@@ -3,7 +3,7 @@ import numpy as np
 
 geo_template = "packed_bed_template.geo"
 
-datafilename = "datafile.txt" #To be changed for the name of the file taht contains de positions and radiuses of the spheres
+datafilename = "datafile.txt" #To be changed for the name of the file that contains the positions and radiuses of the spheres
 geofilename = "packed_bed.geo" #To be changed for the name of the .geo file you want to create
 
 x,y,z,r = np.loadtxt(datafilename, skiprows=1, unpack=True)
