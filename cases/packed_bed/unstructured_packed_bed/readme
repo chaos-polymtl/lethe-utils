@@ -1,0 +1,6 @@
+For both conventional meshes and solid meshes (Nitsche), the .geo file is generated using a python script (generate_pb_geo.py), that uses a template to recreate a certain format. It is therefore suggested not to change the template files (packed_bed_template.geo and solid_mesh_template.geo). 
+
+In the python scripts, you might want to change the name of the file that contains the positions and radiuses of the spheres (datafilename). You could also want the created .geo file to be called something else than "packed_bed.geo", you can change that.
+You might also want to change the dimensions of the packed bed, under "#Dimensions of the box"
+Lastly, you might want to modify the minimal and maximal lengths of the cells under "#Length of cells"
+

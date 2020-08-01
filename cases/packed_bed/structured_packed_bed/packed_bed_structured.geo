@@ -25,7 +25,6 @@ EndFor
 
 // Deleting the spheres from the geometry
 BooleanDifference(n*n*n+2) = { Volume{1}; Delete; }{ Volume{2 : n*n*n+1}; Delete;};
-Physical Volume(100) = v(#v()-1);
 
 Mesh.CharacteristicLengthMin = 0.0200;
 Mesh.CharacteristicLengthMax = 0.100;
