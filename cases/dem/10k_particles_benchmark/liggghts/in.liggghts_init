@@ -1,0 +1,81 @@
+#NOTE : Toutes les dimensions ont ete divise par 10. Cela fait des particules de 55 micron de rayon! Le FCC est surement plus petit, mais pas tant que cela.
+
+
+
+echo            both
+#log             ../reacteurFCC/log.liggghts
+#thermo_log      ../reacteurFCC/post/thermo.txt
+log             ./log.liggghts
+thermo_log      ./post/thermo.txt
+
+atom_style      granular
+atom_modify     map array
+communicate     single vel yes
+
+boundary        f f f
+newton          off
+processors      1 1 1 
+
+units           si
+
+region          domain block -0.030 0.030 -0.030 0.030 0 0.09 units box
+create_box      1 domain
+
+# Attention a prendre un neighbhor qui est >2X le rayon!
+neighbor        0.0025 bin
+neigh_modify    every 20 delay 0 check no
+
+# Material properties required for granular pair styles
+
+fix         m1 all property/global youngsModulus peratomtype 1.e8
+fix         m2 all property/global poissonsRatio peratomtype 0.3
+fix         m3 all property/global coefficientRestitution peratomtypepair 1 0.9
+fix         m4 all property/global coefficientFriction peratomtypepair 1 0.3
+fix         m5 all property/global coefficientRollingFriction peratomtypepair 1 0.1
+
+# pair style
+pair_style  gran model hertz tangential history cohesion off rolling_friction epsd2 # Hertzian without cohesion
+pair_coeff  * *
+
+# timestep, gravity
+#Le pas de temps critique depend de la taille, il faut donc le baisser ici
+timestep    0.0000010
+fix         gravi all gravity 9.81 vector 0.0 0.0 -1.0
+
+# walls
+fix     xwalls1  all wall/gran model hertz tangential history primitive type 1 xplane -0.030
+fix     ywalls1  all wall/gran model hertz tangential history primitive type 1 yplane -0.030
+fix     xwalls2  all wall/gran model hertz tangential history primitive type 1 xplane +0.030
+fix     ywalls2  all wall/gran model hertz tangential history primitive type 1 yplane +0.030
+fix     zwalls1  all wall/gran model hertz tangential history primitive type 1 zplane 0.0
+fix     zwalls2  all wall/gran model hertz tangential history primitive type 1 zplane 0.10
+#fix     cylwalls all wall/gran model hertz tangential history primitive type 1 zcylinder 0.005 0. 0.
+
+# particle distributions and insertion
+region  bc block -0.029 +0.029 -0.029 0.029 0.00 0.09 #axe centre x centre y rayon bottom top
+
+# Changer le volume_limit permet d'inserer de petite particules
+fix     pts1 all particletemplate/sphere 32452867 atom_type 1 density constant 1000 radius constant 0.0010 volume_limit 1e-20
+
+fix     pdd1 all particledistribution/discrete 15485867 1 pts1 1. 
+
+fix     ins all insert/rate/region seed 123457 maxattempt 100000 distributiontemplate pdd1 nparticles 10000 particlerate 1000000 insert_every 10000 overlapcheck yes region bc ntry_mc 10000 
+
+# apply nve integration to all particles that are inserted as single particles
+fix     integr all nve/sphere
+
+# screen output
+compute         1 all erotate/sphere
+thermo_style    custom step atoms ke c_1 vol
+thermo          1000
+thermo_modify   lost ignore norm no
+
+#insert the first particles so that dump is not empty
+run    1
+dump   dmp all custom/vtk 1000 post/bed_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius 
+dump   dmp2 all custom 1000 post/bed_*.dump x y z radius 
+#dump   dumpstress all mesh/gran/VTK 200 post/mesh_*.vtk stress wear cad
+
+fix         ts_check all check/timestep/gran 1000 0.4 0.4
+run        100000 upto
+write_restart   post/restart/liggghts.restart
