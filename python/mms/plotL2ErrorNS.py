@@ -27,7 +27,7 @@ plt.rc('font', **font)
 plt.rcParams['legend.numpoints'] = 1
 params = {'backend': 'ps',
              'axes.labelsize': 24,
-             'text.fontsize': 28,
+             'font.size': 28,
              'legend.fontsize': 17,
              'xtick.labelsize': 15,
              'ytick.labelsize': 15,

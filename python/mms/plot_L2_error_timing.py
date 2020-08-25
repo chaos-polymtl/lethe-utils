@@ -29,7 +29,7 @@ plt.rc('font', **font)
 plt.rcParams['legend.numpoints'] = 1
 params = {'backend': 'ps',
              'axes.labelsize': 20,
-             'text.fontsize': 20,
+             'font.size': 20,
              'legend.fontsize': 16,
              'xtick.labelsize': 14,
              'ytick.labelsize': 14,
@@ -103,7 +103,7 @@ for i in range(0,len(sys.argv)-1):
 
     #Input file
     print ("R-> %s" %fname)
-    mat = numpy.loadtxt(fname,skiprows=1,usecols=(1,3))
+    mat = numpy.loadtxt(fname,skiprows=1,usecols=(1,5))
     uL2E=mat[:,0]
     time=mat[:,1]
     ax.plot(uL2E,time,"-"+syms[i],label=labels[i],color=colors[i])
