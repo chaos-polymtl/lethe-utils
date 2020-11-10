@@ -26,15 +26,6 @@ def dx(f):
 def dy(f):
     return diff(f,y)
 
-<<<<<<< HEAD
-eps = 0.5 
-u=sin(pi*x)*sin(pi*x)*sin(pi*y)*cos(pi*y)
-v=-sin(pi*x)*cos(pi*x)*sin(pi*y)*sin(pi*y)
-p=sin(pi*x)*sin(pi*y)
-
-print ("Verifying divergence free")
-print (dx(u)+dy(v))
-=======
 eps = 0.5
 u=sin(pi*x)*sin(pi*x)*cos(pi*y)*sin(pi*y)
 v=-cos(pi*x)*sin(pi*x)*sin(pi*y)*sin(pi*y)
@@ -42,8 +33,8 @@ v=-cos(pi*x)*sin(pi*x)*sin(pi*y)*sin(pi*y)
 p=sin(pi*x)+sin(pi*y)
 
 print ("Verifying divergence free")
-print (eps*(dx(u)+dy(v)) + u*(dx(eps))+ v*(dy(eps)))
->>>>>>> 7de8b0b949390a275185a59599a3a68c52c217a9
+print (eps*(dx(u)+dy(v)) + u*(dx(eps)) + v*(dy(eps)))
+
 
 print ("Stokes X Source term:")
 print (simplify(-laplacian(u)+dx(p)))
