@@ -14,10 +14,6 @@ def conv(u,v,f):
     cx = u * diff(f,x) 
     cy = v * diff(f,y) 
 
-def conv(u,v,f):
-    cx = u * diff(f,x)
-    cy = v * diff(f,y)
-
     return cx+cy
 
 def dx(f):
@@ -26,7 +22,7 @@ def dx(f):
 def dy(f):
     return diff(f,y)
 
-eps = 0.5
+eps = 1
 u=sin(pi*x)*sin(pi*x)*cos(pi*y)*sin(pi*y)
 v=-cos(pi*x)*sin(pi*x)*sin(pi*y)*sin(pi*y)
 
