@@ -29,25 +29,20 @@ v = exp(sin(pi*x)*sin(pi*y))/exp(1)
 
 p =  0.5 + 0.5*sin(pi*x)*sin(pi*y)
 
-print ("Verifying mass conservation")
-print (simplify(eps*(dx(u)+dy(v)) + u*(dx(eps)) + v*(dy(eps))))
+print ("Verifying divergence free")
+print (eps*(dx(u)+dy(v)) + u*(dx(eps)) + v*(dy(eps)))
 
 
 print ("Stokes X Source term:")
-print (simplify((-laplacian(u)+dx(p))/eps))
+print ((simplify(-laplacian(u)+dx(p))/eps))
 
 print ("Stokes Y Source term:")
-print (simplify((-laplacian(v)+dy(p))/eps))
+print ((simplify(-laplacian(v)+dy(p))/eps))
 
 print ("Convection X source term:")
-print (simplify((conv(eps*u,eps*v,u))/eps))
+print ((simplify(conv(eps*u,eps*v,u))/eps))
 
 print ("Convection Y source term:")
-print (simplify((conv(eps*u,eps*v,v))/eps))
-
-print("Total X")
-print (simplify((-laplacian(u)+dx(p)+conv(eps*u,eps*v,u))/eps))
-print("Total Y")
-print (simplify((-laplacian(v)+dy(p)+conv(eps*u,eps*v,v))/eps))
+print ((simplify(conv(eps*u,eps*v,v))/eps))
 
 

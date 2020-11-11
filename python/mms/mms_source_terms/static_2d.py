@@ -24,8 +24,8 @@ def dy(f):
     return diff(f,y)
 
 eps = exp(-sin(pi*x)*sin(pi*y))/exp(1)
-u = exp(sin(pi*x)*sin(pi*y))/exp(1)
-v = exp(sin(pi*x)*sin(pi*y))/exp(1)
+u = 0#exp(sin(pi*x)*sin(pi*y))/exp(1)
+v = 0#exp(sin(pi*x)*sin(pi*y))/exp(1)
 
 p =  0.5 + 0.5*sin(pi*x)*sin(pi*y)
 

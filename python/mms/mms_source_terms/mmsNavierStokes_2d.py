@@ -32,10 +32,10 @@ print ("Verifying divergence free")
 print (dx(u)+dy(v))
 
 print ("Stokes X Source term:")
-print (-laplacian(u)+dx(p))
+print (simplify(-laplacian(u)+dx(p)))
 
 print ("Stokes Y Source term:")
-print (-laplacian(v)+dy(p))
+print (simplify(-laplacian(v)+dy(p)))
 
 print ("Convection X source term:")
 print (simplify(conv(u,v,u)))
