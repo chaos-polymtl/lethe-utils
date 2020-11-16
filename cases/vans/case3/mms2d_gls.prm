@@ -1,0 +1,145 @@
+# Listing of Parameters
+# ---------------------
+# --------------------------------------------------
+# Simulation and IO Control
+#---------------------------------------------------
+subsection simulation control
+  set method                  = bdf2
+  set number mesh adapt       = 0
+  set output name              = mms2d_
+  #set startup time scaling         = 0.4
+  set time end                     = 1
+  set time step                    = 0.1
+
+  
+end
+
+#---------------------------------------------------
+# Physical Properties
+#---------------------------------------------------
+subsection physical properties
+    set kinematic viscosity            = 1.000
+end
+
+#---------------------------------------------------
+# Mesh
+#---------------------------------------------------
+subsection mesh
+    set type                 = dealii
+    set grid type            = hyper_cube
+    set grid arguments       = -1 : 1 : false
+    set initial refinement   = 6
+end
+
+
+#---------------------------------------------------
+# Void Fraction
+#---------------------------------------------------
+subsection void fraction
+   set mode = function
+     subsection function
+     set Function expression = (1 - 0.1*cos(2*pi*t))*exp(-sin(pi*x)*sin(pi*y))/exp(1)
+     end
+end
+
+# --------------------------------------------------
+# Boundary Conditions
+#---------------------------------------------------
+subsection boundary conditions
+  set number                  = 4
+    subsection bc 0
+        set id                = 0
+        set type              = function
+        subsection u
+            set Function expression = cos(2*pi*t)*exp(sin(pi*x)*sin(pi*y))/exp(1)
+        end
+        subsection v
+            set Function expression = cos(2*pi*t)*exp(sin(pi*x)*sin(pi*y))/exp(1)
+        end
+end
+	
+    subsection bc 1
+        set id                = 1
+        set type              = function
+        subsection u
+            set Function expression = cos(2*pi*t)*exp(sin(pi*x)*sin(pi*y))/exp(1)
+        end
+        subsection v
+            set Function expression = cos(2*pi*t)*exp(sin(pi*x)*sin(pi*y))/exp(1)
+        end
+end
+	
+    subsection bc 2
+        set id                = 2
+        set type              = function
+        subsection u
+            set Function expression = cos(2*pi*t)*exp(sin(pi*x)*sin(pi*y))/exp(1)
+        end
+        subsection v
+            set Function expression = cos(2*pi*t)*exp(sin(pi*x)*sin(pi*y))/exp(1)
+        end
+end
+	
+    subsection bc 3
+        set id                = 3
+        set type              = function
+        subsection u
+            set Function expression = cos(2*pi*t)*exp(sin(pi*x)*sin(pi*y))/exp(1)
+        end
+        subsection v
+            set Function expression = cos(2*pi*t)*exp(sin(pi*x)*sin(pi*y))/exp(1)
+        end
+end
+end
+
+
+# --------------------------------------------------
+# Source term
+#---------------------------------------------------
+subsection source term
+  set enable                 = true
+    subsection xyz
+            set Function expression = 1.0*pi*(1.0*pi*exp(sin(pi*x)*sin(pi*y) + 2)*sin(pi*x)^2*cos(2*pi*t)*cos(pi*y)^2 - 2.0*pi*exp(sin(pi*x)*sin(pi*y) + 2)*sin(pi*x)*sin(pi*y)*cos(2*pi*t) + 1.0*pi*exp(sin(pi*x)*sin(pi*y) + 2)*sin(pi*y)^2*cos(2*pi*t)*cos(pi*x)^2 + 0.1*exp(sin(pi*x)*sin(pi*y))*sin(pi*x)*cos(2*pi*t)^3*cos(pi*y) - 1.0*exp(sin(pi*x)*sin(pi*y))*sin(pi*x)*cos(2*pi*t)^2*cos(pi*y) + 0.1*exp(sin(pi*x)*sin(pi*y))*sin(pi*y)*cos(2*pi*t)^3*cos(pi*x) - 1.0*exp(sin(pi*x)*sin(pi*y))*sin(pi*y)*cos(2*pi*t)^2*cos(pi*x) + 2.0*exp(1)*sin(2*pi*t) - 0.2*exp(1)*sin(4*pi*t) - 0.5*exp(3)*sin(pi*y)*cos(2*pi*t)*cos(pi*x))*exp(sin(pi*x)*sin(pi*y) - 2)/(0.1*cos(2*pi*t) - 1.0); 1.0*pi*(1.0*pi*exp(sin(pi*x)*sin(pi*y) + 2)*sin(pi*x)^2*cos(2*pi*t)*cos(pi*y)^2 - 2.0*pi*exp(sin(pi*x)*sin(pi*y) + 2)*sin(pi*x)*sin(pi*y)*cos(2*pi*t) + 1.0*pi*exp(sin(pi*x)*sin(pi*y) + 2)*sin(pi*y)^2*cos(2*pi*t)*cos(pi*x)^2 + 0.1*exp(sin(pi*x)*sin(pi*y))*sin(pi*x)*cos(2*pi*t)^3*cos(pi*y) - 1.0*exp(sin(pi*x)*sin(pi*y))*sin(pi*x)*cos(2*pi*t)^2*cos(pi*y) + 0.1*exp(sin(pi*x)*sin(pi*y))*sin(pi*y)*cos(2*pi*t)^3*cos(pi*x) - 1.0*exp(sin(pi*x)*sin(pi*y))*sin(pi*y)*cos(2*pi*t)^2*cos(pi*x) + 2.0*exp(1)*sin(2*pi*t) - 0.2*exp(1)*sin(4*pi*t) - 0.5*exp(3)*sin(pi*x)*cos(2*pi*t)*cos(pi*y))*exp(sin(pi*x)*sin(pi*y) - 2)/(0.1*cos(2*pi*t) - 1.0); 0
+
+    end
+end
+
+# --------------------------------------------------
+# Analytical Solution
+#---------------------------------------------------
+subsection analytical solution
+  set enable                 = true
+    subsection uvw
+            set Function expression = cos(2*pi*t)*exp(sin(pi*x)*sin(pi*y))/exp(1); cos(2*pi*t)*exp(sin(pi*x)*sin(pi*y))/exp(1); 0.5 + 0.5*cos(2*pi*t)*sin(pi*x)*sin(pi*y)
+    end
+end
+# --------------------------------------------------
+# Mesh Adaptation Control
+#---------------------------------------------------
+subsection mesh adaptation
+  set type                    = none
+end
+
+
+# --------------------------------------------------
+# Non-Linear Solver Control
+#---------------------------------------------------
+subsection non-linear solver
+  set tolerance               = 1e-8
+  set max iterations          = 10
+  set verbosity               = verbose
+end
+
+# --------------------------------------------------
+# Linear Solver Control
+#---------------------------------------------------
+subsection linear solver
+  set method                                 = gmres
+  set max iters                              = 5000
+  set relative residual                      = 1e-4
+  set minimum residual                       = 1e-9
+  set ilu preconditioner fill                = 4
+  set ilu preconditioner absolute tolerance  = 1e-3
+  set ilu preconditioner relative tolerance  = 1.00
+  set verbosity               = verbose
+end
