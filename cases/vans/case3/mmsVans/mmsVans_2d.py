@@ -62,9 +62,11 @@ print (simplify((conv(eps*u,eps*v,u))/eps))
 print ("Convection Y source term:")
 print (simplify((conv(eps*u,eps*v,v))/eps))
 
+#+u*(dt(eps) + eps*(dx(u)+dy(v)) + u*(dx(eps)) + v*(dy(eps))) 
+#+v*(dt(eps) + eps*(dx(u)+dy(v)) + u*(dx(eps)) + v*(dy(eps)))
 print("Total X")
-print (simplify((eps*dt(u)+u*(dt(eps) + eps*(dx(u)+dy(v)) + u*(dx(eps)) + v*(dy(eps))) - laplacian(u)+dx(p) + conv(eps*u,eps*v,u))/eps))
+print (simplify((eps*dt(u) - laplacian(u)+dx(p) + conv(eps*u,eps*v,u))/eps))
 print("Total Y")
-print (simplify((eps*dt(v)+v*(dt(eps) + eps*(dx(u)+dy(v)) + u*(dx(eps)) + v*(dy(eps))) - laplacian(v)+dy(p) + conv(eps*u,eps*v,v))/eps))
+print (simplify((eps*dt(v) - laplacian(v)+dy(p) + conv(eps*u,eps*v,v))/eps))
 
 

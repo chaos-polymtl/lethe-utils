@@ -4,14 +4,21 @@
 # Simulation and IO Control
 #---------------------------------------------------
 subsection simulation control
-  set method                  = bdf2
+  set method                  = bdf1
   set number mesh adapt       = 0
-  set output name              = mms2d_
-  #set startup time scaling         = 0.4
+  set output name              = result_
+  set startup time scaling         = 0.1
   set time end                     = 1
-  set time step                    = 0.1
+  set time step                    = 0.01
+  set subdivision             = 1  
+end
 
-  
+#---------------------------------------------------
+# FEM
+#---------------------------------------------------
+subsection FEM
+    set velocity order            = 1
+    set pressure order            = 1
 end
 
 #---------------------------------------------------
@@ -40,6 +47,16 @@ subsection void fraction
      subsection function
      set Function expression = (1 - 0.1*cos(2*pi*t))*exp(-sin(pi*x)*sin(pi*y))/exp(1)
      end
+end
+
+#---------------------------------------------------
+# Initial condition
+#---------------------------------------------------
+subsection initial conditions
+    set type = L2projection
+    subsection uvwp
+            set Function expression = exp(sin(pi*x)*sin(pi*y))/exp(1); exp(sin(pi*x)*sin(pi*y))/exp(1); 0.5 + 0.5*sin(pi*x)*sin(pi*y)
+    end
 end
 
 # --------------------------------------------------
@@ -99,7 +116,10 @@ end
 subsection source term
   set enable                 = true
     subsection xyz
-            set Function expression = 1.0*pi*(1.0*pi*exp(sin(pi*x)*sin(pi*y) + 2)*sin(pi*x)^2*cos(2*pi*t)*cos(pi*y)^2 - 2.0*pi*exp(sin(pi*x)*sin(pi*y) + 2)*sin(pi*x)*sin(pi*y)*cos(2*pi*t) + 1.0*pi*exp(sin(pi*x)*sin(pi*y) + 2)*sin(pi*y)^2*cos(2*pi*t)*cos(pi*x)^2 + 0.1*exp(sin(pi*x)*sin(pi*y))*sin(pi*x)*cos(2*pi*t)^3*cos(pi*y) - 1.0*exp(sin(pi*x)*sin(pi*y))*sin(pi*x)*cos(2*pi*t)^2*cos(pi*y) + 0.1*exp(sin(pi*x)*sin(pi*y))*sin(pi*y)*cos(2*pi*t)^3*cos(pi*x) - 1.0*exp(sin(pi*x)*sin(pi*y))*sin(pi*y)*cos(2*pi*t)^2*cos(pi*x) + 2.0*exp(1)*sin(2*pi*t) - 0.2*exp(1)*sin(4*pi*t) - 0.5*exp(3)*sin(pi*y)*cos(2*pi*t)*cos(pi*x))*exp(sin(pi*x)*sin(pi*y) - 2)/(0.1*cos(2*pi*t) - 1.0); 1.0*pi*(1.0*pi*exp(sin(pi*x)*sin(pi*y) + 2)*sin(pi*x)^2*cos(2*pi*t)*cos(pi*y)^2 - 2.0*pi*exp(sin(pi*x)*sin(pi*y) + 2)*sin(pi*x)*sin(pi*y)*cos(2*pi*t) + 1.0*pi*exp(sin(pi*x)*sin(pi*y) + 2)*sin(pi*y)^2*cos(2*pi*t)*cos(pi*x)^2 + 0.1*exp(sin(pi*x)*sin(pi*y))*sin(pi*x)*cos(2*pi*t)^3*cos(pi*y) - 1.0*exp(sin(pi*x)*sin(pi*y))*sin(pi*x)*cos(2*pi*t)^2*cos(pi*y) + 0.1*exp(sin(pi*x)*sin(pi*y))*sin(pi*y)*cos(2*pi*t)^3*cos(pi*x) - 1.0*exp(sin(pi*x)*sin(pi*y))*sin(pi*y)*cos(2*pi*t)^2*cos(pi*x) + 2.0*exp(1)*sin(2*pi*t) - 0.2*exp(1)*sin(4*pi*t) - 0.5*exp(3)*sin(pi*x)*cos(2*pi*t)*cos(pi*y))*exp(sin(pi*x)*sin(pi*y) - 2)/(0.1*cos(2*pi*t) - 1.0); 0
+            set Function expression = pi*(pi*(-cos(pi*(x - y)) - cos(2*pi*(x - y))/4 + cos(pi*(x + y)) - cos(2*pi*(x + y))/4 + 1/2)*exp(sin(pi*x)*sin(pi*y) + 2)*cos(2*pi*t) + (0.1*cos(2*pi*t) - 1)*exp(sin(pi*x)*sin(pi*y))*sin(pi*(x + y))*cos(2*pi*t)^2 - 2*exp(1)*(0.1*cos(2*pi*t) - 1)*sin(2*pi*t) - 0.5*exp(3)*sin(pi*y)*cos(2*pi*t)*cos(pi*x))*exp(sin(pi*x)*sin(pi*y) - 2)/(0.1*cos(2*pi*t) - 1); pi*(pi*(-cos(pi*(x - y)) - cos(2*pi*(x - y))/4 + cos(pi*(x + y)) - cos(2*pi*(x + y))/4 + 1/2)*exp(sin(pi*x)*sin(pi*y) + 2)*cos(2*pi*t) + (0.1*cos(2*pi*t) - 1)*exp(sin(pi*x)*sin(pi*y))*sin(pi*(x + y))*cos(2*pi*t)^2 - 2*exp(1)*(0.1*cos(2*pi*t) - 1)*sin(2*pi*t) - 0.5*exp(3)*sin(pi*x)*cos(2*pi*t)*cos(pi*y))*exp(sin(pi*x)*sin(pi*y) - 2)/(0.1*cos(2*pi*t) - 1); 0
+
+            
+#1.0*pi*(1.0*pi*exp(sin(pi*x)*sin(pi*y) + 2)*sin(pi*x)^2*cos(2*pi*t)*cos(pi*y)^2 - 2.0*pi*exp(sin(pi*x)*sin(pi*y) + #2)*sin(pi*x)*sin(pi*y)*cos(2*pi*t) + 1.0*pi*exp(sin(pi*x)*sin(pi*y) + 2)*sin(pi*y)^2*cos(2*pi*t)*cos(pi*x)^2 + #0.1*exp(sin(pi*x)*sin(pi*y))*sin(pi*x)*cos(2*pi*t)^3*cos(pi*y) - 1.0*exp(sin(pi*x)*sin(pi*y))*sin(pi*x)*cos(2*pi*t)^2*cos(pi*y) + #0.1*exp(sin(pi*x)*sin(pi*y))*sin(pi*y)*cos(2*pi*t)^3*cos(pi*x) - 1.0*exp(sin(pi*x)*sin(pi*y))*sin(pi*y)*cos(2*pi*t)^2*cos(pi*x) + #2.0*exp(1)*sin(2*pi*t) - 0.2*exp(1)*sin(4*pi*t) - 0.5*exp(3)*sin(pi*y)*cos(2*pi*t)*cos(pi*x))*exp(sin(pi*x)*sin(pi*y) - 2)/(0.1*cos(2*pi*t) - #1.0); 1.0*pi*(1.0*pi*exp(sin(pi*x)*sin(pi*y) + 2)*sin(pi*x)^2*cos(2*pi*t)*cos(pi*y)^2 - 2.0*pi*exp(sin(pi*x)*sin(pi*y) + #2)*sin(pi*x)*sin(pi*y)*cos(2*pi*t) + 1.0*pi*exp(sin(pi*x)*sin(pi*y) + 2)*sin(pi*y)^2*cos(2*pi*t)*cos(pi*x)^2 + #0.1*exp(sin(pi*x)*sin(pi*y))*sin(pi*x)*cos(2*pi*t)^3*cos(pi*y) - 1.0*exp(sin(pi*x)*sin(pi*y))*sin(pi*x)*cos(2*pi*t)^2*cos(pi*y) + #0.1*exp(sin(pi*x)*sin(pi*y))*sin(pi*y)*cos(2*pi*t)^3*cos(pi*x) - 1.0*exp(sin(pi*x)*sin(pi*y))*sin(pi*y)*cos(2*pi*t)^2*cos(pi*x) + #2.0*exp(1)*sin(2*pi*t) - 0.2*exp(1)*sin(4*pi*t) - 0.5*exp(3)*sin(pi*x)*cos(2*pi*t)*cos(pi*y))*exp(sin(pi*x)*sin(pi*y) - 2)/(0.1*cos(2*pi*t) - #1.0); 0
 
     end
 end
@@ -127,7 +147,7 @@ end
 subsection non-linear solver
   set tolerance               = 1e-8
   set max iterations          = 10
-  set verbosity               = verbose
+  set verbosity               = quiet
 end
 
 # --------------------------------------------------
@@ -141,5 +161,5 @@ subsection linear solver
   set ilu preconditioner fill                = 4
   set ilu preconditioner absolute tolerance  = 1e-3
   set ilu preconditioner relative tolerance  = 1.00
-  set verbosity               = verbose
+  set verbosity               = quiet
 end
