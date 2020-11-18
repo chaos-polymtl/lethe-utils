@@ -34,12 +34,24 @@ def dt(f):
     return diff(f,t)  
     
 
-T = 2*pi
-eps = (1 - 0.1*cos(T*t))*exp(-sin(pi*x)*sin(pi*y))/exp(1)
-u = cos(T*t)*exp(sin(pi*x)*sin(pi*y))/exp(1)
-v = cos(T*t)*exp(sin(pi*x)*sin(pi*y))/exp(1)
 
-p =  0.5 + 0.5*cos(T*t)*sin(pi*x)*sin(pi*y)
+eps = (5*cos(pi*t/4))*(exp(-(x+2)*(y+2)))/(pi)
+u = (pi/8)*tan(pi*t/4)*(-1/(y+2))
+v = (pi/8)*tan(pi*t/4)*(-1/(x+2))
+
+p =  0.5 + 0.5*(cos(pi*t/4))*sin(pi*x)*sin(pi*y)
+
+#print ("dx(u)")
+#print (simplify(dx(u)))
+
+#print ("dy(v)")
+#print (simplify(dy(v)))
+
+#print ("dx(eps)")
+#print (simplify(dx(eps)))
+
+#print ("dy(eps)")
+#print (simplify(dy(eps)))
 
 print ("Mass Source Term")
 print (simplify(dt(eps) + eps*(dx(u)+dy(v)) + u*(dx(eps)) + v*(dy(eps))))
