@@ -30,7 +30,7 @@ v = 2*cos(pi*x) * sin(pi*x) * sin(pi*y) * sin(pi*y)
 p = sin(pi*x)*sin(pi*y)
 
 print ("Verifying divergence free")
-print (eps*(dx(u)+dy(v)) + u*(dx(eps)) + v*(dy(eps)))
+print (simplify(eps*(dx(u)+dy(v)) + u*(dx(eps)) + v*(dy(eps))))
 
 
 print ("Stokes X Source term:")
@@ -45,4 +45,8 @@ print ((simplify(conv(eps*u,eps*v,u))/eps))
 print ("Convection Y source term:")
 print ((simplify(conv(eps*u,eps*v,v))/eps))
 
+print("Total X")
+print (simplify((-laplacian(u)+dx(p) + conv(eps*u,eps*v,u))/eps))
+print("Total Y")
+print (simplify((-laplacian(v)+dy(p) + conv(eps*u,eps*v,v))/eps))
 

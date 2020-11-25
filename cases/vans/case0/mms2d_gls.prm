@@ -6,7 +6,7 @@
 subsection simulation control
   set method                  = steady
   set number mesh adapt       = 2
-  set output name              = mms2d_
+  set output name              = case0_vans
 end
 
 #---------------------------------------------------
@@ -52,7 +52,7 @@ end
 subsection source term
   set enable                 = true
     subsection xyz
-            set Function expression = 2.0*pi^2*sin(2*pi*y) + 2.0*pi^2*sin(2*pi*(x - y)) - 2.0*pi^2*sin(2*pi*(x + y)) + 4.0*x^1.0*y^2.0 + 1.0*pi*sin(pi*x)^3*sin(pi*y)^2*cos(pi*x); -2.0*pi^2*sin(2*pi*x) + 2.0*pi^2*sin(2*pi*(x - y)) + 2.0*pi^2*sin(2*pi*(x + y)) + 4.0*x^2.0*y^1.0 + 1.0*pi*sin(pi*x)^2*sin(pi*y)^3*cos(pi*y); 0
+            set Function expression = pi*(16.0*pi*sin(pi*x)^2*cos(pi*y) - 4.0*pi*cos(pi*y) + 1.0*sin(pi*x)^3*sin(pi*y)*cos(pi*x) + 1.0*cos(pi*x))*sin(pi*y); pi*(-16.0*pi*sin(pi*y)^2*cos(pi*x) + 4.0*pi*cos(pi*x) + 1.0*sin(pi*x)*sin(pi*y)^3*cos(pi*y) + 1.0*cos(pi*y))*sin(pi*x); 0
     end
 end
 
@@ -62,7 +62,7 @@ end
 subsection analytical solution
   set enable                 = true
     subsection uvw
-            set Function expression = sin(pi*x) * sin(pi*x) * cos(pi*y) * sin(pi*y) ; -cos(pi*x) * sin(pi*x) * sin(pi*y) * sin(pi*y); x^2*y^2
+            set Function expression = sin(pi*x) * sin(pi*x) * cos(pi*y) * sin(pi*y) ; -cos(pi*x) * sin(pi*x) * sin(pi*y) * sin(pi*y); 0.5 + 0.5*sin(pi*x)*sin(pi*y)
     end
 end
 # --------------------------------------------------
@@ -80,7 +80,7 @@ subsection non-linear solver
   set tolerance               = 1e-8
   set max iterations          = 10
   set residual precision      = 2
-  set verbosity               = verbose
+  set verbosity               = quiet
 end
 
 # --------------------------------------------------
@@ -94,5 +94,5 @@ subsection linear solver
   set ilu preconditioner fill                = 4
   set ilu preconditioner absolute tolerance  = 1e-3
   set ilu preconditioner relative tolerance  = 1.00
-  set verbosity               = verbose
+  set verbosity               = quiet
 end

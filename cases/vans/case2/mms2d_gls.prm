@@ -40,10 +40,50 @@ end
 # Boundary Conditions
 #---------------------------------------------------
 subsection boundary conditions
-  set number                  = 1
+  set number                  = 4
     subsection bc 0
-        set type              = noslip
-    end
+        set id                = 0
+        set type              = function
+        subsection u
+            set Function expression = exp(sin(-pi)*sin(pi*y))/exp(1)
+        end
+        subsection v
+            set Function expression = exp(sin(-pi)*sin(pi*y))/exp(1)
+        end
+end
+
+    subsection bc 1
+        set id                = 1
+        set type              = function
+        subsection u
+            set Function expression = exp(sin(pi)*sin(pi*y))/exp(1)
+        end
+        subsection v
+            set Function expression = exp(sin(pi)*sin(pi*y))/exp(1)
+        end
+end
+
+    subsection bc 2
+        set id                = 2
+        set type              = function
+        subsection u
+            set Function expression = exp(sin(pi*x)*sin(-pi))/exp(1)
+        end
+        subsection v
+            set Function expression = exp(sin(pi*x)*sin(-pi))/exp(1)
+        end
+end
+
+    subsection bc 3
+        set id                = 3
+        set type              = function
+        subsection u
+            set Function expression = exp(sin(pi*x)*sin(pi))/exp(1)
+        end
+        subsection v
+            set Function expression = exp(sin(pi*x)*sin(pi))/exp(1)
+        end
+end
 end
 
 # --------------------------------------------------
@@ -52,7 +92,7 @@ end
 subsection source term
   set enable                 = true
     subsection xyz
-            set Function expression = pi*(-pi*(sin(pi*x)*cos(pi*y)^2 - sin(pi*y))*exp(sin(pi*x)*sin(pi*y))*sin(pi*x) + pi*(sin(pi*x) - sin(pi*y)*cos(pi*x)^2)*exp(sin(pi*x)*sin(pi*y))*sin(pi*y) + 0.5*exp(1)*sin(pi*y)*cos(pi*x))*exp(sin(pi*x)*sin(pi*y)) + pi*exp(2*sin(pi*x)*sin(pi*y) - 2)*sin(pi*(x + y)); pi*(-pi*(sin(pi*x)*cos(pi*y)^2 - sin(pi*y))*exp(sin(pi*x)*sin(pi*y))*sin(pi*x) + pi*(sin(pi*x) - sin(pi*y)*cos(pi*x)^2)*exp(sin(pi*x)*sin(pi*y))*sin(pi*y) + 0.5*exp(1)*sin(pi*x)*cos(pi*y))*exp(sin(pi*x)*sin(pi*y)); 0
+            set Function expression = pi*(pi*(cos(pi*(x - y)) + cos(2*pi*(x - y))/4 - cos(pi*(x + y)) + cos(2*pi*(x + y))/4 - 1/2)*exp(sin(pi*x)*sin(pi*y) + 2) + exp(sin(pi*x)*sin(pi*y))*sin(pi*(x + y)) + 0.5*exp(3)*sin(pi*y)*cos(pi*x))*exp(sin(pi*x)*sin(pi*y) - 2); pi*(pi*(cos(pi*(x - y)) + cos(2*pi*(x - y))/4 - cos(pi*(x + y)) + cos(2*pi*(x + y))/4 - 1/2)*exp(sin(pi*x)*sin(pi*y) + 2) + exp(sin(pi*x)*sin(pi*y))*sin(pi*(x + y)) + 0.5*exp(3)*sin(pi*x)*cos(pi*y))*exp(sin(pi*x)*sin(pi*y) - 2); 0
     end
 end
 
@@ -79,7 +119,7 @@ end
 subsection non-linear solver
   set tolerance               = 1e-8
   set max iterations          = 10
-  set verbosity               = verbose
+  set verbosity               = quiet
 end
 
 # --------------------------------------------------
@@ -93,5 +133,5 @@ subsection linear solver
   set ilu preconditioner fill                = 4
   set ilu preconditioner absolute tolerance  = 1e-3
   set ilu preconditioner relative tolerance  = 1.00
-  set verbosity               = verbose
+  set verbosity               = quiet
 end
