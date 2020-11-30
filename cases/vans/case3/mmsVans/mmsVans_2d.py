@@ -35,23 +35,11 @@ def dt(f):
     
 
 
-eps = (5*cos(pi*t/4))*(exp(-(x+2)*(y+2)))/(pi)
-u = (pi/8)*tan(pi*t/4)*(-1/(y+2))
-v = (pi/8)*tan(pi*t/4)*(-1/(x+2))
+eps = (1 - 0.1*cos(2*pi*t)*exp(-sin(pi*x)*sin(pi*y)))/exp(1)
+u = cos(2*pi*t)*cos(pi*x)*cos(pi*y)
+v = cos(2*pi*t)*cos(pi*x)*cos(pi*y)
 
-p =  0.5 + 0.5*(cos(pi*t/4))*sin(pi*x)*sin(pi*y)
-
-#print ("dx(u)")
-#print (simplify(dx(u)))
-
-#print ("dy(v)")
-#print (simplify(dy(v)))
-
-#print ("dx(eps)")
-#print (simplify(dx(eps)))
-
-#print ("dy(eps)")
-#print (simplify(dy(eps)))
+p =  0
 
 print ("Mass Source Term")
 print (simplify(dt(eps) + eps*(dx(u)+dy(v)) + u*(dx(eps)) + v*(dy(eps))))
@@ -74,11 +62,9 @@ print (simplify((conv(eps*u,eps*v,u))/eps))
 print ("Convection Y source term:")
 print (simplify((conv(eps*u,eps*v,v))/eps))
 
-#+u*(dt(eps) + eps*(dx(u)+dy(v)) + u*(dx(eps)) + v*(dy(eps))) 
-#+v*(dt(eps) + eps*(dx(u)+dy(v)) + u*(dx(eps)) + v*(dy(eps)))
 print("Total X")
-print (simplify((eps*dt(u) - laplacian(u)+dx(p) + conv(eps*u,eps*v,u))/eps))
+print (simplify((eps*dt(u) + u*(dt(eps) + eps*(dx(u)+dy(v)) + u*(dx(eps)) + v*(dy(eps))) - laplacian(u)+dx(p) + conv(eps*u,eps*v,u))/eps))
 print("Total Y")
-print (simplify((eps*dt(v) - laplacian(v)+dy(p) + conv(eps*u,eps*v,v))/eps))
+print (simplify((eps*dt(v) + v*(dt(eps) + eps*(dx(u)+dy(v)) + u*(dx(eps)) + v*(dy(eps))) - laplacian(v)+dy(p) + conv(eps*u,eps*v,v))/eps))
 
 
