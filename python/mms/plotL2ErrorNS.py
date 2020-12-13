@@ -80,7 +80,7 @@ ax.plot(dx,numpy.exp(b)*dx**a,'-k',label='$\Vert e_{\mathbf{u}}\Vert_{2}=%3.2f  
 ax.plot(dx,pL2E,'ks',label='$\Vert e_{\mathbf{p}}\Vert_{2}$')
 ax.plot(dx,numpy.exp(bp)*dx**ap,'-k',label='$\Vert e_{\mathbf{p}}\Vert_{2}=%3.2f  \Delta x^{%3.2f}$' %(numpy.exp(bp),ap))
 
-ax.legend(loc=2)
+ax.legend(loc=1)
 
 print ('A velocity    = ', a)
 print ('R^2 velocity  = ', rsquared(numpy.log(dx),numpy.log(uL2E)))

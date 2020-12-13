@@ -14,9 +14,6 @@ def conv(u,v,f):
     cx = u * diff(f,x)
     cy = v * diff(f,y)
 
-    print("cx is : ",cx)
-    print("cy is : ",cy)
-
     return cx+cy
 
 def dx(f):
@@ -31,7 +28,7 @@ v=-cos(a*x)*sin(a*x)*sin(a*y)*sin(a*y)
 #u=sin(a*y)
 #v=sin(a*x)
 
-T=sin(a*x)*sin(a*y)
+T=sin(a*x) *sin(a*x)* sin(a*y)
 
 
 print ("Verifying divergence free")
@@ -42,6 +39,9 @@ print (simplify(-laplacian(T)))
 
 print ("Source term convection:")
 print(conv(u,v,T))
+
+print ("Final source term")
+print (simplify(-laplacian(T)+conv(u,v,T)))
 #
 #print ("Stokes Y Source term:")
 #print (-laplacian(v)+dy(p))

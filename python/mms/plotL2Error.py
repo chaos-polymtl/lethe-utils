@@ -80,7 +80,7 @@ ax.grid(b=True, which='major', color='k', linestyle='-')
 ax.plot(dx,uL2E,'ko',label='$\Vert e_{\mathbf{u}}\Vert_{2}$')
 ax.plot(dx,numpy.exp(b)*dx**a,'-k',label='$\Vert e_{\mathbf{u}}\Vert_{2}=%3.2f  \Delta x^{%3.2f}$' %(numpy.exp(b),a))
 
-ax.legend(loc=2)
+ax.legend(loc=1)
 
 print ('A u    = ', a)
 print ('R^2 u  = ', rsquared(numpy.log(dx),numpy.log(uL2E)))
