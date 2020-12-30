@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 """
 Name   : postprocess_data.py
 Author : Audrey Collard-Daigneault
@@ -13,6 +16,8 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import os
 import glob
+from pathlib import Path
+
 
 ################################################ FILL OUT THIS PART ###################################################
 
@@ -25,6 +30,10 @@ prefix_name = "graph_all"  # literature and Lethe data to plot should all be in 
 
 # Path and name to save graphs (no extention)
 path_to_save = "./output_geometry/"
+Path(path_to_save).mkdir(parents=True, exist_ok=True)
+
+
+
 name_to_save = "dataingeometry"
 
 # Scale factor for the curves
