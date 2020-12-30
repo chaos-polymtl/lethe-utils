@@ -1,0 +1,29 @@
+This folder contains the necessary tools to post-process simulations for the periodic_hills test cases.
+
+It contains a number of python script which can be used to automatically post-process the case.
+By default, the case post-processing can be fully ran by:
+- Copying the data created by lethe to a lethe folder in the present directory
+- Identifying the lethe file names the post-process in the postprocess_data.py script
+- Running the postprocess_data.py script
+- Running the data_in_geometry.py script
+
+These scripts rely on a folder structure which will be created dynamically. The file paths can be dynamically changed.
+
+Description of each files:
+-------------------------
+
+* breuer2009_data_comparison.py:
+Compares two different sources for the data of the Breuer article. This code is intended mostly as a verification and should not be used when
+post-processing simulation data.
+
+* post_process_data.py 
+Script that extracts the data out a lethe simulations and prepares the csv and graphics used to compare the exprimental and reference
+results with the simulation results. The CSV data for Lethe should be prepared by outputting to a single csv file the averaged
+velocity and reynolds stressed. This can be done by using the spreadsheet view in paraview and exporting this spreadsheet.
+All the csv files to be post-processed should be in the lethe subfolder of the present root. The name of each file and their
+associated label should also be hard-coded within the python script.
+
+* plot_data_with_geometry.py
+Script that plots the pertinent data superposed with the periodic hill geometry
+
+
