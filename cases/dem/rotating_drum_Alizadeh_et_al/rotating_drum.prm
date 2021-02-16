@@ -53,13 +53,13 @@ subsection physical properties
     		set poisson ratio particle          	= 0.24
     		set restitution coefficient particle	= 0.97
     		set friction coefficient particle       = 0.3
-    		set rolling friction particle         	= 0.05
+    		set rolling friction particle         	= 0.01
 	end
     set young modulus wall            			= 100000000
     set poisson ratio wall            			= 0.24
     set restitution coefficient wall           		= 0.85
     set friction coefficient wall         		= 0.35
-    set rolling friction wall         	      	  	= 0.05
+    set rolling friction wall         	      	  	= 0.01
 end
 
 #---------------------------------------------------
