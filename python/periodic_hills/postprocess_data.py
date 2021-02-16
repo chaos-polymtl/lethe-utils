@@ -25,7 +25,8 @@ colors=['#1b9e77','#d95f02','#7570b3','#e7298a','#66a61e','#e6ab02']
 path_to_lethe_data = "./lethe/" \
 
 #file_names_lethe_data = ["data_3","data_3_bdf2"]  # add all lethe files in this list
-file_names_lethe_data = ["data_5_800s","data_6_500s"]  # add all lethe files in this list
+file_names_lethe_data = ["data_3"]#,"data_6_500s"]  # add all lethe files in this list
+file_names_lethe_data = ["data_5_800s"]
 
 # Information about the literature data (
 path_to_literature_data = "./lit/Re_5600/" \
@@ -46,7 +47,13 @@ path_to_save_csv = folder_to_save_csv+name_to_save
 # NOTE : make sure the number of labels are the same that the number of files names of lethe data
 #labels = ["Lethe - 1M - 720s", "Lethe - 4M - 300s","Lethe - 4M - 500s"]
 #labels = ["Lethe - 1M - bdf1","Lethe - 1M - bdf2"]
-labels = ["Lethe - 4M - 800s", "Lethe - Q2Q1 1M - 500s"]
+labels = ["Lethe - 1M - 720s"]
+labels = ["Lethe - 4M - 800s"]
+
+
+#Interpolation threshold
+#thres=0.07 #0.07 for mesh 3
+thres=0.04 #0.04 for mesh 5
 
 # x/h position with literature data files
 x_available = [0.05, 0.5, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -226,7 +233,7 @@ for x_value in x_available:
                 print("No unique data found for : ", x_value, " Interpolating")
                 # Find all x in tolerance = 0.1
                 if nb_unique_x < 1:
-                    y_data = data.loc[(np.abs(data["Points_0"] - x_value) < 0.04)]
+                    y_data = data.loc[(np.abs(data["Points_0"] - x_value) < thres)]
 
                 # Get index of value by sorted difference with x_value
                 unique_values = np.unique(y_data["Points_0"])
@@ -236,13 +243,13 @@ for x_value in x_available:
 
                 # Find the values min and max related to the x_value
                 min_x_value = max_x_value = None
+               
 
                 for index in index_sorted_delta:
                     if unique_values[index] < x_value and min_x_value is None:
                         min_x_value = unique_values[index]
                     elif unique_values[index] > x_value and max_x_value is None:
                         max_x_value = unique_values[index]
-
                 y_data_min = data.loc[(np.abs(data["Points_0"] - min_x_value) < 1e-6)]
                 y_data_max = data.loc[(np.abs(data["Points_0"] - max_x_value) < 1e-6)]
                 y_data = pd.DataFrame(data=y_data_max, columns=y_data_max.columns, index=y_data_max.index)
