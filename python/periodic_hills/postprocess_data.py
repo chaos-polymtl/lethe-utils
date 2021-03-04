@@ -18,10 +18,15 @@ from pathlib import Path
 # Reynolds number of the simulation (Currently available for Re = 5600 only)
 Re = 5600
 
+# Colors for graphs
+colors=['#1b9e77','#d95f02','#7570b3','#e7298a','#66a61e','#e6ab02']
+
 # Information about the lethe data
 path_to_lethe_data = "./lethe/" \
 
-file_names_lethe_data = ["data_3","data_5_300s","data_5_500s"]  # add all lethe files in this list
+#file_names_lethe_data = ["data_3","data_3_bdf2"]  # add all lethe files in this list
+file_names_lethe_data = ["data_3"]#,"data_6_500s"]  # add all lethe files in this list
+file_names_lethe_data = ["data_5_800s"]
 
 # Information about the literature data (
 path_to_literature_data = "./lit/Re_5600/" \
@@ -40,7 +45,15 @@ path_to_save_csv = folder_to_save_csv+name_to_save
 
 # Label for Lethe data for the legend
 # NOTE : make sure the number of labels are the same that the number of files names of lethe data
-labels = ["Lethe - 1M - 720s", "Lethe - 4M - 300s","Lethe - 4M - 500s"]
+#labels = ["Lethe - 1M - 720s", "Lethe - 4M - 300s","Lethe - 4M - 500s"]
+#labels = ["Lethe - 1M - bdf1","Lethe - 1M - bdf2"]
+labels = ["Lethe - 1M - 720s"]
+labels = ["Lethe - 4M - 800s"]
+
+
+#Interpolation threshold
+#thres=0.07 #0.07 for mesh 3
+thres=0.04 #0.04 for mesh 5
 
 # x/h position with literature data files
 x_available = [0.05, 0.5, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -212,29 +225,31 @@ for x_value in x_available:
         for data in lethe_data:
             # Taking data of x value and data type and sorting it for y
             data = data[["Points_0", "Points_1", data_type]]
-            y_data = data.loc[(np.abs(data["Points_0"] - x_value) < 1e-6)]
+            y_data = data.loc[(np.abs(data["Points_0"] - x_value) < 1e-8)]
 
             # If there's no data at x_values, it does using the 2 nearest x
             nb_unique_x = len(np.unique(y_data["Points_0"]))
             if nb_unique_x != 1:
+                print("No unique data found for : ", x_value, " Interpolating")
                 # Find all x in tolerance = 0.1
                 if nb_unique_x < 1:
-                    y_data = data.loc[(np.abs(data["Points_0"] - x_value) < 0.1)]
+                    y_data = data.loc[(np.abs(data["Points_0"] - x_value) < thres)]
 
                 # Get index of value by sorted difference with x_value
                 unique_values = np.unique(y_data["Points_0"])
+                print ("Unique values identified : ", unique_values)
                 delta = np.abs(unique_values - x_value)
                 index_sorted_delta = np.argsort(delta)
 
                 # Find the values min and max related to the x_value
                 min_x_value = max_x_value = None
+               
 
                 for index in index_sorted_delta:
                     if unique_values[index] < x_value and min_x_value is None:
                         min_x_value = unique_values[index]
                     elif unique_values[index] > x_value and max_x_value is None:
                         max_x_value = unique_values[index]
-
                 y_data_min = data.loc[(np.abs(data["Points_0"] - min_x_value) < 1e-6)]
                 y_data_max = data.loc[(np.abs(data["Points_0"] - max_x_value) < 1e-6)]
                 y_data = pd.DataFrame(data=y_data_max, columns=y_data_max.columns, index=y_data_max.index)
@@ -283,19 +298,21 @@ for x_value in x_available:
         # Plotting results
         fig, ax = plt.subplots()
 
+        color_index=0
         # If there's Lethe data for this x and this data type
-        line_type = '-'  # solid line for the first set of data
         for index, name in enumerate(labels):
             if data_to_plot[index] is not None:
-                ax.plot(data_to_plot[index], y_to_plot[index], line_type, label=name)
-                line_type = '--'  # dashed lines for other Lethe data
+                ax.plot(data_to_plot[index], y_to_plot[index], '--', label=name,color=colors[color_index])
+                color_index+=1
 
         if Breuer2009_data is not None:
-            ax.plot(Breuer2009_data[0], Breuer2009_data[1], '--', color='xkcd:scarlet',
-                    label='Simulation LESOCC - Breuer 2009')
+            ax.plot(Breuer2009_data[0], Breuer2009_data[1], '-',alpha=0.7, color=colors[color_index],
+                    label='LESOCC - Breuer 2009')
+            color_index+=1
+
 
         if Rapp2009_data is not None:
-            ax.plot(Rapp2009_data[0], Rapp2009_data[1], '--', color='xkcd:black',
+            ax.plot(Rapp2009_data[0], Rapp2009_data[1], '--', color='black',
                     label='Experimental - Rapp 2009')
 
         ax.set_title(data_type + " at Re = " + str(Re) + " at x = " + str(x_value))
