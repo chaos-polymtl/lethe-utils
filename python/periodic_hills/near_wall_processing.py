@@ -1,10 +1,10 @@
-# Name   : near_wall.py
+# Name   : near_wall_processing.py
 # Author : Catherine Radburn
 # Date   : 03-03-2021
 # Desc   : This code finds the reattachment point from Lethe, and evaluates and plots y+ across the length.
 #           The near-wall region of data is extracted from Lethe. The reattachment point is found at the wall-nearest
-#           point as the x-value where the average x-direction velocity is zero. y+ is calculated from the Reynolds
-#           shear stress u'v' at the half of the wall-nearest point (equivalent to the cell centroid in FVM).
+#           point as the x-value where the average x-direction velocity is zero. y+ is calculated from the gradient of
+#	    the average x velocity in the y direction, giving the wall shear stress.
 #           Note that this code only applies if alpha = 1 (i.e. no stretching of geometry)
 
 import pandas
@@ -243,7 +243,7 @@ def y_plus(extracted_lethe_data, viscosity, folder_to_save_csv):
             y_cc = (y1 - y0)/2
             viscous_stress = viscosity * ((wall_nearest_points[m, 2]) / (y1 - y0))
             re_stress = wall_nearest_points[m, 3]
-            tau = viscous_stress - re_stress
+            tau = viscous_stress
             y_plus = (y_cc*numpy.sqrt(abs(tau)))/(viscosity)
 
             if y_plus < 14:

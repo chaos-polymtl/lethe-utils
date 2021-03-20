@@ -2,8 +2,8 @@
 # Author : Catherine Radburn
 # Date   : 12-03-2021
 # Desc   : This code evaluates and plots y+ across the length, and plots the values superimposed onto the geometry.
-#           The near-wall region of data is extracted from Lethe. y+ is calculated from the Reynolds
-#           shear stress u'v' at the half of the wall-nearest point (equivalent to the cell centroid in FVM).
+#           The near-wall region of data is extracted from Lethe. y+ is calculated from the gradient of the x velocity
+#           in the y direction (the wall shear stress).
 #           Note that this code only applies if alpha = 1 (i.e. no stretching of geometry)
 
 import pandas
