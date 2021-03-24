@@ -68,10 +68,10 @@ Transfinite Surface {1:4};
 
 
 
-
-//Physical Surface(0) = {1};
-//Physical Line(0)={4};
-//Physical Line(1)={2};
-//Physical Line(2)={1,3};
 Recombine Surface{1:4};
+Physical Surface(0) = {1:4};
+Physical Line(0)={1,5,11,3,10,8,13};
+Physical Line(1)={4};
+Physical Line(2)={9};
+Physical Line(3)={12};
 
