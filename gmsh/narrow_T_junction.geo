@@ -1,15 +1,15 @@
 // Define a variable
 
-H_1=1;
-H_2=H_1+0.5;
+H_1=0.300;
+H_2=H_1+0.3;
 L_1=1;
-L_2=L_1+0.5;
-L_3=L_1+3;
-nl_1=5;
+L_2=L_1+0.0254;
+L_3=L_2+10;
+nl_1=40;
 nl_2=10;
-nl_3=20;
-nh_1=10;
-nh_2=5;
+nl_3=400;
+nh_1=20;
+nh_2=40;
 
 
 Point(1) = {0, 0, 0};
@@ -46,7 +46,8 @@ Line(13)={10,7};
 Transfinite Line {1,3} = Ceil(nl_1) Using Progression 1;
 Transfinite Line {2,4,6,12} = Ceil(nh_1) Using Progression 1;
 Transfinite Line {5,7,9} = Ceil(nl_2) Using Progression 1;
-Transfinite Line {11,13} = Ceil(nl_3) Using Progression 1;
+Transfinite Line {11} = Ceil(nl_3) Using Progression 1;
+Transfinite Line {13} = Ceil(nl_3) Using Progression 1;
 Transfinite Line {8,10} = Ceil(nh_2) Using Progression 1;
 
 

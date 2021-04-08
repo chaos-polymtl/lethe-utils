@@ -177,10 +177,9 @@ def y_plus(extracted_lethe_data, viscosity):
             re_stress = wall_nearest_points[m, 3]
             tau = viscous_stress - re_stress
             y_plus = (y_cc*numpy.sqrt(abs(tau)))/(viscosity)
-            y_plus_geo = y0 + y_plus
 
-            if y_plus_geo < fudge_factor:
-                y_plus_data.append([x, y_plus_geo])
+            if y_plus < fudge_factor:
+                y_plus_data.append([x, y_plus])
 
         y_plus_data = numpy.asarray(y_plus_data)
 
@@ -250,7 +249,8 @@ def wall_geometry():
         y0 = y0 / 28
         x = x / 28
 
-        y_wall.append([x, y0])
+        # Take away maximum hill height to ensure hill is below y+ curve
+        y_wall.append([x, y0-1])
 
     # Output
     y_wall = numpy.asarray(y_wall)
@@ -279,7 +279,7 @@ def plot_y_plus(folder_to_save_png, extracted_y_plus, y_wall, labels, Re):
 
     ax.set_title("y_plus along the lower wall at Re = " + str(Re))
     ax.set_xlabel("x/h")
-    ax.set_ylabel("y/h")
+    ax.set_ylabel("y_plus")
     ax.legend()
     fig.savefig(
         folder_to_save_png + "graph_y_plus_geometry.png",
