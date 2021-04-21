@@ -2,10 +2,13 @@
 // Catherine Radburn, April 2021
 
 // Variables
-gr=1; // Global refinement
-nr=30; // Refinement
-nt=30;
-nl=75;
+gr=1; 		// Global refinement
+diagonal=30; 	// Refinement diagonal to the sphere
+around=30;  	// Refinement around the sphere
+trail=75;	// Refinement of trail of sphere
+downstream=26;		// Length of domain downstream of sphere
+upstream=-6;		// Length of domain upstream of sphere (must be negative)
+half_cs=10;		// Half the cross-sectional width/height
 
 // Points
 Point(1) = {0, 0, 0, gr};
@@ -27,66 +30,65 @@ Point(15) = {-3, 3, -3, gr};
 Point(16) = {-3, -3, 3, gr};
 Point(17) = {-3, -3, -3, gr};
 
-Point(26) = {26, -10, -3, gr};
-Point(27) = {26, 10, -3, gr};
-Point(28) = {26, -3, -3, gr};
-Point(29) = {26, 3, -3, gr};
-Point(30) = {26, 10, -3, gr};
-Point(24) = {3, 10, -3, gr};
-Point(25) = {3, -10, -3, gr};
-Point(22) = {-3, -10, -3, gr};
-Point(23) = {-3, 10, -3, gr};
-Point(18) = {-6, -3, -3, gr};
-Point(19) = {-6, 3, -3, gr};
-Point(20) = {-6, 10, -3, gr};
-Point(21) = {-6, -10, -3, gr};
+Point(26) = {downstream, - half_cs, -3, gr};
+Point(27) = {downstream, half_cs, -3, gr};
+Point(28) = {downstream, -3, -3, gr};
+Point(29) = {downstream, 3, -3, gr};
+Point(24) = {3, half_cs, -3, gr};
+Point(25) = {3, - half_cs, -3, gr};
+Point(22) = {-3, - half_cs, -3, gr};
+Point(23) = {-3, half_cs, -3, gr};
+Point(18) = {upstream, -3, -3, gr};
+Point(19) = { upstream, 3, -3, gr};
+Point(20) = { upstream, half_cs, -3, gr};
+Point(21) = { upstream, - half_cs, -3, gr};
 
-Point(31) = {26, 10, 3, gr};
-Point(32) = {26, -10, 3, gr};
-Point(33) = {26, -3, 3, gr};
-Point(34) = {26, 3, 3, gr};
-Point(35) = {3, 10, 3, gr};
-Point(36) = {3, -10, 3, gr};
-Point(37) = {-3, -10, 3, gr};
-Point(38) = {-3, 10, 3, gr};
-Point(39) = {-6, 10, 3, gr};
-Point(40) = {-6, -10, 3, gr};
-Point(41) = {-6, -3, 3, gr};
-Point(42) = {-6, 3, 3, gr};
+Point(31) = {downstream, half_cs, 3, gr};
+Point(32) = {downstream, - half_cs, 3, gr};
+Point(33) = {downstream, -3, 3, gr};
+Point(34) = {downstream, 3, 3, gr};
+Point(35) = {3, half_cs, 3, gr};
+Point(36) = {3, - half_cs, 3, gr};
+Point(37) = {-3, - half_cs, 3, gr};
+Point(38) = {-3, half_cs, 3, gr};
+Point(39) = { upstream, half_cs, 3, gr};
+Point(40) = { upstream, - half_cs, 3, gr};
+Point(41) = { upstream, -3, 3, gr};
+Point(42) = { upstream, 3, 3, gr};
 
-Point(58) = {26, 10, 10, gr};
-Point(59) = {26, 3, 10, gr};
-Point(60) = {26, -3, 10, gr};
-Point(61) = {26, -10, 10, gr};
-Point(54) = {3, -10, 10, gr};
-Point(55) = {3, -3, 10, gr};
-Point(56) = {3, 3, 10, gr};
-Point(57) = {3, 10, 10, gr};
-Point(49) = {-3, -3, 10, gr};
-Point(50) = {-3, 3, 10, gr};
-Point(51) = {-3, 10, 10, gr};
-Point(53) = {-3, -10, 10, gr};
-Point(43) = {-6, 10, 10, gr};
-Point(44) = {-6, 3, 10, gr};
-Point(47) = {-6, -10, 10, gr};
-Point(48) = {-6, -3, 10, gr};
+Point(58) = {downstream, half_cs, half_cs, gr};
+Point(59) = {downstream, 3, half_cs, gr};
+Point(60) = {downstream, -3, half_cs, gr};
+Point(61) = {downstream, - half_cs, half_cs, gr};
+Point(54) = {3, - half_cs, half_cs, gr};
+Point(55) = {3, -3, half_cs, gr};
+Point(56) = {3, 3, half_cs, gr};
+Point(57) = {3, half_cs, half_cs, gr};
+Point(49) = {-3, -3, half_cs, gr};
+Point(50) = {-3, 3, half_cs, gr};
+Point(51) = {-3, half_cs, half_cs, gr};
+Point(53) = {-3, - half_cs, half_cs, gr};
+Point(43) = { upstream, half_cs, half_cs, gr};
+Point(44) = { upstream, 3, half_cs, gr};
+Point(47) = { upstream, - half_cs, half_cs, gr};
+Point(48) = { upstream, -3, half_cs, gr};
 
-Point(62) = {26, -10, -10, gr};
-Point(63) = {26, 10, -10, gr};
-Point(64) = {26, 3, -10, gr};
-Point(65) = {26, -3, -10, gr};
-Point(66) = {3, -3, -10, gr};
-Point(67) = {3, -10, -10, gr};
-Point(68) = {3, 10, -10, gr};
-Point(69) = {3, 3, -10, gr};
-Point(70) = {-3, 3, -10, gr};
-Point(71) = {-3, -3, -10, gr};
-Point(72) = {-3, -10, -10, gr};
-Point(73) = {-3, 10, -10, gr};
-Point(74) = {-6, 10, -10, gr};
-Point(75) = {-6, -10, -10, gr};
-Point(76) = {-6, -3, -10, gr};
-Point(77) = {-6, 3, -10, gr};
+Point(62) = {downstream, - half_cs, - half_cs, gr};
+Point(63) = {downstream, half_cs, - half_cs, gr};
+Point(64) = {downstream, 3, - half_cs, gr};
+Point(65) = {downstream, -3, - half_cs, gr};
+Point(66) = {3, -3, - half_cs, gr};
+Point(67) = {3, - half_cs, - half_cs, gr};
+Point(68) = {3, half_cs, - half_cs, gr};
+Point(69) = {3, 3, - half_cs, gr};
+Point(70) = {-3, 3, - half_cs, gr};
+Point(71) = {-3, -3, - half_cs, gr};
+Point(72) = {-3, - half_cs, - half_cs, gr};
+Point(73) = {-3, half_cs, - half_cs, gr};
+Point(74) = { upstream, half_cs, - half_cs, gr};
+Point(75) = { upstream, - half_cs, - half_cs, gr};
+Point(76) = { upstream, -3, - half_cs, gr};
+Point(77) = { upstream, 3, - half_cs, gr};
 
 Line(1) = {38, 35};
 Line(2) = {11, 10};
@@ -589,11 +591,11 @@ Volume(32) = {32};
 // Hexahedra and refinement
 
 // Around sphere
-Transfinite Line {1, 2, 6, 10, 14, 17, 20, 23, 25, 29, 33, 35, 38, 41, 44, 47, 58, 61, 64, 67, 70, 73, 76, 79, 82, 85, 88, 91, 94, 97, 100, 103, 106, 109, 112, 115, 118, 121, 124, 127, 130, 133, 136, 139, 142, 146, 149, 152, 157:168} = Ceil(nt) Using Progression 1.00;
+Transfinite Line {1, 2, 6, 10, 14, 17, 20, 23, 25, 29, 33, 35, 38, 41, 44, 47, 58, 61, 64, 67, 70, 73, 76, 79, 82, 85, 88, 91, 94, 97, 100, 103, 106, 109, 112, 115, 118, 121, 124, 127, 130, 133, 136, 139, 142, 146, 149, 152, 157:168} = Ceil(around) Using Progression 1.00;
 // Diagonal to sphere
-Transfinite Line {2, 6, 14, 17, 33, 35, 38, 41, 49:56, 121, 124, 133, 136, 157:168} = Ceil(nr) Using Progression 1.00;
+Transfinite Line {2, 6, 14, 17, 33, 35, 38, 41, 49:56, 121, 124, 133, 136, 157:168} = Ceil(diagonal) Using Progression 1.00;
 // Trail
-Transfinite Line {3, 7, 11, 12, 15, 18, 21, 24, 83, 86, 89, 92, 95, 98, 101, 104} = Ceil(nl) Using Progression 1.00;
+Transfinite Line {3, 7, 11, 12, 15, 18, 21, 24, 83, 86, 89, 92, 95, 98, 101, 104} = Ceil(trail) Using Progression 1.00;
 
 Transfinite Surface {1:127};
 Recombine Surface{1:127};
@@ -607,3 +609,5 @@ Physical Surface(1) = {80, 81, 82, 83, 84, 85, 88, 87, 86};
 Physical Surface(3) = {113, 114, 107, 108, 109, 110, 111, 112, 115};
 
 Physical Volume(1) = {1:32};
+
+//end
