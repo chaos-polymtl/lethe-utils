@@ -8,18 +8,23 @@ around=30;  	// Refinement around the sphere
 trail=75;	// Refinement of trail of sphere
 downstream=26;		// Length of domain downstream of sphere
 upstream=-6;		// Length of domain upstream of sphere (must be negative)
-half_cs=10;		// Half the cross-sectional width/height
+cross_section=20;		// Half the cross-sectional width/height
+radius=0.5;		// Radius of sphere
+
+// Calculate parameters
+sphere_points=Sqrt(radius*radius/3);
+half_cs=cross_section/2;
 
 // Points
 Point(1) = {0, 0, 0, gr};
-Point(2) = {0.35355, 0.35355, 0.35355, gr};
-Point(3) = {0.35355, 0.35355, -0.35355, gr};
-Point(4) = {0.35355, -0.35355, -0.35355, gr};
-Point(5) = {0.35355, -0.35355, 0.35355, gr};
-Point(6) = {-0.35355, -0.35355, 0.35355, gr};
-Point(7) = {-0.35355, -0.35355, -0.35355, gr};
-Point(8) = {-0.35355, 0.35355, -0.35355, gr};
-Point(9) = {-0.35355, 0.35355, 0.35355, gr};
+Point(2) = {sphere_points, sphere_points, sphere_points, gr};
+Point(3) = {sphere_points, sphere_points, -sphere_points, gr};
+Point(4) = {sphere_points, -sphere_points, -sphere_points, gr};
+Point(5) = {sphere_points, -sphere_points, sphere_points, gr};
+Point(6) = {-sphere_points, -sphere_points, sphere_points, gr};
+Point(7) = {-sphere_points, -sphere_points, -sphere_points, gr};
+Point(8) = {-sphere_points, sphere_points, -sphere_points, gr};
+Point(9) = {-sphere_points, sphere_points, sphere_points, gr};
 
 Point(10) = {3, 3, 3, gr};
 Point(11) = {-3, 3, 3, gr};
