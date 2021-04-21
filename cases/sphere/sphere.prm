@@ -4,8 +4,13 @@
 # Simulation Control
 #---------------------------------------------------
 subsection simulation control
-  set method                  = steady			# Assuming steady state
-  set number mesh adapt       = 1			# Can change for steady state
+  set method                  = steady_bdf			# Assuming steady state
+  set time step        	      = 0.1
+  set adapt 		      = true
+  set max cfl		      = 1000
+  set stop tolerance          = 1e-5
+  set adaptative time step scaling = 1.2
+  set number mesh adapt       = 0
   set output name             = sphere-output
   set output frequency        = 1
   set subdivision             = 1
@@ -39,16 +44,14 @@ end
 # Initial condition
 #---------------------------------------------------
 subsection initial conditions
-    set type = nodal
-    subsection uvwp
-            set Function expression = 1; 0; 0; 0		# inlet at u=1
-    end
+    set type = viscous
+    set viscosity = 0.1
 end
 #---------------------------------------------------
 # Physical Properties
 #---------------------------------------------------
 subsection physical properties
-    set kinematic viscosity            = 0.04	# Re = 25
+    set kinematic viscosity            = 0.01
 end
 #---------------------------------------------------
 # Mesh
