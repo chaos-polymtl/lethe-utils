@@ -114,10 +114,10 @@ def reattachment(extracted_lethe_data, labels):
                     averaging_data.append(y_nearest)
                 else:
                     # if focussed_wall_array y value is smaller than y_nearest, replace and reintiialise averaging_data
-                    if focussed_wall_array[m,1] < y_nearest[0,1]:
+                    if focussed_wall_array[m,1] < y_nearest[0,1] and wall_array[m, 2] != 0:
                         y_nearest = numpy.array([focussed_wall_array[m, :]])
                         averaging_data = [y_nearest]
-                    elif focussed_wall_array[m,1] == y_nearest[0,1]:
+                    elif focussed_wall_array[m,1] == y_nearest[0,1] and wall_array[m, 2] != 0:
                         averaging_data.append(numpy.array([focussed_wall_array[m, :]]))
 
             # Average data
@@ -151,6 +151,7 @@ def reattachment(extracted_lethe_data, labels):
 
 def y_plus(extracted_lethe_data, viscosity, folder_to_save_csv):
 
+    fudge_factor = 6
     index = 1
     extracted_y_plus = []
 
@@ -246,7 +247,7 @@ def y_plus(extracted_lethe_data, viscosity, folder_to_save_csv):
             tau = viscous_stress
             y_plus = (y_cc*numpy.sqrt(abs(tau)))/(viscosity)
 
-            if y_plus < 14:
+            if y_plus < fudge_factor:
                 y_plus_data.append([x, y_plus])
 
         y_plus_data = numpy.asarray(y_plus_data)
@@ -261,7 +262,6 @@ def y_plus(extracted_lethe_data, viscosity, folder_to_save_csv):
         # Output
         print("y+ values of Lethe data " + str(index) + " extracted")
         extracted_y_plus.append(y_plus_data)
-        print(y_plus_data)
 
         # Write output arrays to .csv files
         pandas.DataFrame(y_plus_data).to_csv(folder_to_save_csv + '_Lethe_' + str(file_names_lethe_data[index-1]) + '_y_plus.csv')

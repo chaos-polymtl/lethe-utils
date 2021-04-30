@@ -1,6 +1,6 @@
 # Name   : postprocess_data_new.py
 # Author : Catherine Radburn (adapted from Audrey Collard-Daigneault)
-# Date   : 20-02-2020
+# Date   : 27-04-2021
 # Desc   : This code plots simulation data from Lethe and other data from literature.
 #           Each run will extract the literature and Lethe data for a specified x_value and data_type, save extracted
 #           data as .csv files, and plot extracted data into a .png file.
@@ -25,14 +25,14 @@ path_to_lethe_data = "./lethe/"
 # file_names_lethe_data = ["data_3","data_3_bdf2"]  # add all lethe files in this list
 # file_names_lethe_data = ["data_3"],"data_6_500s"]  # add all lethe files in this list
 # file_names_lethe_data = ["data_3"]
-file_names_lethe_data = ["data_5_800s", "data_3"]
+file_names_lethe_data = ["static_1000s","adaptive_1000s"]
 
 # Label for Lethe data for the legend
 # NOTE : make sure the number of labels are the same that the number of files names of lethe data
 # labels = ["Lethe - 1M - 720s", "Lethe - 4M - 300s","Lethe - 4M - 500s"]
 # labels = ["Lethe - 1M - bdf1","Lethe - 1M - bdf2"]
 # labels = ["Lethe - 1M - 720s"]
-labels = ["Lethe - 4M - 800s", "Lethe - 1M - 720s"]
+labels = ["Lethe - static mesh","Lethe - adaptive mesh"]
 
 # Information about the literature data
 path_to_literature_data = "./lit/Re_5600/"
@@ -45,14 +45,14 @@ folder_to_save_csv = "./output_csv/"
 Path(folder_to_save_csv).mkdir(parents=True, exist_ok=True)
 
 # x/h position: Set x_value to be equal to 0.05, 0.5, 1, 2, 3, 4, 5, 6, 7 or 8
-x_value = 0.05
+x_value = 2
 
 # data type options: Set data_type to be equal to "average_velocity_0", "average_velocity_1", "reynolds_normal_stress_0"
 # "reynolds_normal_stress_1", "reynolds_shear_stress_uv", "reynolds_normal_stress_2" or "turbulent_kinetic_energy"
-data_type = "reynolds_normal_stress_0"
+data_type = "average_velocity_1"
 
 # Extract and generate graphs for all x_values and data_types? (True or False)
-all_data = False
+all_data = True
 
 ########################################################################################################################
 
@@ -202,6 +202,8 @@ def lethe_data_extraction(x_value, data_type, path_to_lethe_data, file_names_let
             y_data = numpy.asarray(y_data)
             data_type_data = numpy.asarray(data_type_data)
 
+            #print(y_data)
+
             # Average across z values
             # Initialise lists
             lethe_data_y = []
@@ -266,7 +268,7 @@ def lethe_data_extraction(x_value, data_type, path_to_lethe_data, file_names_let
 
             # Upper interpolation values
 
-            # Delete initial rows in interpolation matrices
+            # Convert interpolation matrices to numpy arrays
             upper_interpolation_matrix = numpy.asarray(upper_interpolation_matrix)
 
             # Sort columns by y value
@@ -333,10 +335,24 @@ def lethe_data_extraction(x_value, data_type, path_to_lethe_data, file_names_let
             lethe_data_lower_y = numpy.asarray(lethe_data_lower_y)
             lower_data_values = numpy.asarray(lower_data_values)
 
-            # Linear interpolation : u = (u_2 - u_1) * (x - x_1) / (x2 - x1) + u_1
+            # Prepare for linear interpolation
             int_fraction = (x_value - just_below_x_value) / (just_above_x_value - just_below_x_value)
-            lethe_data_data_type = ((upper_data_values - lower_data_values) * int_fraction) + lower_data_values
-            lethe_data_y = ((lethe_data_upper_y - lethe_data_lower_y) * int_fraction) + lethe_data_lower_y
+            lethe_data_data_type = []
+            lethe_data_y = []
+
+            # Ensure corresponding y values are used in interpolation
+            for upper_index, upper_y in numpy.ndenumerate(lethe_data_upper_y):
+                for lower_index, lower_y in numpy.ndenumerate(lethe_data_lower_y):
+                    if upper_y >= lower_y and upper_y <= lower_y+0.001:
+                        # Linear interpolation : u = (u_2 - u_1) * (x - x_1) / (x2 - x1) + u_1
+                        lethe_data = ((upper_data_values[upper_index] - lower_data_values[lower_index]) * int_fraction) + lower_data_values[lower_index]
+                        lethe_y = ((upper_y - lower_y) * int_fraction) + lower_y
+
+                        lethe_data_data_type.append([lethe_data])
+                        lethe_data_y.append([lethe_y])
+
+            lethe_data_data_type = numpy.asarray(lethe_data_data_type)
+            lethe_data_y = numpy.asarray(lethe_data_y)
 
             # Create matrix of interpolated data points and y/h
             file_name = [lethe_data_data_type, lethe_data_y]
