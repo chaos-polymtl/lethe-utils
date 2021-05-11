@@ -277,9 +277,9 @@ def plot_y_plus(folder_to_save_png, extracted_y_plus, y_wall, labels, Re):
         ax.plot(y_wall[:, 0], y_wall[:, 1], '-', color='black')
         index += 1
 
-    ax.set_title("y_plus along the lower wall at Re = " + str(Re))
-    ax.set_xlabel("x/h")
-    ax.set_ylabel("y_plus")
+    ax.set_title("$y^+$ along the lower wall at Re = " + str(Re))
+    ax.set_xlabel("$x/h$")
+    ax.set_ylabel("$y^+$")
     ax.legend()
     fig.savefig(
         folder_to_save_png + "graph_y_plus_geometry.png",

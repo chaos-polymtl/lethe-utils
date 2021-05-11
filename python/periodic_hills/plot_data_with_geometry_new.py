@@ -1,7 +1,7 @@
 # Name   : plot_data_with_geometry_new.py
 # Author : Catherine Radburn (adapted from Audrey Collard-Daigneault)
-# Date   : 20-03-2020
-# Desc   : This code plots those following data type (<u>/<ub>, <v>/<ub>, <u'u'>/<ub²>, <v'v'>/<ub²>, <u'v'>/<ub²>) of
+# Date   : 11-05-2021
+# Desc   : This code plots those following data type (u/u_b, v/u_b, u'u'/u_b², v'v'/u_b², u'v'/u_b²) of
 #          generated Lethe data csv files (with the post_processing_new.py code) with the experimental data of Rapp 2009
 #          and the computational data of Breuer 2009.
 
@@ -10,6 +10,8 @@ import numpy
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 from pathlib import Path
+import time
+start_time = time.time()
 
 ################################################ FILL OUT THIS PART ###################################################
 
@@ -26,19 +28,22 @@ Path(path_to_save).mkdir(parents=True, exist_ok=True)
 # Label for Lethe data for the legend (should be the same as used in post_processing_new.py)
 # NOTE : make sure the number of labels are the same that the number of Lethe simulation data in csv files and
 #        and associated to the right data set
-labels = ["Lethe - 1M - 720s", "Lethe - 4M - 800s"]
+labels = ["Lethe - 1M - 800s", "Lethe - 4M - 800s"]
 
 # File names of lethe data
-file_names_lethe_data = ["data_3", "data_5_800s"]
+file_names_lethe_data = ["1M_800", "4M_800"]
 
 # data_type_available = ["average_velocity_0", "average_velocity_1", "reynolds_normal_stress_0",
 #                            "reynolds_normal_stress_1", "reynolds_shear_stress_uv"]
-data_type = "reynolds_shear_stress_uv"
+data_type = "reynolds_normal_stress_1"
 
 # Scale factor for the curves
-# Suggestions : 0.8 for average_velocity_0, 3 for average_velocity_1, 5 for reynolds normal stress 0,
-#               15 for reynolds normal stress 0, and 10 for reynolds shear stresses
-scale_factor = 10
+# Suggestions : 0.8 for average_velocity_0, 3 for average_velocity_1, 5 for reynolds_normal_stress_0,
+#               15 for reynolds_normal_stress_1, and 10 for reynolds_shear_stress
+scale_factor = 15
+
+# Display the title on the output graphs? (True or False)
+display_title = True
 
 #######################################################################################################################
 # Function to define hill geometry
@@ -148,7 +153,6 @@ def hill_geometry():
     y_top = max_y * numpy.ones(len(x_vector)) / H
 
     return x_vector, y_bottom, y_top
-#x_vector_hill, y_bottom_hill, y_top_hill = hill_geometry()
 
 # Function to retrieve data from .csv files
 def obtain_data(x_available, folder_to_save_csv, file_names_lethe_data, data_type):
@@ -179,7 +183,7 @@ def obtain_data(x_available, folder_to_save_csv, file_names_lethe_data, data_typ
 
 # Function to plot data at all x
 def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_bottom, y_top, scale_factor,
-                       lethe_labels, x_label):
+                       lethe_labels, x_label, show_title):
     # Plot data for the chosen data type
     fig, ax = plt.subplots()
 
@@ -247,11 +251,29 @@ def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_
 
 
     # Plot and save graph
-    ax.set_title(data_type + " at Re = " + str(Re))
-    ax.set_xlabel("$x/h$ ; " + str(scale_factor) + "$*$" + x_label)
+    if show_title is True:
+        if data_type == "average_velocity_0":
+            title = "Average x velocity $u$"
+        elif data_type == "average_velocity_1":
+            title = "Average y velocity $v$"
+        elif data_type == "reynolds_normal_stress_0":
+            title = "Reynolds normal stress $u'u'$"
+        elif data_type == "reynolds_normal_stress_1":
+            title = "Reynolds normal stress $v'v'$"
+        elif data_type == "reynolds_shear_stress_uv":
+            title = "Reynolds shear stress $u'v'$"
+        elif data_type == "reynolds_normal_stress_2":
+            title = "Reynolds normal stress $w'w'$"
+        elif data_type == "turbulent_kinetic_energy":
+            title = "Turbulent kinetic energy $k$"
+        else:
+            title = None
+
+        ax.set_title(title + " at Re = " + str(Re))
+    ax.set_xlabel("$x/h$ ; " + str(scale_factor) + "x " + x_label)
     ax.set_ylabel("$y/h$")
     plt.vlines([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, 3.035, linestyle=':', color='xkcd:dark grey', linewidth=0.75)
-    ax.set_ybound(-0.5, 3.035) # + nb_data * 0.4)
+    ax.set_ybound(-0.5, 3.035)
     plt.gca().set_aspect('equal', adjustable='box')
     ax.legend(fontsize='x-small')
     ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
@@ -259,6 +281,7 @@ def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_
     plt.close(fig)
     ax.clear()
 
+    print("Data plotted over geometry")
     return
 
 ########################################################################################################################
@@ -270,10 +293,11 @@ x_available = [0.05, 0.5, 1, 2, 3, 4, 5, 6, 7, 8]
 # Set x_label
 data_type_available = ["average_velocity_0", "average_velocity_1", "reynolds_normal_stress_0",
                             "reynolds_normal_stress_1", "reynolds_shear_stress_uv"]
-x_labels_available = [r"$\langle u \rangle/u_{b}$", r"$\langle v \rangle/u_{b}$", r"$\langle u'u' \rangle/u_{b}^{2}$",
-            r"$\langle v'v' \rangle/u_{b}^{2}$", r"$\langle u'v' \rangle/u_{b}^{2}$"]
+x_labels_available = ["$u/u_b$", "$v/u_b$", "$u'u'/u_b^2$", "$v'v'/u_b^2$", "$u'v'/u_b^2$"]
 x_label = x_labels_available[data_type_available.index(data_type)]
 
 data_at_all_x = obtain_data(x_available, path_to_data, file_names_lethe_data, data_type)
 plot_onto_geometry(x_available, Re, data_at_all_x, path_to_save, x_vector_hill, y_bottom_hill, y_top_hill, scale_factor,
-                   labels, x_label)
+                   labels, x_label, display_title)
+
+print("--- %s seconds ---" % (time.time() - start_time))
