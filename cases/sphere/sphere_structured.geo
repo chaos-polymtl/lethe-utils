@@ -3,17 +3,18 @@
 
 // Variables
 gr=1; 		// Global refinement
-diagonal=30; 	// Refinement diagonal to the sphere
 around=30;  	// Refinement around the sphere
 trail=75;	// Refinement of trail of sphere
+near_sphere=1.10;	// Progression of cell refinement to sphere surface
 downstream=26;		// Length of domain downstream of sphere
 upstream=-6;		// Length of domain upstream of sphere (must be negative)
-cross_section=20;		// Half the cross-sectional width/height
+cross_section=20;	// Half the cross-sectional width/height
 radius=0.5;		// Radius of sphere
 
 // Calculate parameters
 sphere_points=Sqrt(radius*radius/3);
 half_cs=cross_section/2;
+shell=radius+2.5;
 
 // Points
 Point(1) = {0, 0, 0, gr};
@@ -26,74 +27,74 @@ Point(7) = {-sphere_points, -sphere_points, -sphere_points, gr};
 Point(8) = {-sphere_points, sphere_points, -sphere_points, gr};
 Point(9) = {-sphere_points, sphere_points, sphere_points, gr};
 
-Point(10) = {3, 3, 3, gr};
-Point(11) = {-3, 3, 3, gr};
-Point(12) = {3, -3, 3, gr};
-Point(13) = {3, 3, -3, gr};
-Point(14) = {3, -3, -3, gr};
-Point(15) = {-3, 3, -3, gr};
-Point(16) = {-3, -3, 3, gr};
-Point(17) = {-3, -3, -3, gr};
+Point(10) = {shell, shell, shell, gr};
+Point(11) = {-shell, shell, shell, gr};
+Point(12) = {shell, -shell, shell, gr};
+Point(13) = {shell, shell, -shell, gr};
+Point(14) = {shell, -shell, -shell, gr};
+Point(15) = {-shell, shell, -shell, gr};
+Point(16) = {-shell, -shell, shell, gr};
+Point(17) = {-shell, -shell, -3, gr};
 
 Point(26) = {downstream, - half_cs, -3, gr};
 Point(27) = {downstream, half_cs, -3, gr};
-Point(28) = {downstream, -3, -3, gr};
-Point(29) = {downstream, 3, -3, gr};
-Point(24) = {3, half_cs, -3, gr};
-Point(25) = {3, - half_cs, -3, gr};
-Point(22) = {-3, - half_cs, -3, gr};
-Point(23) = {-3, half_cs, -3, gr};
-Point(18) = {upstream, -3, -3, gr};
-Point(19) = { upstream, 3, -3, gr};
-Point(20) = { upstream, half_cs, -3, gr};
-Point(21) = { upstream, - half_cs, -3, gr};
+Point(28) = {downstream, -shell, -shell, gr};
+Point(29) = {downstream, shell, -shell, gr};
+Point(24) = {shell, half_cs, -shell, gr};
+Point(25) = {shell, - half_cs, -shell, gr};
+Point(22) = {-shell, - half_cs, -shell, gr};
+Point(23) = {-shell, half_cs, -shell, gr};
+Point(18) = {upstream, -shell, -shell, gr};
+Point(19) = { upstream, shell, -shell, gr};
+Point(20) = { upstream, half_cs, -shell, gr};
+Point(21) = { upstream, - half_cs, -shell, gr};
 
-Point(31) = {downstream, half_cs, 3, gr};
-Point(32) = {downstream, - half_cs, 3, gr};
-Point(33) = {downstream, -3, 3, gr};
-Point(34) = {downstream, 3, 3, gr};
-Point(35) = {3, half_cs, 3, gr};
-Point(36) = {3, - half_cs, 3, gr};
-Point(37) = {-3, - half_cs, 3, gr};
-Point(38) = {-3, half_cs, 3, gr};
-Point(39) = { upstream, half_cs, 3, gr};
-Point(40) = { upstream, - half_cs, 3, gr};
-Point(41) = { upstream, -3, 3, gr};
-Point(42) = { upstream, 3, 3, gr};
+Point(31) = {downstream, half_cs, shell, gr};
+Point(32) = {downstream, - half_cs, shell, gr};
+Point(33) = {downstream, -shell, shell, gr};
+Point(34) = {downstream, shell, shell, gr};
+Point(35) = {shell, half_cs, shell, gr};
+Point(36) = {shell, - half_cs, shell, gr};
+Point(37) = {-shell, - half_cs, shell, gr};
+Point(38) = {-shell, half_cs, shell, gr};
+Point(39) = { upstream, half_cs, shell, gr};
+Point(40) = { upstream, - half_cs, shell, gr};
+Point(41) = { upstream, -shell, shell, gr};
+Point(42) = { upstream, shell, shell, gr};
 
 Point(58) = {downstream, half_cs, half_cs, gr};
-Point(59) = {downstream, 3, half_cs, gr};
-Point(60) = {downstream, -3, half_cs, gr};
+Point(59) = {downstream, shell, half_cs, gr};
+Point(60) = {downstream, -shell, half_cs, gr};
 Point(61) = {downstream, - half_cs, half_cs, gr};
-Point(54) = {3, - half_cs, half_cs, gr};
-Point(55) = {3, -3, half_cs, gr};
-Point(56) = {3, 3, half_cs, gr};
-Point(57) = {3, half_cs, half_cs, gr};
-Point(49) = {-3, -3, half_cs, gr};
-Point(50) = {-3, 3, half_cs, gr};
-Point(51) = {-3, half_cs, half_cs, gr};
-Point(53) = {-3, - half_cs, half_cs, gr};
+Point(54) = {shell, - half_cs, half_cs, gr};
+Point(55) = {shell, -shell, half_cs, gr};
+Point(56) = {shell, shell, half_cs, gr};
+Point(57) = {shell, half_cs, half_cs, gr};
+Point(49) = {-shell, -shell, half_cs, gr};
+Point(50) = {-shell, shell, half_cs, gr};
+Point(51) = {-shell, half_cs, half_cs, gr};
+Point(53) = {-shell, - half_cs, half_cs, gr};
 Point(43) = { upstream, half_cs, half_cs, gr};
-Point(44) = { upstream, 3, half_cs, gr};
+Point(44) = { upstream, shell, half_cs, gr};
 Point(47) = { upstream, - half_cs, half_cs, gr};
-Point(48) = { upstream, -3, half_cs, gr};
+Point(48) = { upstream, -shell, half_cs, gr};
 
 Point(62) = {downstream, - half_cs, - half_cs, gr};
 Point(63) = {downstream, half_cs, - half_cs, gr};
-Point(64) = {downstream, 3, - half_cs, gr};
-Point(65) = {downstream, -3, - half_cs, gr};
-Point(66) = {3, -3, - half_cs, gr};
-Point(67) = {3, - half_cs, - half_cs, gr};
-Point(68) = {3, half_cs, - half_cs, gr};
-Point(69) = {3, 3, - half_cs, gr};
-Point(70) = {-3, 3, - half_cs, gr};
-Point(71) = {-3, -3, - half_cs, gr};
-Point(72) = {-3, - half_cs, - half_cs, gr};
-Point(73) = {-3, half_cs, - half_cs, gr};
+Point(64) = {downstream, shell, - half_cs, gr};
+Point(65) = {downstream, -shell, - half_cs, gr};
+Point(66) = {shell, -shell, - half_cs, gr};
+Point(67) = {shell, - half_cs, - half_cs, gr};
+Point(68) = {shell, half_cs, - half_cs, gr};
+Point(69) = {shell, shell, - half_cs, gr};
+Point(70) = {-shell, shell, - half_cs, gr};
+Point(71) = {-shell, -shell, - half_cs, gr};
+Point(72) = {-shell, - half_cs, - half_cs, gr};
+Point(73) = {-shell, half_cs, - half_cs, gr};
 Point(74) = { upstream, half_cs, - half_cs, gr};
 Point(75) = { upstream, - half_cs, - half_cs, gr};
-Point(76) = { upstream, -3, - half_cs, gr};
-Point(77) = { upstream, 3, - half_cs, gr};
+Point(76) = { upstream, -shell, - half_cs, gr};
+Point(77) = { upstream, shell, - half_cs, gr};
 
 Line(1) = {38, 35};
 Line(2) = {11, 10};
@@ -598,7 +599,8 @@ Volume(32) = {32};
 // Around sphere
 Transfinite Line {1, 2, 6, 10, 14, 17, 20, 23, 25, 29, 33, 35, 38, 41, 44, 47, 58, 61, 64, 67, 70, 73, 76, 79, 82, 85, 88, 91, 94, 97, 100, 103, 106, 109, 112, 115, 118, 121, 124, 127, 130, 133, 136, 139, 142, 146, 149, 152, 157:168} = Ceil(around) Using Progression 1.00;
 // Diagonal to sphere
-Transfinite Line {2, 6, 14, 17, 33, 35, 38, 41, 49:56, 121, 124, 133, 136, 157:168} = Ceil(diagonal) Using Progression 1.00;
+Transfinite Line {49:56} = Ceil(around) Using Progression near_sphere;
+Transfinite Line {2, 6, 14, 17, 33, 35, 38, 41, 121, 124, 133, 136, 157:168} = Ceil(around) Using Progression 1.00;
 // Trail
 Transfinite Line {3, 7, 11, 12, 15, 18, 21, 24, 83, 86, 89, 92, 95, 98, 101, 104} = Ceil(trail) Using Progression 1.00;
 
