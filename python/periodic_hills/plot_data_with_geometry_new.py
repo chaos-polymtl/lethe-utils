@@ -40,6 +40,9 @@ data_type = "reynolds_shear_stress_uv"
 #               15 for reynolds normal stress 0, and 10 for reynolds shear stresses
 scale_factor = 10
 
+# Display the title on the output graphs? (True or False)
+display_title = True
+
 #######################################################################################################################
 # Function to define hill geometry
 def hill_geometry():
@@ -148,7 +151,6 @@ def hill_geometry():
     y_top = max_y * numpy.ones(len(x_vector)) / H
 
     return x_vector, y_bottom, y_top
-#x_vector_hill, y_bottom_hill, y_top_hill = hill_geometry()
 
 # Function to retrieve data from .csv files
 def obtain_data(x_available, folder_to_save_csv, file_names_lethe_data, data_type):
@@ -179,7 +181,7 @@ def obtain_data(x_available, folder_to_save_csv, file_names_lethe_data, data_typ
 
 # Function to plot data at all x
 def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_bottom, y_top, scale_factor,
-                       lethe_labels, x_label):
+                       lethe_labels, x_label, show_title):
     # Plot data for the chosen data type
     fig, ax = plt.subplots()
 
@@ -247,7 +249,25 @@ def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_
 
 
     # Plot and save graph
-    ax.set_title(data_type + " at Re = " + str(Re))
+    if show_title is True:
+        if data_type == "average_velocity_0":
+            title = "Average x velocity $u$"
+        elif data_type == "average_velocity_1":
+            title = "Average y velocity $v$"
+        elif data_type == "reynolds_normal_stress_0":
+            title = "Reynolds normal stress $u'u'$"
+        elif data_type == "reynolds_normal_stress_1":
+            title = "Reynolds normal stress $v'v'$"
+        elif data_type == "reynolds_shear_stress_uv":
+            title = "Reynolds shear stress $u'v'$"
+        elif data_type == "reynolds_normal_stress_2":
+            title = "Reynolds normal stress $w'w'$"
+        elif data_type == "turbulent_kinetic_energy":
+            title = "Turbulent kinetic energy $k$"
+        else:
+            title = None
+
+        ax.set_title(title + " at Re = " + str(Re))
     ax.set_xlabel("$x/h$ ; " + str(scale_factor) + "$*$" + x_label)
     ax.set_ylabel("$y/h$")
     plt.vlines([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, 3.035, linestyle=':', color='xkcd:dark grey', linewidth=0.75)
@@ -276,4 +296,4 @@ x_label = x_labels_available[data_type_available.index(data_type)]
 
 data_at_all_x = obtain_data(x_available, path_to_data, file_names_lethe_data, data_type)
 plot_onto_geometry(x_available, Re, data_at_all_x, path_to_save, x_vector_hill, y_bottom_hill, y_top_hill, scale_factor,
-                   labels, x_label)
+                   labels, x_label, display_title)

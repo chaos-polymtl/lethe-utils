@@ -25,14 +25,14 @@ path_to_lethe_data = "./lethe/"
 # file_names_lethe_data = ["data_3","data_3_bdf2"]  # add all lethe files in this list
 # file_names_lethe_data = ["data_3"],"data_6_500s"]  # add all lethe files in this list
 # file_names_lethe_data = ["data_3"]
-file_names_lethe_data = ["static_1000s","adaptive_1000s"]
+file_names_lethe_data = ["4M_600", "1M_800"]
 
 # Label for Lethe data for the legend
 # NOTE : make sure the number of labels are the same that the number of files names of lethe data
 # labels = ["Lethe - 1M - 720s", "Lethe - 4M - 300s","Lethe - 4M - 500s"]
 # labels = ["Lethe - 1M - bdf1","Lethe - 1M - bdf2"]
 # labels = ["Lethe - 1M - 720s"]
-labels = ["Lethe - static mesh","Lethe - adaptive mesh"]
+labels = ["Lethe - 4M - 600s", "Lethe - 1M - 800s"]
 
 # Information about the literature data
 path_to_literature_data = "./lit/Re_5600/"
@@ -45,14 +45,17 @@ folder_to_save_csv = "./output_csv/"
 Path(folder_to_save_csv).mkdir(parents=True, exist_ok=True)
 
 # x/h position: Set x_value to be equal to 0.05, 0.5, 1, 2, 3, 4, 5, 6, 7 or 8
-x_value = 2
+x_value = 0.5
 
 # data type options: Set data_type to be equal to "average_velocity_0", "average_velocity_1", "reynolds_normal_stress_0"
 # "reynolds_normal_stress_1", "reynolds_shear_stress_uv", "reynolds_normal_stress_2" or "turbulent_kinetic_energy"
 data_type = "average_velocity_1"
 
 # Extract and generate graphs for all x_values and data_types? (True or False)
-all_data = True
+all_data = False
+
+# Display the title on the output graphs? (True or False)
+display_title = True
 
 ########################################################################################################################
 
@@ -201,9 +204,7 @@ def lethe_data_extraction(x_value, data_type, path_to_lethe_data, file_names_let
             # Convert to numpy arrays
             y_data = numpy.asarray(y_data)
             data_type_data = numpy.asarray(data_type_data)
-
-            #print(y_data)
-
+            
             # Average across z values
             # Initialise lists
             lethe_data_y = []
@@ -266,6 +267,10 @@ def lethe_data_extraction(x_value, data_type, path_to_lethe_data, file_names_let
                     # Create matrix of y and data_type values just below x_value
                     lower_interpolation_matrix.append([lethe_data_range_array[i, 1], lethe_data_range_array[i, 2]])
 
+            for i in numpy.unique(upper_interpolation_matrix):
+                print(i)
+            
+            
             # Upper interpolation values
 
             # Convert interpolation matrices to numpy arrays
@@ -301,7 +306,6 @@ def lethe_data_extraction(x_value, data_type, path_to_lethe_data, file_names_let
                 # Add values to arrays for interpolation
                 lethe_data_upper_y.append([i])
                 upper_data_values.append([u_average])
-
 
             # Convert to array
             lethe_data_upper_y = numpy.asarray(lethe_data_upper_y)
@@ -371,14 +375,32 @@ def lethe_data_extraction(x_value, data_type, path_to_lethe_data, file_names_let
 
 
 # Plot literature values against Lethe values
-def plot_to_png(Breuer2009_data, Rapp2009_data, lethe_data, data_type, x_value, labels, literature_data_type,
-                folder_to_save_png):
+def plot_to_png(Breuer2009_data, Rapp2009_data, lethe_data, data_type, x_value, labels,
+                folder_to_save_png, show_title):
     # Plotting results
     fig, ax = plt.subplots()
 
     # Colours for graphs
     colors = ['#1b9e77', '#7570b3', '#e7298a', '#66a61e', '#e6ab02', '#58aef5']
     index = 0
+
+    # Set display axis titles
+    if data_type == "average_velocity_0":
+        x_axis_label = "$v/u_b$"
+    elif data_type == "average_velocity_1":
+        x_axis_label = "$v/u_b$"
+    elif data_type == "reynolds_normal_stress_0":
+        x_axis_label = "$u'u'/u_b^2$"
+    elif data_type == "reynolds_normal_stress_1":
+        x_axis_label = "$v'v'/u_b^2$"
+    elif data_type == "reynolds_shear_stress_uv":
+        x_axis_label = "$u'v'/u_b^2$"
+    elif data_type == "reynolds_normal_stress_2":
+        x_axis_label = "$w'w'/u_b^2$"
+    elif data_type == "turbulent_kinetic_energy":
+        x_axis_label = "$k/u_b^2$"
+    else:
+        x_axis_label = None
 
     # Plot Lethe data
     for file_name in lethe_data:
@@ -396,8 +418,28 @@ def plot_to_png(Breuer2009_data, Rapp2009_data, lethe_data, data_type, x_value, 
         ax.plot(Rapp2009_data[0], Rapp2009_data[1], '--', color='black',
                 label='Experimental - Rapp 2009')
 
-    ax.set_title(data_type + " at Re = " + str(Re) + " at x = " + str(x_value))
-    ax.set_xlabel(literature_data_type)
+    # Only display title if specified
+    if show_title is True:
+        if data_type == "average_velocity_0":
+            title = "Average x velocity $u$"
+        elif data_type == "average_velocity_1":
+            title = "Average y velocity $v$"
+        elif data_type == "reynolds_normal_stress_0":
+            title = "Reynolds normal stress $u'u'$"
+        elif data_type == "reynolds_normal_stress_1":
+            title = "Reynolds normal stress $v'v'$"
+        elif data_type == "reynolds_shear_stress_uv":
+            title = "Reynolds shear stress $u'v'$"
+        elif data_type == "reynolds_normal_stress_2":
+            title = "Reynolds normal stress $w'w'$"
+        elif data_type == "turbulent_kinetic_energy":
+            title = "Turbulent kinetic energy $k$"
+        else:
+            title = None
+
+        ax.set_title(title + " at Re = " + str(Re) + " at x = " + str(x_value))
+
+    ax.set_xlabel(x_axis_label)
     ax.set_ylabel("$y/h$")
     ax.legend()
     fig.savefig(
@@ -424,7 +466,7 @@ if all_data is True:
             [Breuer2009_data, Rapp2009_data, literature_data_type] = literature_data_extraction(x, flow_property, path_to_literature_data,
                                                                       folder_to_save_csv, Re)
             lethe_data = lethe_data_extraction(x, flow_property, path_to_lethe_data, file_names_lethe_data, Re)
-            plot_to_png(Breuer2009_data, Rapp2009_data, lethe_data, flow_property, x, labels, literature_data_type, folder_to_save_png)
+            plot_to_png(Breuer2009_data, Rapp2009_data, lethe_data, flow_property, x, labels, folder_to_save_png, display_title)
 
 # Collect a specified x_value and data_type
 else:
@@ -435,6 +477,6 @@ else:
     lethe_data = lethe_data_extraction(x_value, data_type, path_to_lethe_data, file_names_lethe_data, Re)
 
     # PLOT RESULTS
-    plot_to_png(Breuer2009_data, Rapp2009_data, lethe_data, data_type, x_value, labels, literature_data_type, folder_to_save_png)
+    plot_to_png(Breuer2009_data, Rapp2009_data, lethe_data, data_type, x_value, labels, folder_to_save_png, display_title)
 
 print("--- %s seconds ---" % (time.time() - start_time))

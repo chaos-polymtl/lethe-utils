@@ -1,10 +1,10 @@
 # Name   : near_wall_processing.py
 # Author : Catherine Radburn
-# Date   : 03-03-2021
+# Date   : 11-05-2021
 # Desc   : This code finds the reattachment point from Lethe, and evaluates and plots y+ across the length.
 #           The near-wall region of data is extracted from Lethe. The reattachment point is found at the wall-nearest
 #           point as the x-value where the average x-direction velocity is zero. y+ is calculated from the gradient of
-#	    the average x velocity in the y direction, giving the wall shear stress.
+#	        the average x velocity in the y direction, giving the wall shear stress.
 #           Note that this code only applies if alpha = 1 (i.e. no stretching of geometry)
 
 import pandas
@@ -32,7 +32,7 @@ file_names_lethe_data = ["data_3"]
 # NOTE : make sure the number of labels are the same that the number of files names of lethe data
 # labels = ["Lethe - 1M - 720s", "Lethe - 4M - 300s","Lethe - 4M - 500s"]
 # labels = ["Lethe - 1M - bdf1","Lethe - 1M - bdf2"]
-labels = ["Lethe - 1M - 720s"]
+labels = ["Lethe - 1M - 800s"]
 # labels = ["Lethe - 1M - 720s", "Lethe - 4M - 800s"]
 
 # Information about the literature data
@@ -44,6 +44,9 @@ Path(folder_to_save_png).mkdir(parents=True, exist_ok=True)
 
 folder_to_save_csv = "./output_csv/"
 Path(folder_to_save_csv).mkdir(parents=True, exist_ok=True)
+
+# Display the title on the output graphs? (True or False)
+display_title = True
 
 ########################################################################################################################
 
@@ -271,7 +274,7 @@ def y_plus(extracted_lethe_data, viscosity, folder_to_save_csv):
     return extracted_y_plus
 
 # Plot of y+ values
-def plot_y_plus(folder_to_save_png, extracted_y_plus, labels, Re):
+def plot_y_plus(folder_to_save_png, extracted_y_plus, labels, Re, title):
     # Plotting results
     fig, ax = plt.subplots()
 
@@ -285,9 +288,10 @@ def plot_y_plus(folder_to_save_png, extracted_y_plus, labels, Re):
             ax.plot(file_name[:,0], file_name[:,1], '-', label=labels[index], color=colors[index])
             index += 1
 
-    ax.set_title("y_plus along the lower wall at Re = " + str(Re))
-    ax.set_xlabel("x/h")
-    ax.set_ylabel("y_plus")
+    if title is True:
+        ax.set_title("$y^+$ along the lower wall at Re = " + str(Re))
+    ax.set_xlabel("$x/h$")
+    ax.set_ylabel("$y^+$")
     ax.legend()
     fig.savefig(
         folder_to_save_png + "graph_y_plus.png",
@@ -306,6 +310,6 @@ assert len(labels) == len(file_names_lethe_data), f"It seems to have {len(file_n
 lethe_data = lethe_data_extraction(path_to_lethe_data, file_names_lethe_data, Re)
 reattachment(lethe_data, labels)
 y_plus_data = y_plus(lethe_data, viscosity, folder_to_save_csv)
-plot_y_plus(folder_to_save_png, y_plus_data, labels, Re)
+plot_y_plus(folder_to_save_png, y_plus_data, labels, Re, display_title)
 
 print("--- %s seconds ---" % (time.time() - start_time))
