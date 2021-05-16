@@ -388,7 +388,7 @@ def plot_to_png(Breuer2009_data, Rapp2009_data, lethe_data, data_type, x_value, 
 
     # Set display axis titles
     if data_type == "average_velocity_0":
-        x_axis_label = "$v/u_b$"
+        x_axis_label = "$u/u_b$"
     elif data_type == "average_velocity_1":
         x_axis_label = "$v/u_b$"
     elif data_type == "reynolds_normal_stress_0":
