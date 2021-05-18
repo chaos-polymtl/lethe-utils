@@ -4,6 +4,8 @@
 # Desc   : This code plots those following data type (u/u_b, v/u_b, u'u'/u_b², v'v'/u_b², u'v'/u_b²) of
 #          generated Lethe data csv files (with the post_processing_new.py code) with the experimental data of Rapp 2009
 #          and the computational data of Breuer 2009.
+#           If all x_value and data_type available are required, ignore data_type and scale_factor in lines 40 and 45, and
+#           make all_data = True.
 
 import pandas
 import numpy
@@ -28,22 +30,25 @@ Path(path_to_save).mkdir(parents=True, exist_ok=True)
 # Label for Lethe data for the legend (should be the same as used in post_processing_new.py)
 # NOTE : make sure the number of labels are the same that the number of Lethe simulation data in csv files and
 #        and associated to the right data set
-labels = ["Lethe - 1M - 800s", "Lethe - 4M - 800s"]
+labels = ["Lethe - 4M - 800s","Lethe - 8M - 800s"]
 
 # File names of lethe data
-file_names_lethe_data = ["1M_800", "4M_800"]
+file_names_lethe_data = ["4M_800","8M_800"]
 
 # data_type_available = ["average_velocity_0", "average_velocity_1", "reynolds_normal_stress_0",
 #                            "reynolds_normal_stress_1", "reynolds_shear_stress_uv"]
-data_type = "reynolds_normal_stress_1"
+data_type = "average_velocity_1"
 
 # Scale factor for the curves
 # Suggestions : 0.8 for average_velocity_0, 3 for average_velocity_1, 5 for reynolds_normal_stress_0,
 #               15 for reynolds_normal_stress_1, and 10 for reynolds_shear_stress
-scale_factor = 15
+scale_factor = 3
+
+# Extract and generate graphs for all x_values and data_types? (True or False)
+all_data = True
 
 # Display the title on the output graphs? (True or False)
-display_title = True
+display_title = False
 
 #######################################################################################################################
 # Function to define hill geometry
@@ -183,7 +188,7 @@ def obtain_data(x_available, folder_to_save_csv, file_names_lethe_data, data_typ
 
 # Function to plot data at all x
 def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_bottom, y_top, scale_factor,
-                       lethe_labels, x_label, show_title):
+                       lethe_labels, x_label, show_title, data_type):
     # Plot data for the chosen data type
     fig, ax = plt.subplots()
 
@@ -249,7 +254,6 @@ def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_
                 else:
                     ax.plot(dataset[0, :], dataset[1, :], "--", color=color, linewidth=0.75)
 
-
     # Plot and save graph
     if show_title is True:
         if data_type == "average_velocity_0":
@@ -270,7 +274,7 @@ def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_
             title = None
 
         ax.set_title(title + " at Re = " + str(Re))
-    ax.set_xlabel("$x/h$ ; " + str(scale_factor) + "x " + x_label)
+    ax.set_xlabel("$x/h$ ; " + str(scale_factor) + x_label)
     ax.set_ylabel("$y/h$")
     plt.vlines([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 0, 3.035, linestyle=':', color='xkcd:dark grey', linewidth=0.75)
     ax.set_ybound(-0.5, 3.035)
@@ -294,10 +298,27 @@ x_available = [0.05, 0.5, 1, 2, 3, 4, 5, 6, 7, 8]
 data_type_available = ["average_velocity_0", "average_velocity_1", "reynolds_normal_stress_0",
                             "reynolds_normal_stress_1", "reynolds_shear_stress_uv"]
 x_labels_available = ["$u/u_b$", "$v/u_b$", "$u'u'/u_b^2$", "$v'v'/u_b^2$", "$u'v'/u_b^2$"]
-x_label = x_labels_available[data_type_available.index(data_type)]
 
-data_at_all_x = obtain_data(x_available, path_to_data, file_names_lethe_data, data_type)
-plot_onto_geometry(x_available, Re, data_at_all_x, path_to_save, x_vector_hill, y_bottom_hill, y_top_hill, scale_factor,
-                   labels, x_label, display_title)
+# Plot all data profiles
+if all_data is True:
+    scale_available = [0.8, 3, 5, 15, 10]
+
+    # Cycle through all data types
+    for data in data_type_available:
+        print("Data type: " + data)
+        x_label = x_labels_available[data_type_available.index(data)]
+        scale = scale_available[data_type_available.index(data)]
+
+        data_at_all_x = obtain_data(x_available, path_to_data, file_names_lethe_data, data)
+        plot_onto_geometry(x_available, Re, data_at_all_x, path_to_save, x_vector_hill, y_bottom_hill, y_top_hill, scale,
+                        labels, x_label, display_title, data)
+
+# Plot specify profiles        
+else:
+    x_label = x_labels_available[data_type_available.index(data_type)]
+
+    data_at_all_x = obtain_data(x_available, path_to_data, file_names_lethe_data, data_type)
+    plot_onto_geometry(x_available, Re, data_at_all_x, path_to_save, x_vector_hill, y_bottom_hill, y_top_hill, scale_factor,
+                    labels, x_label, display_title, data_type)
 
 print("--- %s seconds ---" % (time.time() - start_time))
