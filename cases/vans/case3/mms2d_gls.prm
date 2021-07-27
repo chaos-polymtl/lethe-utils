@@ -4,13 +4,13 @@
 # Simulation and IO Control
 #---------------------------------------------------
 subsection simulation control
-  set method                  = bdf2
+  set method                  = bdf1
   set number mesh adapt       = 0
   set output name              = result_
   set output frequency		= 2
   set startup time scaling         = 0.6
   set time end                     = 1
-  set time step                    = 0.025
+  set time step                    = 0.1
   set subdivision             = 1  
 end
 
@@ -18,7 +18,7 @@ end
 # FEM
 #---------------------------------------------------
 subsection FEM
-    set velocity order            = 3
+    set velocity order            = 2
     set pressure order            = 2
 end
 
@@ -36,7 +36,7 @@ subsection mesh
     set type                 = dealii
     set grid type            = hyper_cube
     set grid arguments       = -1 : 1 : false
-    set initial refinement   = 6
+    set initial refinement   = 7
 end
 
 
@@ -85,7 +85,7 @@ end
 #---------------------------------------------------
 subsection analytical solution
   set enable                 = true
-    subsection uvw
+    subsection uvwp
             set Function expression = cos(2*pi*t)*cos(pi*x)*cos(pi*y); cos(2*pi*t)*cos(pi*x)*cos(pi*y); 0
 end
 end
