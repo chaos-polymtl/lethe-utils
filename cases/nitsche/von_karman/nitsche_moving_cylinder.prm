@@ -7,7 +7,7 @@
 #---------------------------------------------------
 subsection simulation control
   set method                  = bdf2
-  set time step               = 0.0125
+  set time step               = 0.005
   set time end                = 200
   set output name             = vk_cylinder
   set output path             = ./output/
