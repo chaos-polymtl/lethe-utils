@@ -11,7 +11,7 @@ subsection simulation control
   set time end                = 200
   set output name             = vk_cylinder
   set output path             = ./output/
-  set output frequency        = 5
+  set output frequency        = 10
   set subdivision             = 1
 end
 
