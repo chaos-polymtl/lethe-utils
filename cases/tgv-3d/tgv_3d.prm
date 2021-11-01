@@ -120,11 +120,12 @@ end
 # Non-Linear Solver Control
 #---------------------------------------------------
 subsection non-linear solver
-  set solver                  = skip_newton
+  set solver                  = inexact_newton
   set verbosity               = verbose
   set tolerance               = 1e-9
   set max iterations          = 10
-  set skip iterations         = 3
+  set reuse matrix            = true
+  set matrix tolerance        = 0.01
 end
 
 # --------------------------------------------------
@@ -134,7 +135,7 @@ subsection linear solver
   set verbosity               = verbose
   set method                  = gmres
   set max iters               = 5000
-  set relative residual       = 1e-8
+  set relative residual       = 1e-4
   set minimum residual        = 1e-12
   set ilu preconditioner fill               = 0
   set ilu preconditioner absolute tolerance = 1e-12
