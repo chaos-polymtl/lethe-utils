@@ -3,7 +3,7 @@ START=$2
 FINISH=$3
 OUTPUT=$4
 
-echo "Merging files with PREFIX $PREFIX'_'$START to $PREFIX'_'$FINISH"
+echo "Merging files with PREFIX $PREFIX$START to $PREFIX$FINISH"
 
 for f in $(seq $START $FINISH); 
 do
