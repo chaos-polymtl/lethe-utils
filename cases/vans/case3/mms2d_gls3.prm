@@ -26,7 +26,9 @@ end
 # Physical Properties
 #---------------------------------------------------
 subsection physical properties
+   subsection fluid 0
     set kinematic viscosity            = 1.000
+   end
 end
 
 #---------------------------------------------------
@@ -101,7 +103,7 @@ end
 # Non-Linear Solver Control
 #---------------------------------------------------
 subsection non-linear solver
-  set tolerance               = 1e-8
+  set tolerance               = 1e-9
   set max iterations          = 10
   set verbosity               = verbose
 end
@@ -113,9 +115,9 @@ subsection linear solver
   set method                                 = gmres
   set max iters                              = 5000
   set relative residual                      = 1e-4
-  set minimum residual                       = 1e-9
+  set minimum residual                       = 1e-10
   set ilu preconditioner fill                = 4
-  set ilu preconditioner absolute tolerance  = 1e-3
+  set ilu preconditioner absolute tolerance  = 1e-11
   set ilu preconditioner relative tolerance  = 1.00
   set verbosity               = verbose
 end
