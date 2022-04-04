@@ -20,7 +20,7 @@ print('This is the dictionary of your .prm file:')
 print(example.prm_dict)
 print('To print out any value inside the dictionary, ask for it using ["parameter_name"] right after .prm_dict variable')
 
-print('The path to the case can be seen using ')
+print('The path to the case can be seen using: example.case_path')
 
 #To read the data to pyvista dataframe, use the following with
 #the .pvd file as argument
