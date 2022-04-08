@@ -56,6 +56,9 @@ class Lethe_pyvista_tools():
                         self.prm_dict[clean_line[0]] = clean_line[1]
         
             print(f'Successfully constructed. To see the .prm dictionary, print($NAME.prm_dict)')
+        #If no output path is precified, the next step will not fail
+        if not "output path" in self.prm_dict:
+            self.prm_dict['output path'] = "/"
         #Define path where vtu files are
         self.path_output = self.path_case + self.prm_dict['output path'].replace('.', '')
 
