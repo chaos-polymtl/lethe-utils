@@ -34,7 +34,7 @@ end
 # Timer
 #---------------------------------------------------
 subsection timer
-    set type                       = iteration
+    set type                       = end
 end
 
 
