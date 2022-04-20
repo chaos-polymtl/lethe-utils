@@ -14,7 +14,7 @@ communicate     single vel yes
 
 boundary        f f f
 newton          off
-processors      1 1 1 
+processors      2 2 2 
 
 units           si
 
@@ -77,5 +77,5 @@ dump   dmp2 all custom 1000 post/bed_*.dump x y z radius
 #dump   dumpstress all mesh/gran/VTK 200 post/mesh_*.vtk stress wear cad
 
 fix         ts_check all check/timestep/gran 1000 0.4 0.4
-run        100000 upto
+run        10000000 upto
 write_restart   post/restart/liggghts.restart

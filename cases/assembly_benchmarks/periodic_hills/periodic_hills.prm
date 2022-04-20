@@ -1,0 +1,139 @@
+# Listing of Parameters
+# ---------------------
+# --------------------------------------------------
+# Simulation and IO Control
+#---------------------------------------------------
+subsection simulation control
+  set method                       = bdf2
+  set output name                  = periodic_hills_output_q2q2
+  set time step                    = 0.025
+  set output frequency             = 4000
+  set output path                  = ./
+  set time end                     = 0.050
+end
+
+#---------------------------------------------------
+# Physical Properties
+#---------------------------------------------------
+subsection physical properties
+  subsection fluid 0
+    set kinematic viscosity        = 1.78571E-04 # Re = 5600
+end
+end
+
+#---------------------------------------------------
+# Mesh
+#---------------------------------------------------
+subsection mesh
+    set type                       = periodic_hills
+    set initial refinement         = 2
+    set grid arguments 		   = 1;1;9;6;5
+end
+
+#---------------------------------------------------
+# Timer
+#---------------------------------------------------
+subsection timer
+    set type                       = iteration
+end
+
+
+#---------------------------------------------------
+# Restart
+#---------------------------------------------------
+subsection restart
+	set restart 	= false
+        set checkpoint  = false
+        set filename    = periodic_hills_restart
+        set frequency   = 100
+end
+
+#---------------------------------------------------
+# Flow control
+#---------------------------------------------------
+subsection flow control
+    set enable                     = true
+    set boundary id    		   = 0
+    set volumetric flow rate       = -9.1575 # bulk velocity = -1
+    set flow direction 		   = 0
+    set initial beta		   = 7.66
+    set verbosity                  = verbose
+end
+
+#---------------------------------------------------
+# Post-Processing
+#---------------------------------------------------
+subsection post-processing
+    set calculate average velocities    = true
+    set initial time 		        = 207
+end
+
+# --------------------------------------------------
+# Boundary Conditions
+#---------------------------------------------------
+subsection boundary conditions
+  set number                      = 4
+    subsection bc 0
+        set type                  = periodic
+        set id                    = 0
+        set periodic_id           = 1
+        set periodic_direction    = 0
+    end
+    subsection bc 1
+        set id                    = 2
+        set type                  = noslip
+    end
+    subsection bc 2
+        set id                    = 3
+        set type                  = noslip
+    end
+    subsection bc 3
+        set type                  = periodic
+        set id                    = 4
+        set periodic_id           = 5
+        set periodic_direction    = 2
+    end 
+end
+
+#---------------------------------------------------
+# FEM
+#---------------------------------------------------
+subsection FEM
+    set velocity order            = 2
+    set pressure order            = 2
+    set qmapping all              = true
+end
+
+
+# --------------------------------------------------
+# Mesh Adaptation Control
+#---------------------------------------------------
+subsection mesh adaptation
+  set type                        = none
+end
+
+
+# --------------------------------------------------
+# Non-Linear Solver Control
+#---------------------------------------------------
+subsection non-linear solver
+  set solver                      = newton
+  set tolerance                   = 1e-5
+  set max iterations              = 10
+  set verbosity                   = verbose
+end
+
+# --------------------------------------------------
+# Linear Solver Control
+#---------------------------------------------------
+subsection linear solver
+  set method                                 = gmres
+  set max iters                              = 5000
+  set relative residual                      = 1e-3
+  set minimum residual                       = 1e-9
+  set max krylov vectors                     = 200
+  set ilu preconditioner fill                = 0
+  set ilu preconditioner absolute tolerance  = 1e-12
+  set ilu preconditioner relative tolerance  = 1.00
+  set verbosity                              = verbose
+end
