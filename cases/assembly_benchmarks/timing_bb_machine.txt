@@ -1,0 +1,21 @@
+Timing
+
+TGV_O2
+------------
+20/04/2022 - Base lethe
++---------------------------------------------+------------+------------+
+| Total wallclock time elapsed since start    |       129s |            |
+|                                             |            |            |
+| Section                         | no. calls |  wall time | % of total |
++---------------------------------+-----------+------------+------------+
+| Assemble RHS                    |         9 |      11.8s |       9.2% |
+| Assemble matrix                 |         6 |        82s |        64% |
+| kinetic_energy_calculation      |         2 |    0.0912s |         0% |
+| output                          |         1 |     0.245s |      0.19% |
+| setup_ILU                       |         6 |      25.8s |        20% |
+| solve_linear_system             |         6 |      8.36s |       6.5% |
++---------------------------------+-----------+------------+------------+
+
+
+Periodic Hills
+----------------
