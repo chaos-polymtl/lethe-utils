@@ -34,10 +34,10 @@ Point(13) = {shell, shell, -shell, gr};
 Point(14) = {shell, -shell, -shell, gr};
 Point(15) = {-shell, shell, -shell, gr};
 Point(16) = {-shell, -shell, shell, gr};
-Point(17) = {-shell, -shell, -3, gr};
+Point(17) = {-shell, -shell, -shell, gr};
 
-Point(26) = {downstream, - half_cs, -3, gr};
-Point(27) = {downstream, half_cs, -3, gr};
+Point(26) = {downstream, - half_cs, -shell, gr};
+Point(27) = {downstream, half_cs, -shell, gr};
 Point(28) = {downstream, -shell, -shell, gr};
 Point(29) = {downstream, shell, -shell, gr};
 Point(24) = {shell, half_cs, -shell, gr};
