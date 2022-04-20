@@ -77,7 +77,7 @@ subsection mesh
     set type                 = dealii
     set grid type            = subdivided_hyper_cube
     set grid arguments       = 2 : -3.14159265359 : 3.14159265359 : true
-    set initial refinement   = 4 #7
+    set initial refinement   = 3 #7
 end
 # --------------------------------------------------
 # Mesh Adaptation Control

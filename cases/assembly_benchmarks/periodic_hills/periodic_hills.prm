@@ -26,7 +26,7 @@ end
 #---------------------------------------------------
 subsection mesh
     set type                       = periodic_hills
-    set initial refinement         = 2
+    set initial refinement         = 1
     set grid arguments 		   = 1;1;9;6;5
 end
 
