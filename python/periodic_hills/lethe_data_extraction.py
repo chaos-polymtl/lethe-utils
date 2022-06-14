@@ -1,9 +1,10 @@
-# Name   : post_processing_new.py
-# Author : Catherine Radburn (adapted from Audrey Collard-Daigneault)
-# Date   : 11-05-2021
-# Desc   : This code plots simulation data from Lethe and other data from literature.
-#           Each run will extract the literature and Lethe data for a specified x_value and data_type, save extracted
-#           data as .csv files, and plot extracted data into a .png file. Displaying the title is optional.
+# Name   : lethe_data_extraction.py
+# Author : Laura Prieto Saavedra (Adpated from Catherine Radburn and Audrey Collard-Daigneault)
+# Date   : 22-06-2021
+# Desc   : This code extracts the Lethe data for the periodic hills case for a specified x_value and data_type.
+#          The data is saved as .csv files in the output_csv file. This only needs to be done once, as this data is 
+#          not changing and it can be reused. 
+
 #           If all x_value and data_type available are required, ignore x_value and data_type in lines 46 and 49, and
 #           make all_data = True.
 #           On line 350, a tolerance is specified. This may need to be varied if too little/too much data is plotted.
@@ -18,149 +19,35 @@ start_time = time.time()
 ########################################################################################################################
 # SET VARIABLES
 
-# Reynolds number of the simulation (Currently available for Re = 5600 only)
+# Reynolds number of the simulation (Currently available for Re = 5600, 10600, 37000 only)
 Re = 5600
 
-# Information about the Lethe data
-path_to_lethe_data = "./lethe/"
-# file_names_lethe_data = ["data_3","data_3_bdf2"]  # add all lethe files in this list
-# file_names_lethe_data = ["data_3"],"data_6_500s"]  # add all lethe files in this list
-# file_names_lethe_data = ["data_3"]
-file_names_lethe_data = ["1M_800", "4M_800"]
+# Path to folder where Lethe simulation data is stored
+path_to_lethe_data = "./lethe_data/"
 
-# Label for Lethe data for the legend
-# NOTE : make sure the number of labels are the same that the number of files names of lethe data
-# labels = ["Lethe - 1M - 720s", "Lethe - 4M - 300s","Lethe - 4M - 500s"]
-# labels = ["Lethe - 1M - bdf1","Lethe - 1M - bdf2"]
-# labels = ["Lethe - 1M - 720s"]
-labels = ["Lethe - 1M - 800s", "Lethe - 4M - 800s"]
+#Filename
+# example: file_names_lethe_data = ["0.0125_1M_1000s", "0.025_4M_800s"]
+file_names_lethe_data = ["0.025_120K_800s_5600_q2q2"]
 
-# Information about the literature data
-path_to_literature_data = "./lit/Re_5600/"
-
-# Save graph.png and data.csv
-folder_to_save_png = "./output_png/"
-Path(folder_to_save_png).mkdir(parents=True, exist_ok=True)
-
-folder_to_save_csv = "./output_csv/"
+#Create a solver according to case
+folder_to_save_csv = "./output_csv/all_data/"
 Path(folder_to_save_csv).mkdir(parents=True, exist_ok=True)
 
 # x/h position: Set x_value to be equal to 0.05, 0.5, 1, 2, 3, 4, 5, 6, 7 or 8
-x_value = 0.5
+x_value = 6
 
 # data type options: Set data_type to be equal to "average_velocity_0", "average_velocity_1", "reynolds_normal_stress_0"
 # "reynolds_normal_stress_1", "reynolds_shear_stress_uv", "reynolds_normal_stress_2" or "turbulent_kinetic_energy"
-data_type = "average_velocity_1"
+data_type = "reynolds_normal_stress_0"
 
 # Extract and generate graphs for all x_values and data_types? (True or False)
 all_data = True
 
-# Display the title on the output graphs? (True or False)
-display_title = True
-
 ########################################################################################################################
-
-# Literature data extraction of files associated with x/h
-def literature_data_extraction(x_value, data_type, path_to_literature_data, folder_to_save_csv, Re):
-    assert Re == 5600, "Currently available for Re = 5600 only."
-
-    # Using x value to determine which file number is required
-    if x_value == 0.05:
-        literature_data_nb = "01"
-        ww_lit_data_nb = "05"
-    elif x_value == 0.5:
-        literature_data_nb = "02"
-        ww_lit_data_nb = None
-    elif x_value == 1:
-        literature_data_nb = "03"
-        ww_lit_data_nb = None
-    elif x_value == 2:
-        literature_data_nb = "04"
-        ww_lit_data_nb = "11"
-    elif x_value == 3:
-        literature_data_nb = "05"
-        ww_lit_data_nb = None
-    elif x_value == 4:
-        literature_data_nb = "06"
-        ww_lit_data_nb = "17"
-    elif x_value == 5:
-        literature_data_nb = "07"
-        ww_lit_data_nb = None
-    elif x_value == 6:
-        literature_data_nb = "08"
-        ww_lit_data_nb = None
-    elif x_value == 7:
-        literature_data_nb = "09"
-        ww_lit_data_nb = None
-    elif x_value == 8:
-        literature_data_nb = "10"
-        ww_lit_data_nb = "23"
-    else:
-        literature_data_nb = None
-        ww_lit_data_nb = None
-
-    # Setting file number or column to data type
-    if data_type == "average_velocity_0":
-        literature_data_type = "u/u_b"
-    elif data_type == "average_velocity_1":
-        literature_data_type = "v/u_b"
-    elif data_type == "reynolds_normal_stress_0":
-        literature_data_type = "u'u'/u_b^2"
-    elif data_type == "reynolds_normal_stress_1":
-        literature_data_type = "v'v'/u_b^2"
-    elif data_type == "reynolds_shear_stress_uv":
-        literature_data_type = "u'v'/u_b^2"
-    elif data_type == "reynolds_normal_stress_2":
-        literature_data_type = "w'w'/u_b^2"
-    elif data_type == "turbulent_kinetic_energy":
-        literature_data_type = "k/u_b^2"
-    else:
-        literature_data_type = None
-
-    # Getting literature data
-    # To obtain reynolds_normal_stress_2
-    if ww_lit_data_nb is not None and literature_data_type == "w'w'/u_b^2":
-        Rapp2009_data = None
-        Breuer2009_csv = path_to_literature_data + "Breuer2009/Breuer2009_" + str(ww_lit_data_nb) + ".csv"
-        Breuer2009_data = pandas.read_csv(Breuer2009_csv, usecols=["x", "Curve" + str(ww_lit_data_nb)], sep=",")
-        Breuer2009_data = [numpy.array(Breuer2009_data["Curve" + str(ww_lit_data_nb)]),numpy.array(Breuer2009_data["x"])]
-
-    elif ww_lit_data_nb is None and literature_data_type == "w'w'/u_b^2":
-        Rapp2009_data = Breuer2009_data = None
-
-    # To obtain turbulent_kinetic_energy
-    elif literature_data_nb is not None and literature_data_type == "k/u_b^2":
-        Rapp2009_data = None
-        Breuer2009_csv = path_to_literature_data + "Breuer2009_UFR3-30/Breuer2009_3-30_" + str(literature_data_nb) + ".csv"
-        Breuer2009_data = pandas.read_csv(Breuer2009_csv, usecols=["y/h", literature_data_type], sep=";")
-        Breuer2009_data = [numpy.array(Breuer2009_data[literature_data_type]), numpy.array(Breuer2009_data["y/h"])]
-
-    # To obtain all other data_type
-    elif literature_data_nb is not None and literature_data_type is not None:
-        Rapp2009_csv = path_to_literature_data + "Rapp2009_UFR3-30/Rapp2009_" + str(literature_data_nb) + ".csv"
-        Rapp2009_data = pandas.read_csv(Rapp2009_csv, usecols=["y/h", literature_data_type], sep=",")
-        Rapp2009_data = [numpy.array(Rapp2009_data[literature_data_type]), numpy.array(Rapp2009_data["y/h"])]
-
-        Breuer2009_csv = path_to_literature_data + "Breuer2009_UFR3-30/Breuer2009_3-30_" + str(
-            literature_data_nb) + ".csv"
-        Breuer2009_data = pandas.read_csv(Breuer2009_csv, usecols=["y/h", literature_data_type], sep=";")
-        Breuer2009_data = [numpy.array(Breuer2009_data[literature_data_type]), numpy.array(Breuer2009_data["y/h"])]
-    else:
-        Rapp2009_data = Breuer2009_data = None
-
-    # Write output arrays to .csv files
-    pandas.DataFrame(Rapp2009_data).to_csv(
-        folder_to_save_csv + '_Rapp2009' + str(data_type) + '_x_' + str(x_value) + '.csv')
-    pandas.DataFrame(Breuer2009_data).to_csv(
-        folder_to_save_csv + '_Breuer2009' + str(data_type) + '_x_' + str(x_value) + '.csv')
-
-    print("Literature data extracted for x = ", x_value, " and for data type = " + data_type)
-    return Breuer2009_data, Rapp2009_data, literature_data_type
-
 
 # Lethe data extraction of files associated with x/h
 def lethe_data_extraction(x_value, data_type, path_to_lethe_data, file_names_lethe_data, Re):
-    assert Re == 5600, "Currently available for Re = 5600 only."
+    assert Re == 5600 or Re == 10600 or Re == 37000, "Currently available for Re = 5600, 10600, 37000 only."
 
     # Set bounds for x-values to be stored in iteration
     lower_bound = x_value - 0.1  # Tolerance set at 0.1 based on spacing in x-values at coarse mesh in initial case
@@ -371,114 +258,29 @@ def lethe_data_extraction(x_value, data_type, path_to_lethe_data, file_names_let
         # Reshape numpy arrays to write to .csv
         file = [numpy.concatenate(lethe_data_data_type), numpy.concatenate(lethe_data_y)]
         # Write output arrays to .csv files
-        pandas.DataFrame(file).to_csv(folder_to_save_csv + '_Lethe_data_' + str(file_names_lethe_data[index-1]) + str(data_type) + '_x_' + str(x_value) + '.csv')
+        pandas.DataFrame(file).to_csv(folder_to_save_csv + '_Lethe_data_' + str(file_names_lethe_data[index-1]) + '_' + str(data_type) + '_x_' + str(x_value) + '.csv')
         index += 1
 
     return extracted_lethe_data
 
-# Plot literature values against Lethe values
-def plot_to_png(Breuer2009_data, Rapp2009_data, lethe_data, data_type, x_value, labels,
-                folder_to_save_png, show_title):
-    # Plotting results
-    fig, ax = plt.subplots()
-
-    # Colours for graphs
-    colors = ['#1b9e77', '#7570b3', '#e7298a', '#66a61e', '#e6ab02', '#58aef5']
-    index = 0
-
-    # Set display axis titles
-    if data_type == "average_velocity_0":
-        x_axis_label = "$u/u_b$"
-    elif data_type == "average_velocity_1":
-        x_axis_label = "$v/u_b$"
-    elif data_type == "reynolds_normal_stress_0":
-        x_axis_label = "$u'u'/u_b^2$"
-    elif data_type == "reynolds_normal_stress_1":
-        x_axis_label = "$v'v'/u_b^2$"
-    elif data_type == "reynolds_shear_stress_uv":
-        x_axis_label = "$u'v'/u_b^2$"
-    elif data_type == "reynolds_normal_stress_2":
-        x_axis_label = "$w'w'/u_b^2$"
-    elif data_type == "turbulent_kinetic_energy":
-        x_axis_label = "$k/u_b^2$"
-    else:
-        x_axis_label = None
-
-    # Plot Lethe data
-    for file_name in lethe_data:
-        if file_name is not None:
-            ax.plot(file_name[0], file_name[1], '--', label=labels[index], color=colors[index])
-            index += 1
-
-    # Plot Breuer data
-    if Breuer2009_data is not None:
-        ax.plot(Breuer2009_data[0], Breuer2009_data[1], '-', alpha=0.7, color='orange',
-                label='LESOCC - Breuer 2009')
-
-    # Plot Rapp data
-    if Rapp2009_data is not None:
-        ax.plot(Rapp2009_data[0], Rapp2009_data[1], '--', color='black',
-                label='Experimental - Rapp 2009')
-
-    # Only display title if specified
-    if show_title is True:
-        if data_type == "average_velocity_0":
-            title = "Average x velocity $u$"
-        elif data_type == "average_velocity_1":
-            title = "Average y velocity $v$"
-        elif data_type == "reynolds_normal_stress_0":
-            title = "Reynolds normal stress $u'u'$"
-        elif data_type == "reynolds_normal_stress_1":
-            title = "Reynolds normal stress $v'v'$"
-        elif data_type == "reynolds_shear_stress_uv":
-            title = "Reynolds shear stress $u'v'$"
-        elif data_type == "reynolds_normal_stress_2":
-            title = "Reynolds normal stress $w'w'$"
-        elif data_type == "turbulent_kinetic_energy":
-            title = "Turbulent kinetic energy $k$"
-        else:
-            title = None
-
-        ax.set_title(title + " at Re = " + str(Re) + " at x = " + str(x_value))
-
-    ax.set_xlabel(x_axis_label)
-    ax.set_ylabel("$y/h$")
-    ax.legend()
-    fig.savefig(
-        folder_to_save_png + "graph_" + data_type + "_x_" + str(x_value) + ".png",
-        dpi=300)
-    plt.close(fig)
-    ax.clear()
-
 ########################################################################################################################
 # RUN FUNCTIONS
 
-# Verify the number of labels is right
-assert len(labels) == len(file_names_lethe_data), f"It seems to have {len(file_names_lethe_data)} Lethe data files and you gave " \
-                            f"{len(labels)} labels, please verify your labels names."
-
 # Collect all data types at each x_value
 if all_data is True:
-    data_type_available = ["average_velocity_0", "average_velocity_1", "reynolds_normal_stress_0",
-                           "reynolds_normal_stress_1", "reynolds_shear_stress_uv", "reynolds_normal_stress_2"]   # turbulent_kinetic_energy
+    # data_type_available = ["average_velocity_0", "average_velocity_1", "reynolds_normal_stress_0",
+                        #    "reynolds_normal_stress_1", "reynolds_shear_stress_uv", "reynolds_normal_stress_2"]   # turbulent_kinetic_energy
+    data_type_available = ["average_velocity_0","reynolds_normal_stress_0", "reynolds_shear_stress_uv"] 
     x_available = [0.05, 0.5, 1, 2, 3, 4, 5, 6, 7, 8]
+    # x_available = [0.5, 2, 4, 6]
 
     for x in x_available:
         for flow_property in data_type_available:
-            [Breuer2009_data, Rapp2009_data, literature_data_type] = literature_data_extraction(x, flow_property, path_to_literature_data,
-                                                                      folder_to_save_csv, Re)
             lethe_data = lethe_data_extraction(x, flow_property, path_to_lethe_data, file_names_lethe_data, Re)
-            plot_to_png(Breuer2009_data, Rapp2009_data, lethe_data, flow_property, x, labels, folder_to_save_png, display_title)
 
 # Collect a specified x_value and data_type
 else:
-    # EXTRACT DATA FROM LITERATURE FUNCTION (loop through all x, data type)
-    [Breuer2009_data, Rapp2009_data, literature_data_type] = literature_data_extraction(x_value, data_type, path_to_literature_data, folder_to_save_csv, Re)
-
     # EXTRACT DATA FROM LETHE FUNCTION (loop through all x, data type)
     lethe_data = lethe_data_extraction(x_value, data_type, path_to_lethe_data, file_names_lethe_data, Re)
-
-    # PLOT RESULTS
-    plot_to_png(Breuer2009_data, Rapp2009_data, lethe_data, data_type, x_value, labels, folder_to_save_png, display_title)
 
 print("--- %s seconds ---" % (time.time() - start_time))
