@@ -8,7 +8,6 @@
 subsection simulation control
   set method            = steady
   set number mesh adapt = 4
-  set output name       = {{output_name}}
   set output frequency  = 1
   set subdivision       = 1
 end

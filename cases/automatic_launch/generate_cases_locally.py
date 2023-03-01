@@ -18,7 +18,6 @@ PATH = os.getcwd()
 PATH_PREFIX = 'cylinder_u_'
 PRM_FILE = 'cylinder.prm'
 MESH_FILE = 'cylinder-structured.msh'
-OUTPUT_NAME = 'cylinder-output'
 number_of_cases = 20
 
 # Generation of data points
@@ -29,23 +28,22 @@ velocity = np.linspace(1, 10, number_of_cases)
 # Generation of different cases
 for u in velocity:
 
-    path_name = f'{PATH_PREFIX}{u:.2f}'
+    case_folder_name = f'{PATH_PREFIX}{u:.2f}'
 
-    if os.path.exists(path_name):
-        shutil.rmtree(path_name)
+    if os.path.exists(case_folder_name):
+        shutil.rmtree(case_folder_name)
 
     # Open the parameter (prm) template file
     fic_prm = open(PRM_FILE, 'r')
     content_prm = fic_prm.read()
     # Insert the velocity in the prm template with Jinja2 and render it
     template = Template(content_prm)
-    parameters = template.render(output_name = OUTPUT_NAME,
-                                 velocity_x = u)
+    parameters = template.render(velocity_x = u)
     # Close the prm file
     fic_prm.close()
 
     # Create the folder of the case and put the prm template in it
-    case_path = f'{PATH}/{path_name}'
+    case_path = f'{PATH}/{case_folder_name}'
     os.mkdir(case_path)
     shutil.copy(f'{PATH}/{PRM_FILE}', f'{case_path}/{PRM_FILE}')
     
@@ -55,13 +53,10 @@ for u in velocity:
     # Enter the case folder
     os.chdir(case_path)
 
-    # Create the ouput folder
-    os.mkdir(OUTPUT_NAME)
-
     # Write a unique prm file with the prm template being updated
     write_prm = open(PRM_FILE, 'w')
     write_prm.write(parameters)
     write_prm.close()
 
-    # Get out of the case folder (in order to create another one)
+    # Get out of the case path (in order to create another template for another case)
     os.chdir('../')
