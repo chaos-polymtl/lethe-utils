@@ -7,7 +7,7 @@ In each folder, we change the input velocity (u) in the parameter file in order 
 have a different case of the same problem.
 """
 
-from jinja2 import Template
+import jinja2
 import os
 import numpy as np
 import shutil
@@ -25,6 +25,11 @@ first_velocity = 1
 last_velocity = 10
 velocity = np.linspace(1, 10, number_of_cases)
 
+# Create Jinja template
+templateLoader = jinja2.FileSystemLoader(searchpath=PATH)
+templateEnv = jinja2.Environment(loader=templateLoader)
+template = templateEnv.get_template(PRM_FILE)
+
 # Generation of different cases
 for u in velocity:
 
@@ -32,15 +37,9 @@ for u in velocity:
 
     if os.path.exists(case_folder_name):
         shutil.rmtree(case_folder_name)
-
-    # Open the parameter (prm) template file
-    fic_prm = open(PRM_FILE, 'r')
-    content_prm = fic_prm.read()
+    
     # Insert the velocity in the prm template with Jinja2 and render it
-    template = Template(content_prm)
     parameters = template.render(velocity_x = u)
-    # Close the prm file
-    fic_prm.close()
 
     # Create the folder of the case and put the prm template in it
     case_path = f'{PATH}/{case_folder_name}'
@@ -50,13 +49,6 @@ for u in velocity:
     # Copy the mesh file (in order to launch Lethe in seperate folders)
     shutil.copy(f'{PATH}/{MESH_FILE}', f'{case_path}/{MESH_FILE}')
 
-    # Enter the case folder
-    os.chdir(case_path)
-
     # Write a unique prm file with the prm template being updated
-    write_prm = open(PRM_FILE, 'w')
-    write_prm.write(parameters)
-    write_prm.close()
-
-    # Get out of the case path (in order to create another template for another case)
-    os.chdir('../')
+    with open(f'{case_path}/{PRM_FILE}', 'w') as f:
+        f.write(parameters)
