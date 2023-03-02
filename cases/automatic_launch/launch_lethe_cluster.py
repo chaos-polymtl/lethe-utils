@@ -16,5 +16,5 @@ for root, directories, files in os.walk(PATH):
 
         os.chdir(root)
 
-        path_name = root.split('/')[-1]
-        os.system(f'sbatch -J {path_name} {SHELL_FILE}')
+        case_name = root.split('/')[-1]
+        os.system(f'sbatch -J {case_name} {SHELL_FILE}')

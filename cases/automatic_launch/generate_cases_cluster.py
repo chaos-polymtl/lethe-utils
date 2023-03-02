@@ -17,7 +17,7 @@ import shutil
 PATH = os.getcwd()
 
 # User input
-PATH_PREFIX = 'cylinder_u_'
+CASE_PREFIX = 'cylinder_u_'
 PRM_FILE = 'cylinder.prm'
 MESH_FILE = 'cylinder-structured.msh'
 SHELL_FILE = 'launch_lethe.sh'
@@ -31,7 +31,7 @@ velocity = np.linspace(1, 10, number_of_cases)
 # Generation of different cases
 for u in velocity:
 
-    case_folder_name = f'{PATH_PREFIX}{u:.2f}'
+    case_folder_name = f'{CASE_PREFIX}{u:.2f}'
 
     if os.path.exists(case_folder_name):
         shutil.rmtree(case_folder_name)
