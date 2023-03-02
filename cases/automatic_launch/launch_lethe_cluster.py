@@ -7,12 +7,13 @@ import os
 PATH = os.getcwd()
 
 # User input
+CASE_PREFIX = 'cylinder_u_'
 PRM_FILE = 'cylinder.prm'
 SHELL_FILE = 'launch_lethe.sh'
 
 for root, directories, files in os.walk(PATH):
 
-    if PRM_FILE in files and root != PATH:
+    if CASE_PREFIX in root:
 
         os.chdir(root)
 

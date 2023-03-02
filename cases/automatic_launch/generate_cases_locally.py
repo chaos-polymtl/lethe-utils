@@ -35,7 +35,7 @@ for u in velocity:
 
     case_folder_name = f'{CASE_PREFIX}{u:.2f}'
 
-    if os.path.exists(case_folder_name):
+    if os.path.exists(case_folder_name) and os.path.isdir(case_folder_name):
         shutil.rmtree(case_folder_name)
     
     # Insert the velocity in the prm template with Jinja2 and render it
