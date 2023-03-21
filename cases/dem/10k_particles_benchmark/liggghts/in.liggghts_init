@@ -5,8 +5,8 @@
 echo            both
 #log             ../reacteurFCC/log.liggghts
 #thermo_log      ../reacteurFCC/post/thermo.txt
-log             ./log.liggghts
-thermo_log      ./post/thermo.txt
+#log             ./log.liggghts
+#thermo_log      ./post/thermo.txt
 
 atom_style      granular
 atom_modify     map array
@@ -23,7 +23,7 @@ create_box      1 domain
 
 # Attention a prendre un neighbhor qui est >2X le rayon!
 neighbor        0.0025 bin
-neigh_modify    every 20 delay 0 check no
+neigh_modify    every 20 delay 0 check yes
 
 # Material properties required for granular pair styles
 
@@ -39,7 +39,7 @@ pair_coeff  * *
 
 # timestep, gravity
 #Le pas de temps critique depend de la taille, il faut donc le baisser ici
-timestep    0.0000010
+timestep    1e-6
 fix         gravi all gravity 9.81 vector 0.0 0.0 -1.0
 
 # walls
@@ -67,15 +67,15 @@ fix     integr all nve/sphere
 # screen output
 compute         1 all erotate/sphere
 thermo_style    custom step atoms ke c_1 vol
-thermo          1000
+thermo          10000
 thermo_modify   lost ignore norm no
 
 #insert the first particles so that dump is not empty
 run    1
-dump   dmp all custom/vtk 1000 post/bed_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius 
-dump   dmp2 all custom 1000 post/bed_*.dump x y z radius 
+#dump   dmp all custom/vtk 1000 post/bed_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius 
+#dump   dmp2 all custom 1000 post/bed_*.dump x y z radius 
 #dump   dumpstress all mesh/gran/VTK 200 post/mesh_*.vtk stress wear cad
 
 fix         ts_check all check/timestep/gran 1000 0.4 0.4
-run        10000000 upto
+run        200000 upto
 write_restart   post/restart/liggghts.restart
