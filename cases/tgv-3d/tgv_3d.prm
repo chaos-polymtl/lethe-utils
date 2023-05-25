@@ -6,14 +6,14 @@
 # Simulation Control
 #---------------------------------------------------
 subsection simulation control
-  set method                  = sdirk3
-  set time step               = 0.020    # Time step
-    set number mesh adapt     = 0       # If steady, nb mesh adaptation
+  set method                  = bdf3
+  set time step               = 0.02    # Time step
+  set number mesh adapt     = 0       # If steady, nb mesh adaptation
   set startup time scaling    = 0.4
-  set time end                = 20.00     # End time of simulation
+  set time end                = 20     # End time of simulation
   set output path             = output/ # Path to where the output results are made
   set output name             = tgv     # Prefix for VTU outputs
-  set output frequency        = 20       # Frequency of simulation output
+  set output frequency        = 100       # Frequency of simulation output
   set subdivision             = 2       # Mesh subdivision when outputend
 end
 #---------------------------------------------------
@@ -71,13 +71,21 @@ subsection physical properties
 end
 
 #---------------------------------------------------
+# Stabilization
+#---------------------------------------------------
+subsection stabilization
+  set use default stabilization = false
+  set stabilization             = pspg_supg     # <pspg_supg|gls|grad_div>.
+end
+
+#---------------------------------------------------
 # Mesh
 #---------------------------------------------------
 subsection mesh
     set type                 = dealii
     set grid type            = subdivided_hyper_cube
     set grid arguments       = 1 : -3.14159265359 : 3.14159265359 : true
-    set initial refinement   = 3 #7
+    set initial refinement   = 5 #7
 end
 # --------------------------------------------------
 # Mesh Adaptation Control
