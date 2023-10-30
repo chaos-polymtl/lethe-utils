@@ -20,23 +20,54 @@ from lethe_pyvista_tools import *
 #############################################################################
 
 #############################################################################
-'''Simulation properties'''
+#Simulation properties
+measuring_time_constant = 0.95 # This is hard coded. Can be tuned.
 
 #Take case path as argument
-prm_file_names = np.array(["lpbf_0200_0050_11_alloy"])  # ./parameter.prm -->  lpbg_LayerHeight_BladeSpeed_NumberOfLayers_DomainLength_Alloy.prm
-
+prm_file_names = np.array(["lpbf_0100_0100_22_000_ALUM","lpbf_0100_0100_22_100_ALUM","lpbf_0100_0100_22_500_ALUM"])  # ./parameter.prm -->  lpbg_LayerHeight_BladeSpeed_NumberOfLayers_DomainLength_Alloy.prm
+color = np.array(["blue","red","green","cyan","yellow"])
+plt.figure(figsize=(10,6))
 for i in range(len(prm_file_names)):
     # Create the particle object
     prm_file_name = prm_file_names[i]
+    # Variables from Post processing parameters section in the prm file
+    lines = []
+    post_proc_parameters = []
+    with open(prm_file_name + ".prm", 'r') as file:
+        for j in range(14):
+            line = file.readline()
+            lines.append(line)
+        for j in range(2, 14):
+            post_proc_parameters.append(lines[j].split('= ')[1])
+
+    number_of_layers = int(post_proc_parameters[0]) + 2
+    blade_speed = float(post_proc_parameters[1])
+    delta_BP = float(post_proc_parameters[2])
+    delta_o = float(post_proc_parameters[3])
+    delta_n = float(post_proc_parameters[4])
+    delta_miss = float(post_proc_parameters[5])
+    GAP = float(post_proc_parameters[6])
+    lst_layer_extru = float(post_proc_parameters[7])
+    Nst_layer_extru = float(post_proc_parameters[8])
+    # = float(post_proc_parameters[10])
+    first_starting_time = float(post_proc_parameters[10])
+    diff_2_blade = float(post_proc_parameters[11])
+
+    print("--------------")
+    print(f" Parameters :\n"
+          f" Number of layers  = {number_of_layers - 2}\n"
+          f" Blade speed       = {blade_speed:.5}\n"
+          f" Delta_b_p         = {delta_BP:.5}\n"
+          f" Delta_0           = {delta_o  :.5}\n"
+          f" Delta_n           = {delta_n  :.5}\n"
+          f" Delta_miss_match  = {delta_miss:.5}\n"
+          f" GAP               = {GAP:.5}\n"
+                   )
+
+    #Loading the vtu's
     pvd_name = 'out.pvd'
     ignore_data = ['type', 'volumetric contribution', 'velocity', 'torque', 'fem_torque', 'fem_force']
     particle = lethe_pyvista_tools(".", prm_file_name, pvd_name, ignore_data=ignore_data)
-#############################################################################
-
-    # Variables from the title of the .prm file
-    layer_height     = float(prm_file_name[5:9]) * (10 ** -6)
-    blade_speed      = float(prm_file_name[10:14]) * (10 ** -3)
-    number_of_layers = int(prm_file_name[15:17])
 
     # Bluid plate domain
     # This string could be use to isolate the start and the end of the build plate (not for now)
@@ -58,26 +89,27 @@ for i in range(len(prm_file_names)):
     # Blade starting time
     # This is use to find which vtu files is right after the passing of the blade.
     input_string =  particle.prm_dict["grid arguments"].split(',')
-    first_starting_time = 0.35                      # --> HARD CODED IN THE CASE_GENERATOR
     every_mesuring_time = np.empty(number_of_layers)
-    every_mesuring_time[0] = first_starting_time + blade_time_per_layer
+    every_mesuring_time[0] = first_starting_time + blade_time_per_layer * measuring_time_constant
 
-    for i in range(1,number_of_layers):
-        every_mesuring_time[i] = every_mesuring_time[i-1] + blade_time_per_layer * 0.8  # 0.8 is hard coded
+    for j in range(1, number_of_layers):
+        every_mesuring_time[j] = every_mesuring_time[j - 1] + blade_time_per_layer * diff_2_blade
+    print("-----------------")
+    print("Measuring times :")
+    print(every_mesuring_time)
 
-# Create the list of vtu we want to analyse
-# If we do 10 layers, we should have 10 vtu to analyse
-
+    # Create the list of vtu we want to analyse
+    # If we do 10 layers, we should have 10 vtu to analyse
     vtu_mesure = np.zeros(number_of_layers, dtype=np.int32)
 
     # Loop over the vtu in the list and add the one right after the blade
     which_layer = 0
-    for i in range(len(particle.list_vtu)):
+    for j in range(len(particle.list_vtu)):
         # Time of the vtu
-        time = particle.time_list[i]
+        time = particle.time_list[j]
 
         if time >= every_mesuring_time[which_layer]:
-            vtu_mesure[which_layer] = int(i)
+            vtu_mesure[which_layer] = int(j)
             which_layer += 1
 
             if which_layer == len(every_mesuring_time):
@@ -87,11 +119,12 @@ for i in range(len(prm_file_names)):
     relative_density_in_total = np.zeros(number_of_layers)
     volume_of_particles = np.zeros(number_of_layers)
     # Loop over this new list
+    print("-------------------------------")
     print("List of vtu which are analyze : ")
     print(vtu_mesure)
-    for i in range(1, len(vtu_mesure)):
 
-        df = particle.get_df(vtu_mesure[i])
+    for k in range(1, len(vtu_mesure)):
+        df = particle.get_df(vtu_mesure[k])
 
         # Position of every particle in the X direction
         x_positions = df.points[:,0]
@@ -100,25 +133,35 @@ for i in range(len(prm_file_names)):
         for j in range(len(x_positions)):
             # Test if they are inside the desired range
             if x_positions[j] >= x_min and x_positions[j] <= x_max:
-                volume_of_particles[i] += 1 / 6 * np.pi * (df["diameter"][j])**3
-
+                volume_of_particles[k] += 1. / 6. * np.pi * (df["diameter"][j])**3
 
         # Total vertical displacement of the build plate
-        available_volume = (i * layer_height) * build_plate_area
-        relative_density_in_total[i] = volume_of_particles[i] / available_volume
+        total_height = delta_o + (k - 1) * delta_n + delta_BP
+        available_volume = total_height * build_plate_area
+        this_layer_height = delta_n
+        if (k == 1):
+            this_layer_height = delta_o + delta_BP
 
-        relative_density_of_each_layer[i] = (volume_of_particles[i] - volume_of_particles[i-1]) / (layer_height * build_plate_area)
+        relative_density_in_total[k] = volume_of_particles[k] / available_volume
+        relative_density_of_each_layer[k] = (volume_of_particles[k] - volume_of_particles[k-1]) / (this_layer_height * build_plate_area)
+
+    print("------------------------")
+    print("Layer relative density :")
+    print(relative_density_of_each_layer[1:-6])
+    print("------------------------")
+    print("Cummulative relative density : ")
+    print(relative_density_in_total[1:-6])
+
+    plt.plot(np.arange(0,number_of_layers-7), relative_density_of_each_layer[1:-6], "-o" , color = color[i], label = f"Layers RD - {int(round(delta_o* 10**6))} $\mu m$", markersize = 5)
+    plt.plot(np.arange(0,number_of_layers-7), relative_density_in_total[1:-6]     , "--x", color = color[i], label = f"Cummlative RD - {int(round(delta_o* 10**6))} $\mu m$", markersize = 5)
 
 
-    plt.plot(np.arange(0,number_of_layers - 1), relative_density_of_each_layer[1:],"-X")
-    plt.plot(np.arange(0,number_of_layers - 1), relative_density_in_total[1:]     ,"-o")
-
-
-plt.title("Evolution of powder layer relative density \n compare to the total relative density")
-plt.xticks(np.arange(0,number_of_layers - 1))
-plt.ylabel("Powder relative density %")
-plt.xlabel("Layer number")
+plt.title("Evolution of powder layer relative density compare to the \n cumulative relative density for different $\delta_{o}$", fontsize = 16)
+plt.xticks(np.arange(0,number_of_layers - 7))
+plt.ylabel("Powder relative density",fontsize = 14)
+plt.xlabel("Layer number",fontsize = 14)
 plt.grid()
+plt.legend()
 plt.show()
 
 

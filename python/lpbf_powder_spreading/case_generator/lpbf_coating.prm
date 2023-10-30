@@ -1,41 +1,41 @@
+{{Post_processing}}
+#------ Start the of prm file ----- #
 # Listing of Parameters
-# ---------------------
-# --------------------------------------------------
+#---------------------------------------------------
 # Dimension
 #---------------------------------------------------
 
 set dimension = 3
 
-# --------------------------------------------------
+#---------------------------------------------------
 # Simulation and IO Control
 #---------------------------------------------------
 
 subsection simulation control
-  set time step         = 3.5e-7
+  set time step         = 1.40e-6
   set time end          = {{End_time}}   
-  set log frequency     = 30000
-  set output frequency  = 30000
+  set log frequency     = 7500
+  set output frequency  = 7500
   set output path       = ./{{Out}}/
   set output boundaries = false
 end
 
-# --------------------------------------------------
+#---------------------------------------------------
 # Timer
 #---------------------------------------------------
 
 subsection timer
-# Clock monitoring methods. Choices are none, iteration or end
    set type = iteration
 end
 
-# --------------------------------------------------
+#---------------------------------------------------
 # Restart
 #---------------------------------------------------
 
 subsection restart
   # Checkpointing parameters
   set checkpoint = true
-  set frequency  = 300000
+  set frequency  = 75000
 
   # Output/input files
   set filename   = {{Restart}}
@@ -44,7 +44,7 @@ subsection restart
   set restart    = false
 end
 
-# --------------------------------------------------
+#---------------------------------------------------
 # Model parameters
 #---------------------------------------------------
 subsection model parameters
@@ -57,8 +57,8 @@ subsection model parameters
   
   subsection load balancing 
     set load balance method      = dynamic
-    set frequency                = 150000
-    set dynamic check frequency  = 10000
+    set frequency                = 37500
+    set dynamic check frequency  = 11000
     set threshold                = 0.5
   end
   
@@ -84,18 +84,17 @@ subsection lagrangian physical properties
     set diameter                          = 5e-05
     set number                            = 1400000
     set density particles                 = 2670      # ALUM
-    set young modulus particles           = 9e6      # ALUM
+    set young modulus particles           = 1.5e6     # ALUM
     set poisson ratio particles           = 0.30
     set restitution coefficient particles = 0.9
     set friction coefficient particles    = 0.6
     set rolling friction particles        = 0.085
   end
-  set young modulus wall           = 9e6
+  set young modulus wall           = 1.5e6
   set poisson ratio wall           = 0.3
   set restitution coefficient wall = 0.9
   set friction coefficient wall    = 0.6
   set rolling friction wall        = 0.085
-
 end
 
 #---------------------------------------------------
@@ -104,7 +103,7 @@ end
 subsection insertion info
   set insertion method                               = non_uniform
   set inserted number of particles at each time step = 140000
-  set insertion frequency                            = 88000
+  set insertion frequency                            = 22000
   set insertion box minimum x                        = 0.00001
   set insertion box minimum y                        = 0.0012
   set insertion box minimum z                        = 0.00001
@@ -129,7 +128,7 @@ end
 subsection mesh
   set type               = dealii
   set grid type          = subdivided_hyper_rectangle
-  set grid arguments     = 26,16,1 : 0,-0.0157,0 : 0.0276,0.004476,0.00096: true
+  set grid arguments     = 26,16,1 : 0,-0.0157,0 : {{X_max}},0.004476,0.00096: true
   set initial refinement = 4
 end
 
@@ -138,7 +137,6 @@ end
 # Lagrangian Post-processing
 #---------------------------------------------------
 subsection post-processing
- # Enable output of grid, granular temperature, and particles' average velocity
  set Lagrangian post-processing = true
 end
 #---------------------------------------------------
