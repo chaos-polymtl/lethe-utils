@@ -13,23 +13,23 @@ import os
 # Simulation parameters
 # ---------------------
 # These parameters will be written at the start of the prm file for the post-processing python code
-blade_speed = 0.100            # Speed of the blades
-delta_starting_time = 0.7       # delta between two departure time of the blades in proportion of time_per_layer. Usually 0.7 to 0.8.
-number_of_layers = 20           # Number of layer. We do +2 in the code for layer -1 and 0.
-delta_b_p = 100E-6              # Distance between the tip of the blade and the transfert plate
-delta_miss = 0.                 # Miss-match between the build-plate and the seperators
-delta_o = 500E-6                # Thickness of the first layer
-delta_n = 100E-6                # Thickness of the following layers
-GAP = 500E-6                    # Void around the build plate
-first_layer_extrusion = 2000E-6 # Extrusion of the first layer
-other_layer_extrusion = 600E-6  # Extrusion of the following layers
-alloy                 = "ALUM"  # Powder type
-first_starting_time = 0.3       # First departure time (Blade #-1)
+blade_speed = 0.100              # Speed of the blades
+delta_starting_time = 0.7        # delta between two departure time of the blades in proportion of time_per_layer. Usually 0.7 to 0.8.
+number_of_layers = 15            # Number of layer. We do +2 in the code for layer -1 and 0.
+delta_b_p = 100E-6               # Distance between the tip of the blade and the transfert plate
+delta_miss = 0.                  # Miss-match between the build-plate and the seperators
+delta_o = 500E-6                 # Thickness of the first layer
+delta_n = 300E-6                 # Thickness of the following layers
+GAP = 500E-6                     # Void around the build plate
+first_layer_extrusion = 2000E-6  # Extrusion of the first layer
+other_layer_extrusion = 600E-6   # Extrusion of the following layers
+alloy                 = "Y72e4"  # Powder type
+first_starting_time = 0.3        # First departure time (Blade #-1)
 
 # These parameters are not needed in the post_processing code but need to be defined
-diameters_list = 50E-6          # List of all the diameters we want to use
+diameters_list = 100E-6          # List of all the diameters we want to use
 domain_lenght = 0.0276          # Lenght of the domain. Is use to compute the time it takes the blades to move
-plates_speed = 0.005            # Y reference speed of both plate
+plates_speed = 0.01            # Y reference speed of both plate
 insertion_seed = 18
 
 ### Case generator ###
@@ -139,8 +139,8 @@ reservoir_func   = reservoir_func   + ", 0)"
 build_plate_func = build_plate_func + ", 0)"
 
 # Initial translation for the powder reservor and domain
-initial_trans = f"{-(number_of_layers)       * 600E-6 - 2200E-6 :.5}"
-y_min         = f"{-(number_of_layers + 0.5) * 600E-6 - 2200E-6 :.5}"
+initial_trans = f"{-(number_of_layers)        * 600E-6 - 2200E-6 :.5}"
+y_min         = f"{-(number_of_layers + 0.05) * 600E-6 - 2200E-6 :.5}"
 
 # Post_processing string for the post-processing python code
 post_processing = (f"# This file was created on :  {datetime.datetime.now()}\n"
@@ -162,7 +162,7 @@ f"#"
 
 ## File names ##
 # Name of the .prm file created
-CASE_PREFIX = f"lpbf_{delta_n*10**6:04.0f}_{blade_speed*10**3:04.0f}_{number_of_layers:02.0f}_{delta_o * 1e6 :03.0f}_{alloy}"
+CASE_PREFIX = f"lpbf_{alloy}"
 
 # Name of the output folder
 output_folder = f"out_{delta_n*10**6:04.0f}_{blade_speed*10**3:04.0f}_{number_of_layers:02.0f}_{delta_o * 1e6 :03.0f}_{alloy}"

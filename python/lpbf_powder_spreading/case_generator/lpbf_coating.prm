@@ -12,12 +12,12 @@ set dimension = 3
 #---------------------------------------------------
 
 subsection simulation control
-  set time step         = 1.40e-6
+  set time step         = 1.24e-7
   set time end          = {{End_time}}   
-  set log frequency     = 7500
-  set output frequency  = 7500
+  set log frequency     = 21000
+  set output frequency  = 21000
   set output path       = ./{{Out}}/
-  set output boundaries = false
+  set output boundaries = true
 end
 
 #---------------------------------------------------
@@ -34,7 +34,7 @@ end
 
 subsection restart
   # Checkpointing parameters
-  set checkpoint = true
+  set checkpoint = false
   set frequency  = 75000
 
   # Output/input files
@@ -57,12 +57,12 @@ subsection model parameters
   
   subsection load balancing 
     set load balance method      = dynamic
-    set frequency                = 37500
-    set dynamic check frequency  = 11000
+    set frequency                = 250000
+    set dynamic check frequency  = 250000
     set threshold                = 0.5
   end
   
-  set particle particle contact force method  = hertz_mindlin_limit_overlap
+  set particle particle contact force method  = hertz_JKR
   set particle wall contact force method      = nonlinear
   set rolling resistance torque method        = constant_resistance
   set integration method                      = velocity_verlet
@@ -81,18 +81,19 @@ subsection lagrangian physical properties
   set number of particle types = 1
   subsection particle type 0
     set size distribution type            = uniform
-    set diameter                          = 5e-05
-    set number                            = 1400000
-    set density particles                 = 2670      # ALUM
-    set young modulus particles           = 1.5e6     # ALUM
+    set diameter                          = 100e-06
+    set number                            = 250000
+    set density particles                 = 2670     # ALUM
+    set young modulus particles           = 72e6     # ALUM
     set poisson ratio particles           = 0.30
-    set restitution coefficient particles = 0.9
+    set restitution coefficient particles = 0.64
     set friction coefficient particles    = 0.6
     set rolling friction particles        = 0.085
+    set surface energy particles          = 0.001
   end
-  set young modulus wall           = 1.5e6
+  set young modulus wall           = 72e6
   set poisson ratio wall           = 0.3
-  set restitution coefficient wall = 0.9
+  set restitution coefficient wall = 0.64
   set friction coefficient wall    = 0.6
   set rolling friction wall        = 0.085
 end
@@ -102,14 +103,14 @@ end
 #---------------------------------------------------
 subsection insertion info
   set insertion method                               = non_uniform
-  set inserted number of particles at each time step = 140000
-  set insertion frequency                            = 22000
+  set inserted number of particles at each time step = 40000
+  set insertion frequency                            = 12000
   set insertion box minimum x                        = 0.00001
-  set insertion box minimum y                        = 0.0012
+  set insertion box minimum y                        = 0.0019
   set insertion box minimum z                        = 0.00001
-  set insertion box maximum x                        = 0.0098
+  set insertion box maximum x                        = 0.0097
   set insertion box maximum y                        = 0.00447
-  set insertion box maximum z                        = 0.00094
+  set insertion box maximum z                        = 0.00193
   set insertion distance threshold                   = 1.125
   set insertion random number range                  = 0.0025
   set insertion random number seed                   = 18
@@ -128,7 +129,7 @@ end
 subsection mesh
   set type               = dealii
   set grid type          = subdivided_hyper_rectangle
-  set grid arguments     = 26,16,1 : 0,-0.0157,0 : {{X_max}},0.004476,0.00096: true
+  set grid arguments     = 15,9,1 : 0,{{Y_min}},0 : {{X_max}},0.004476,0.00192: true
   set initial refinement = 4
 end
 
@@ -137,7 +138,7 @@ end
 # Lagrangian Post-processing
 #---------------------------------------------------
 subsection post-processing
- set Lagrangian post-processing = true
+ set Lagrangian post-processing = false
 end
 #---------------------------------------------------
 # Solid Objects
