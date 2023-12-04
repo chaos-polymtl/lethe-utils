@@ -12,10 +12,10 @@ set dimension = 3
 #---------------------------------------------------
 
 subsection simulation control
-  set time step         = 1.24e-7
+  set time step         = {{Delta_t}}
   set time end          = {{End_time}}   
-  set log frequency     = 21000
-  set output frequency  = 21000
+  set log frequency     = {{Log_freq}}
+  set output frequency  = {{Output_freq}}
   set output path       = ./{{Out}}/
   set output boundaries = true
 end
@@ -35,10 +35,10 @@ end
 subsection restart
   # Checkpointing parameters
   set checkpoint = false
-  set frequency  = 75000
+  set frequency  = {{Restant_freq}}
 
   # Output/input files
-  set filename   = {{Restart}}
+  set filename   = {{Restart_name}}
 
   # Restarting parameters
   set restart    = false
@@ -57,8 +57,8 @@ subsection model parameters
   
   subsection load balancing 
     set load balance method      = dynamic
-    set frequency                = 250000
-    set dynamic check frequency  = 250000
+    set frequency                = {{Load_Bal_freq}}
+    set dynamic check frequency  = {{Load_Bal_freq}}
     set threshold                = 0.5
   end
   
@@ -82,18 +82,18 @@ subsection lagrangian physical properties
   subsection particle type 0
     set size distribution type            = uniform
     set diameter                          = 100e-06
-    set number                            = 250000
-    set density particles                 = 2670     # ALUM
-    set young modulus particles           = 72e6     # ALUM
+    set number of particles               = 650000
+    set density particles                 = 2670                   # ALUM
+    set young modulus particles           = {{Young_particle}}     # ALUM
     set poisson ratio particles           = 0.30
-    set restitution coefficient particles = 0.64
+    set restitution coefficient particles = 0.8
     set friction coefficient particles    = 0.6
     set rolling friction particles        = 0.085
     set surface energy particles          = 0.001
   end
-  set young modulus wall           = 72e6
+  set young modulus wall           = {{Young_wall}}
   set poisson ratio wall           = 0.3
-  set restitution coefficient wall = 0.64
+  set restitution coefficient wall = 0.85
   set friction coefficient wall    = 0.6
   set rolling friction wall        = 0.085
 end
@@ -102,18 +102,18 @@ end
 # Insertion Info
 #---------------------------------------------------
 subsection insertion info
-  set insertion method                               = non_uniform
-  set inserted number of particles at each time step = 40000
-  set insertion frequency                            = 12000
+  set insertion method                               = volume
+  set inserted number of particles at each time step = 80000
+  set insertion frequency                            = {{Insert_freq}}
   set insertion box minimum x                        = 0.00001
   set insertion box minimum y                        = 0.0019
   set insertion box minimum z                        = 0.00001
   set insertion box maximum x                        = 0.0097
   set insertion box maximum y                        = 0.00447
-  set insertion box maximum z                        = 0.00193
+  set insertion box maximum z                        = 0.00475
   set insertion distance threshold                   = 1.125
   set insertion random number range                  = 0.0025
-  set insertion random number seed                   = 18
+  set insertion random number seed                   = {{Seed}}
   
    # Directions of insertion (0: x, 1: y, 2: z) 
  set insertion first direction                 = 0
@@ -129,9 +129,10 @@ end
 subsection mesh
   set type               = dealii
   set grid type          = subdivided_hyper_rectangle
-  set grid arguments     = 15,9,1 : 0,{{Y_min}},0 : {{X_max}},0.004476,0.00192: true
-  set initial refinement = 4
+  set grid arguments     = 7,5,1 : 0,{{Y_min}},0 : {{X_max}},0.00688,0.0048: true
+  set initial refinement = 5
 end
+
 
 
 #---------------------------------------------------
