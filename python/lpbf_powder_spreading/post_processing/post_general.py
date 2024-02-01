@@ -9,7 +9,6 @@ Date: January 13th, 2024
 '''Importing Libraries'''
 import sys
 
-sys.path.append('/home/gabo/work/lethe/lethe/contrib/postprocessing/')
 
 import numpy as np
 import pandas as pd
@@ -21,7 +20,7 @@ from lethe_pyvista_tools import *
 
 # Take case path as argument
 prm_file_names = np.array(
-    ["01_10dp/lpbf_10dp.prm"])  # ./parameter.prm -->
+    ["01_01/lpbf_poly_disp.prm" ])  # ./parameter.prm -->peut-[etre
 plt.figure(figsize=(10, 6))
 
 # Loop over a
@@ -42,6 +41,8 @@ for i in range(len(prm_file_names)):
     # Type of powder first_starting_time = float((lines[7]).split('=')[1])
     first_starting_time = float((lines[12]).split('=')[1])
     delta_starting_time = float((lines[13]).split('=')[1])
+    extra_time_layer_zero = float((lines[14]).split('=')[1])
+    print(extra_time_layer_zero)
     blade_thickness = 0.0025
 
     # Create the particle object
@@ -75,16 +76,15 @@ for i in range(len(prm_file_names)):
     # This is use to find which vtu files is right after the passing of the blade.
     input_string = particle.prm_dict["grid arguments"].split(',')
 
-    # Finding the departure time of all the blades
-    every_starting_time = np.empty(number_of_layers)
-    every_starting_time[0] = first_starting_time
-
     # Times it takes for a blade to cross the domain in the X direction
     time_per_layer = (domain_x_length + blade_thickness) / blade_speed
 
-    # Find the departure time of every blade
-    for v in range(1, number_of_layers):
-        every_starting_time[v] = every_starting_time[v - 1] + time_per_layer * delta_starting_time
+    # Finding the departure time of all the blades
+    every_starting_time = np.empty(number_of_layers)
+    every_starting_time[0] = first_starting_time
+    every_starting_time[1] = every_starting_time[0] + time_per_layer * (delta_starting_time + extra_time_layer_zero)
+    for j in range(2, number_of_layers):
+        every_starting_time[j] = every_starting_time[j - 1] + time_per_layer * delta_starting_time
 
     # Time step to measure the relative density off the powder on the feeder
     measuring_time_Feeder_rel_density = every_starting_time
@@ -150,10 +150,10 @@ for i in range(len(prm_file_names)):
     feeder_powder_volume_in_slices = np.zeros(len(feeder_layer_limits))
     slice_volume = n_layer_extrusion * domain_z_length * (x_max_Feeder - x_min_Feeder)
 
-    for index, x in enumerate(x_positions, start=1):
-        if x_min_Feeder <= x <= x_max_Feeder and y_positions[index] > feeder_layer_limits[-1]:
+    for j in range(len(x_positions)):
+        if x_min_Feeder <= x_positions[j] <= x_max_Feeder and y_positions[j] > feeder_layer_limits[-1]:
             # Find in which bin the particle is respective to the limits and add it's volume to the right bin
-            feeder_powder_volume_in_slices[np.digitize(y_positions[index], feeder_layer_limits)] += volume_cst * ( df["diameter"][v]) ** 3
+            feeder_powder_volume_in_slices[np.digitize(y_positions[j], feeder_layer_limits)] += volume_cst * (df["diameter"][j]) ** 3
 
     feeder_slices_rel_density = feeder_powder_volume_in_slices / slice_volume
 
@@ -170,10 +170,10 @@ for i in range(len(prm_file_names)):
         available_volume = -height * domain_z_length * (x_max_Feeder - x_min_Feeder)
 
         # Loop throw all the particle
-        for x in x_positions:
+        for j in range(len(x_positions)):
             # Check if they are inside the desired range
-            if x_min_Feeder <= x <= x_max_Feeder:
-                volume_on_feeder[index] += volume_cst * (df["diameter"][v]) ** 3
+            if x_min_Feeder <= x_positions[j] <= x_max_Feeder:
+                volume_on_feeder[index] += volume_cst * (df["diameter"][j]) ** 3
 
         # Compute the relative density in the feeder
         feeder_rel_density[index] = volume_on_feeder[index] / available_volume
@@ -193,22 +193,20 @@ for i in range(len(prm_file_names)):
         x_positions = df.points[:, 0]
 
         # Loop throw all the particle
-        for x_coord in x_positions:
+        for j in range(len(x_positions)):
             # Test if they are inside the desired range
-            if x_min_BP <= x_coord <= x_max_BP:
+            if x_min_BP <= x_positions[j] <= x_max_BP:
                 volume_on_BP[index] += volume_cst * (df["diameter"][j]) ** 3
 
-        # Total vertical displacement of the build plate
-        total_height = (index - 1) * delta_n + delta_o + delta_B_P
-        available_volume = total_height * build_plate_area
+        if index != 1:
+            # Total vertical displacement of the build plate
+            total_height = (index - 1) * delta_n
+            available_volume = total_height * build_plate_area
+            this_layer_height = delta_n
 
-        this_layer_height = delta_n
-        if (index == 1):
-            this_layer_height = delta_o + delta_B_P
-
-        BP_rel_density_cumulative[index] = volume_on_BP[index] / available_volume
-        BP_rel_density_each_layer[index] = (volume_on_BP[index] - volume_on_BP[index - 1]) / (
-                this_layer_height * build_plate_area)
+            BP_rel_density_cumulative[index] = (volume_on_BP[index] - volume_on_BP[1]) / available_volume
+            BP_rel_density_each_layer[index] = (volume_on_BP[index] - volume_on_BP[index - 1]) / (
+                    this_layer_height * build_plate_area)
 
     print(f" Powder volume in the reservoir    : \n{volume_on_feeder} \n ######## ")
     print(f" Relative density in the reservoir : \n{feeder_rel_density} \n ######## ")
@@ -220,7 +218,7 @@ for i in range(len(prm_file_names)):
     np.save("./00_binary/" + prm_file_name.split(".")[0] + "_RelDensityFeederLayers", feeder_slices_rel_density)
     np.save("./00_binary/" + prm_file_name.split(".")[0] + "_LRD", BP_rel_density_each_layer)
     np.save("./00_binary/" + prm_file_name.split(".")[0] + "_CRD", BP_rel_density_cumulative)
-    np.save("./00_binary/" + prm_file_name.split(".")[0] + "_number_of_layers", number_of_layers)
+    np.save("./00_binary/" + prm_file_name.split(".")[0] + "_number_of_layers", number_of_layers-1)
 
     print("Binary files saved!")
 
