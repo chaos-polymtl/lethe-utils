@@ -27,7 +27,7 @@ for core in n_cores:
             copy_lines[copy_lines.index(line)] = line_replacement
 
         # Replace the number of particles
-        param_n_particle = f"{tab}{tab}set number"
+        param_n_particle = f"{tab}{tab}set number of particles"
         if line.startswith(param_n_particle):
             n_space = line[len(param_n_particle):].count(' ') - 1
             line_replacement = line.replace(line, f"{param_n_particle}{n_space*' '}= {2*core*n_particle}\n")
