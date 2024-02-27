@@ -1,5 +1,5 @@
 SetFactory("Built-in");
-n = 120;
+n = 80;
 // Geometry variables
 right_side = 0.06272;
 left_side = -right_side;
