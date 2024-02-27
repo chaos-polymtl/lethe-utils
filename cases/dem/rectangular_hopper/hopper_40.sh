@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --account=rrg-blaisbru
+#SBATCH --account=def-blaisbru
 #SBATCH --ntasks-per-node=40
 #SBATCH --cpus-per-task=1
 #SBATCH --nodes=1 #number of whole nodes used (each with up to 40 tasks-per-node)
