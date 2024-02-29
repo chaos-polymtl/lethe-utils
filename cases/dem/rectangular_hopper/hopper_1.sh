@@ -10,4 +10,4 @@
 
 export OMP_NUM_THREADS=1
 source $HOME/.dealii
-time mpirun -np 1 $HOME/lethe/inst/bin/dem_3d hopper_1.prm
+time mpirun -np 1 lethe-particles hopper_1.prm
