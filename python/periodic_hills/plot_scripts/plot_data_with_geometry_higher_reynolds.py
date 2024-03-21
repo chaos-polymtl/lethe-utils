@@ -20,7 +20,7 @@ start_time = time.time()
 ################################################ FILL OUT THIS PART ###################################################
 
 # Reynolds number of the simulation
-Re = 37000
+Re = 10600
 
 # Path to .csv file (same as post_processing_new.py)
 path_to_lethe_data = "../output_csv/all_data/"
@@ -40,6 +40,8 @@ labels = ["Lethe 120K", "Lethe 250K", "Lethe 500K"]
 
 # File names of lethe data
 file_names_lethe_data = ["0.025_120k_800s_" + str(Re) , "0.025_250k_800s_" + str(Re) , "0.025_500K_800s_" + str(Re)]
+
+# file_names_lethe_data = ["0.1_120k_800s_" + str(Re) , "0.1_250k_800s_" + str(Re) , "0.1_500k_800s_" + str(Re)]
 
 # data_type_available = ["average_velocity_0", "average_velocity_1", "reynolds_normal_stress_0",
 #                            "reynolds_normal_stress_1", "reynolds_shear_stress_uv"]
@@ -235,7 +237,7 @@ def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_
 
         # Specify colours for Lethe plots
         colors = ["xkcd:blue", "xkcd:lime green", "xkcd:red", "xkcd:orange"]    
-
+        # colors = ["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f", "#e5c494"]
 
         # data_x is a list of Rapp then Breuer then Lethe numpy arrays at x_value
         for j, dataset in enumerate(data_x):
@@ -409,7 +411,7 @@ def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_
 
     plt.tight_layout()
     # plt.show()
-    plt.savefig(folder_to_save + "high_reynolds_data_in_geometry_" + str(data_type) + "_" + str(Re) +".eps", dpi=800, bbox_inches='tight',pad_inches = 0)
+    plt.savefig(folder_to_save + "high_reynolds_data_in_geometry_" + str(data_type) + "_" + str(Re) +"_dt0.025.png", bbox_inches='tight')
     # plt.close(fig)
     ax.clear()
     

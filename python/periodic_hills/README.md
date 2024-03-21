@@ -13,8 +13,8 @@ Extraction of lethe data:
 2. Extract the corresponding data using the `lethe_data_extraction.py` tool. 
 3. Use specific post-processing scripts:
    * `plot_data_with_geometry_baseline.py`
-   * `plot_data_time_averaging_per_data_type_two_meshes_horizontal.py`
-   * `plot_data_time_stepping_per_data_type_two_meshes_horizontal.py`
+   * `plot_data_time_averaging_per_data_type_three_meshes_horizontal.py`
+   * `plot_data_time_stepping_per_data_type_three_meshes_horizontal.py`
    * `plot_data_with_geometry_mesh_refinement.py`
    * `plot_data_with_geometry_high_order.py`
    * `plot_data_with_geometry_higher_reynolds.py`
@@ -24,7 +24,7 @@ Other scripts available in the folder:
 
 * The `breuer2009_data_comparison.py` script compares two different sources for the data of the Breuer article. This code is intended mostly as a verification and should not be used when post-processing simulation data.
 
-* The `near_wall_processing.py` script outputs the reattachment point, average y+ and maximum y+ along the lower wall for Lethe simulations, and plots y+.
+* The `mesh_quality.py` script outputs the reattachment point, average and maximum x+, y+ and z+ along the lower wall for Lethe simulations, and plots them.
 
 * The `y_plus_on_geometry.py` script plots y+ superimposed over the periodic hill geometry.
 

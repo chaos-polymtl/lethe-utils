@@ -28,26 +28,27 @@ mesh_labels = ["Lethe - 250K", "Lethe - 500K", "Lethe - 1M", "Lethe - 4M"]
 
 #Reattachement points at different averaging times.
 #250K
-reattachment_points_1 = [5.09686651116088, 5.045595935082811, 5.039710668073614, 5.059829429669876, 5.079026106079334]
-average_times_1 = [600, 700, 800, 900, 1000] 
+reattachment_points_1 = [5.11776931156123, 5.09686651116088, 5.045595935082811, 5.039710668073614, 5.059829429669876, 5.079026106079334]
+average_times_1 = [500, 600, 700, 800, 900, 1000] 
 
 #500K
-reattachment_points_2 = [4.632911085716633, 4.625248808252732, 4.628748473476688, 4.6306247666503495, 4.65011904021285]
-average_times_2 = [600, 700, 800, 900, 1000] 
+reattachment_points_2 = [4.632744089624518, 4.632911085716633, 4.625248808252732, 4.628748473476688, 4.6306247666503495, 4.65011904021285]
+average_times_2 = [500, 600, 700, 800, 900, 1000] 
 
 #1M
-reattachment_points_3 = [4.89558853808692, 4.896752607702034, 4.8661037487483805, 4.8181314809444125, 4.803963093638626]
-average_times_3 = [600, 700, 800, 900, 1000] 
+reattachment_points_3 = [4.929045392294163, 4.89558853808692, 4.896752607702034, 4.8661037487483805, 4.8181314809444125, 4.803963093638626]
+average_times_3 = [500, 600, 700, 800, 900, 1000] 
 
 #4M
-reattachment_points_4 = [4.82322082908, 4.809037746, 4.8116936081221, 4.83547590569519, 4.82277937063245]
-average_times_4 = [600, 700, 800, 900, 1000]
+# reattachment_points_4 = [4.82322082908, 4.809037746, 4.8116936081221, 4.83547590569519, 4.82277937063245] #Old
+reattachment_points_4 = [4.906411955197181, 4.870164512002711, 4.820498723025258, 4.8443378030659651, 4.860565672666695, 4.835132662030343]
+average_times_4 = [500, 600, 700, 800, 900, 1000]
 
 reattachment_points = [reattachment_points_1, reattachment_points_2, reattachment_points_3, reattachment_points_4]
 average_times = [average_times_1, average_times_2, average_times_3, average_times_4]
 
 # Save graph.png 
-folder_to_save_png = "../article_figures/"
+folder_to_save_png = "../conference_figure/"
 # folder_to_save_png = "../journal_im/"
 Path(folder_to_save_png).mkdir(parents=True, exist_ok=True)
 
@@ -58,12 +59,13 @@ def plot_reattachment_points(reattachment_points, average_times, folder_to_save_
     plt.rcParams['text.usetex'] = True
     plt.rcParams['font.family']='DejaVu Serif'
     plt.rcParams['font.serif']='cm'
-    plt.rcParams['font.size'] = 11
+    plt.rcParams['font.size'] = 16
 
     fig, ax = plt.subplots()
 
     markers = ["s", "o", "P", "*", "X"]
     colors = ["xkcd:blue", "xkcd:lime green", "xkcd:red", "xkcd:orange", "xkcd:pumpkin", "xkcd:gold"]    
+    # colors = ["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f", "#e5c494"]
     #Plot Lethe data
     index = 0
     for reattachment_point in reattachment_points:
@@ -75,8 +77,8 @@ def plot_reattachment_points(reattachment_points, average_times, folder_to_save_
         index = index + 1
     
     #Plot lethe error
-    reattachment_point_average = [5.06, 4.63, 4.85, 4.82]
-    constant = [0.5, 0.5, 0.5, 0.2]
+    reattachment_point_average = [5.07, 4.63, 4.86, 4.85]
+    constant = [0.5, 0.5, 0.5, 0.4]
     error_flow_through = numpy.linspace(1,146, num = 145)
 
     index = 0
@@ -112,14 +114,14 @@ def plot_reattachment_points(reattachment_points, average_times, folder_to_save_
 
     ax.plot(rapp_flow_through, rapp_reattachment_point, "--", label = "Experimental - Rapp 2009", color = "k", linewidth = 1.2 )
     
-    fig.set_size_inches(8,4)
+    fig.set_size_inches(9,5)
     ax.set_xlim([0,147])
     ax.set_xlabel("Averaging time [Flows throughs]")
     ax.set_ylabel("Reattachment length [-]")
     fig.subplots_adjust(right=0.6)
     # plt.tight_layout()
-    ax.legend(loc='right', bbox_to_anchor=(1.7, 0.5), facecolor = 'white', framealpha = 0.75, ncol=1, edgecolor = 'black', fancybox = False, shadow = False)
-    fig.savefig(folder_to_save_png + "reattachement_point_mesh_refinement_5600_all.eps",dpi=800)
+    ax.legend(loc='right', bbox_to_anchor=(1.85, 0.5), facecolor = 'white', framealpha = 0.75, ncol=1, edgecolor = 'black', fancybox = False, shadow = False)
+    fig.savefig(folder_to_save_png + "reattachement_point_mesh_refinement_5600_all_new.eps",dpi=800)
     # plt.show()
 
     # For the graphical anstract figure

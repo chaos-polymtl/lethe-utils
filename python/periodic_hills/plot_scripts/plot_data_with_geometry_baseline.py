@@ -34,10 +34,10 @@ Path(path_to_save).mkdir(parents=True, exist_ok=True)
 # Label for Lethe data for the legend (should be the same as used in post_processing_new.py)
 # NOTE : make sure the number of labels are the same that the number of Lethe simulation data in csv files and
 #        and associated to the right data set
-labels = ["Lethe baseline 250K", "Lethe baseline 1M"]
+labels = ["Lethe baseline 250K", "Lethe baseline 1M", "Lethe baseline 4M"]
 
 # File names of lethe data
-file_names_lethe_data = ["0.1_250K_1000s_5600", "0.1_1M_1000s_old_baseline"]
+file_names_lethe_data = ["0.1_250K_1000s_5600", "0.1_1M_1000s_old_baseline", "0.1_4M_1000s_5600"]
 # data_type_available = ["average_velocity_0", "average_velocity_1", "reynolds_normal_stress_0",
 #                            "reynolds_normal_stress_1", "reynolds_shear_stress_uv"]
 data_type = "reynolds_shear_stress_uv"
@@ -208,13 +208,13 @@ def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_
     ax = fig.add_subplot(2,8,(9,16))
 
     # Plot geometry
-    ax.plot(x_vector, y_bottom, '-k', linewidth=0.5)
-    ax.plot(x_vector, y_top, '-k', linewidth=0.5)
+    ax.plot(x_vector, y_bottom, '-k', linewidth=0.5, zorder = 0)
+    ax.plot(x_vector, y_top, '-k', linewidth=0.5, zorder = 0)
 
     if zoom_in_plots is True:
-        ax2 = fig.add_subplot(2,8,(2,3), aspect='equal')
-        ax3 = fig.add_subplot(2,8,(4,5), aspect='equal')
-        ax4 = fig.add_subplot(2,8,(6,7), aspect='equal')
+        ax2 = fig.add_subplot(2,8,(2,3), aspect='equal', zorder = 2)
+        ax3 = fig.add_subplot(2,8,(4,5), aspect='equal', zorder = 2)
+        ax4 = fig.add_subplot(2,8,(6,7), aspect='equal', zorder = 2)
 
         ax2.plot(x_vector, y_bottom, '-k', linewidth=0.5)
         ax2.plot(x_vector, y_top, '-k', linewidth=0.5)
@@ -231,7 +231,8 @@ def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_
         data_x = all_x_data[i]
 
         # Specify colours for Lethe plots
-        colors = ["xkcd:blue", "xkcd:lime green", "xkcd:red", "xkcd:orange", "xkcd:brown", "xkcd:pink", "xkcd:gold"]    
+        colors = ["xkcd:blue", "xkcd:lime green", "xkcd:red", "xkcd:orange", "xkcd:brown", "xkcd:pink", "xkcd:gold"]
+        # colors = ["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f", "#e5c494"]    
 
         # data_x is a list of Rapp then Breuer then Lethe numpy arrays at x_value
         for j, dataset in enumerate(data_x):
@@ -247,17 +248,17 @@ def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_
                 # Plot y-values, data
                 # Only include label on first x plot
                 if x_value == 0.5:
-                    ax.plot(dataset[0,:], dataset[1,:], "-", color=color, label=label, linewidth=1.1)
+                    ax.plot(dataset[0,:], dataset[1,:], "-", color=color, label=label, linewidth=1.2)
                     if zoom_in_plots is True:
-                        ax2.plot(dataset[0,:], dataset[1,:], "-", color=color, linewidth=1.1)
-                        ax3.plot(dataset[0,:], dataset[1,:], "-", color=color, linewidth=1.1)
-                        ax4.plot(dataset[0,:], dataset[1,:], "-", color=color, linewidth=1.1)
+                        ax2.plot(dataset[0,:], dataset[1,:], "-", color=color, linewidth=1.2)
+                        ax3.plot(dataset[0,:], dataset[1,:], "-", color=color, linewidth=1.2)
+                        ax4.plot(dataset[0,:], dataset[1,:], "-", color=color, linewidth=1.2)
                 else:
-                    ax.plot(dataset[0,:], dataset[1,:], "-", color=color, linewidth=1.1)
+                    ax.plot(dataset[0,:], dataset[1,:], "-", color=color, linewidth=1.2)
                     if zoom_in_plots is True:
-                        ax2.plot(dataset[0,:], dataset[1,:], "-", color=color, linewidth=1.1)
-                        ax3.plot(dataset[0,:], dataset[1,:], "-", color=color, linewidth=1.1)
-                        ax4.plot(dataset[0,:], dataset[1,:], "-", color=color, linewidth=1.1)
+                        ax2.plot(dataset[0,:], dataset[1,:], "-", color=color, linewidth=1.2)
+                        ax3.plot(dataset[0,:], dataset[1,:], "-", color=color, linewidth=1.2)
+                        ax4.plot(dataset[0,:], dataset[1,:], "-", color=color, linewidth=1.2)
 
             elif j == 1 and Re != 37000:      # Data is from Breuer
                 # Scale data to plot and remove first column
@@ -271,18 +272,18 @@ def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_
                 # Plot y-values, data
                 # Only include label on first x plot
                 if x_value == 0.5:
-                    ax.plot(dataset[0,:], dataset[1,:], ":", color=color, label=label, linewidth=1.1)
+                    ax.plot(dataset[0,:], dataset[1,:], ":", color=color, label=label, linewidth=1.2)
                     if zoom_in_plots is True:                    
-                        ax2.plot(dataset[0,:], dataset[1,:], ":", color=color, linewidth=1.1)
-                        ax3.plot(dataset[0,:], dataset[1,:], ":", color=color, linewidth=1.1)
-                        ax4.plot(dataset[0,:], dataset[1,:], ":", color=color, linewidth=1.1)
+                        ax2.plot(dataset[0,:], dataset[1,:], ":", color=color, linewidth=1.2)
+                        ax3.plot(dataset[0,:], dataset[1,:], ":", color=color, linewidth=1.2)
+                        ax4.plot(dataset[0,:], dataset[1,:], ":", color=color, linewidth=1.2)
 
                 else:
-                    ax.plot(dataset[0,:], dataset[1,:], ":", color=color, linewidth=1.1)
+                    ax.plot(dataset[0,:], dataset[1,:], ":", color=color, linewidth=1.2)
                     if zoom_in_plots is True:
-                        ax2.plot(dataset[0,:], dataset[1,:], ":", color=color, linewidth=1.1)
-                        ax3.plot(dataset[0,:], dataset[1,:], ":", color=color, linewidth=1.1)
-                        ax4.plot(dataset[0,:], dataset[1,:], ":", color=color, linewidth=1.1)
+                        ax2.plot(dataset[0,:], dataset[1,:], ":", color=color, linewidth=1.2)
+                        ax3.plot(dataset[0,:], dataset[1,:], ":", color=color, linewidth=1.2)
+                        ax4.plot(dataset[0,:], dataset[1,:], ":", color=color, linewidth=1.2)
 
             else:   # Data is from Lethe
                 # Scale data to plot and remove first column
@@ -296,18 +297,18 @@ def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_
                 # Plot y-values, data
                 # Only include label on first x plot
                 if x_value == 0.5:
-                    ax.plot(dataset[0, :], dataset[1, :], "--", color=color, label=label, linewidth=1.1)
+                    ax.plot(dataset[0, :], dataset[1, :], "--", color=color, label=label, linewidth=1.2)
                     if zoom_in_plots is True:                 
-                        ax2.plot(dataset[0,:], dataset[1,:], "--", color=color, linewidth=1.1)
-                        ax3.plot(dataset[0,:], dataset[1,:], "--", color=color, linewidth=1.1)
-                        ax4.plot(dataset[0,:], dataset[1,:], "--", color=color, linewidth=1.1)
+                        ax2.plot(dataset[0,:], dataset[1,:], "--", color=color, linewidth=1.2)
+                        ax3.plot(dataset[0,:], dataset[1,:], "--", color=color, linewidth=1.2)
+                        ax4.plot(dataset[0,:], dataset[1,:], "--", color=color, linewidth=1.2)
 
                 else:
-                    ax.plot(dataset[0, :], dataset[1, :], "--", color=color, linewidth=1.1)
+                    ax.plot(dataset[0, :], dataset[1, :], "--", color=color, linewidth=1.2)
                     if zoom_in_plots is True:
-                        ax2.plot(dataset[0,:], dataset[1,:], "--", color=color, linewidth=1.1)
-                        ax3.plot(dataset[0,:], dataset[1,:], "--", color=color, linewidth=1.1)
-                        ax4.plot(dataset[0,:], dataset[1,:], "--", color=color, linewidth=1.1)
+                        ax2.plot(dataset[0,:], dataset[1,:], "--", color=color, linewidth=1.2)
+                        ax3.plot(dataset[0,:], dataset[1,:], "--", color=color, linewidth=1.2)
+                        ax4.plot(dataset[0,:], dataset[1,:], "--", color=color, linewidth=1.2)
 
     # Plot and save graph
     if show_title is True:
@@ -347,7 +348,7 @@ def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_
     elif Re == 37000:
         ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.6), facecolor = 'white', framealpha = 0.75, ncol=2, edgecolor = 'black', fancybox = False, shadow = False)
     else:
-        ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.6), facecolor = 'white', framealpha = 0.75, ncol=2, edgecolor = 'black', fancybox = False, shadow = False)
+        ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.6), facecolor = 'white', framealpha = 0.75, ncol=3, edgecolor = 'black', fancybox = False, shadow = False)
     
     ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
     ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
@@ -365,7 +366,7 @@ def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_
         ax2.yaxis.set_major_locator(ticker.MultipleLocator(0.2))
 
         ax.add_patch(patches.Rectangle((x1,y1),(x2-x1),(y2-y1),linewidth=0.5, edgecolor='gray', facecolor = 'none'))
-        ax2_1 = ConnectionPatch(xyA=(x1 + (x2-x1)/2, y2), coordsA=ax.transData, xyB=(x1 + (x2-x1)/2, y1), coordsB=ax2.transData, color = 'gray',linewidth=0.5, arrowstyle ="->")
+        ax2_1 = ConnectionPatch(xyA=(x1 + (x2-x1)/2, y2), coordsA=ax.transData, xyB=(x1 + (x2-x1)/2, y1), coordsB=ax2.transData, color = 'gray',linewidth=0.5, arrowstyle ="->", zorder = 1)
         fig.add_artist(ax2_1)
 
         #2nd zoom in
@@ -382,7 +383,7 @@ def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_
         ax3.yaxis.set_major_locator(ticker.MultipleLocator(0.2))
 
         ax.add_patch(patches.Rectangle((x1,y1),(x2-x1),(y2-y1),linewidth=0.5, edgecolor='gray', facecolor = 'none'))
-        ax3_1 = ConnectionPatch(xyA=(x1 + (x2-x1)/2, y2), coordsA=ax.transData, xyB=(x1 + (x2-x1)/2, y1), coordsB=ax3.transData, color = 'gray',linewidth=0.5, arrowstyle ="->")
+        ax3_1 = ConnectionPatch(xyA=(x1 + (x2-x1)/2, y2), coordsA=ax.transData, xyB=(x1 + (x2-x1)/2, y1), coordsB=ax3.transData, color = 'gray',linewidth=0.5, arrowstyle ="->", zorder = 1)
         fig.add_artist(ax3_1)
 
         #3rd zoom in
@@ -396,14 +397,14 @@ def plot_onto_geometry(x_available, Re, all_x_data, folder_to_save, x_vector, y_
         ax4.yaxis.set_major_locator(ticker.MultipleLocator(0.2))
 
         ax.add_patch(patches.Rectangle((x1,y1),(x2-x1),(y2-y1),linewidth=0.5, edgecolor='gray', facecolor = 'none'))
-        ax4_1 = ConnectionPatch(xyA=(x1 + (x2-x1)/2, y2), coordsA=ax.transData, xyB=(x1 + (x2-x1)/2, y1), coordsB=ax4.transData, color = 'gray',linewidth=0.5, arrowstyle ="->", zorder = 0)
+        ax4_1 = ConnectionPatch(xyA=(x1 + (x2-x1)/2, y2), coordsA=ax.transData, xyB=(x1 + (x2-x1)/2, y1), coordsB=ax4.transData, color = 'gray',linewidth=0.5, arrowstyle ="->", zorder = 1)
         fig.add_artist(ax4_1)
 
 
     plt.tight_layout()
     # plt.show()
-    plt.savefig(folder_to_save + "baseline_data_in_geometry_" + str(data_type) + "_" + str(Re) +".eps", dpi=800, bbox_inches='tight',pad_inches = 0)
-    # plt.close(fig)
+    plt.savefig(folder_to_save + "baseline_data_in_geometry_" + str(data_type) + "_" + str(Re) +".eps", dpi=800, bbox_inches='tight')
+    plt.close(fig)
     ax.clear()
     
     if zoom_in_plots is True:

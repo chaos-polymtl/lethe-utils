@@ -27,7 +27,12 @@ path_to_lethe_data = "./lethe_data/"
 
 #Filename
 # example: file_names_lethe_data = ["0.0125_1M_1000s", "0.025_4M_800s"]
-file_names_lethe_data = ["0.025_120K_800s_5600_q2q2"]
+# file_names_lethe_data = ["0.1_4M_1000s_5600", "0.05_4M_1000s_5600", "0.025_4M_1000s_5600", "0.0125_4M_1000s_5600"]
+
+# file_names_lethe_data = ["0.025_500K_500s_5600"] #, "0.025_4M_600s_5600", "0.025_4M_700s_5600", "0.025_4M_800s_5600", "0.025_4M_900s_5600"]
+
+# file_names_lethe_data = ["0.1_120k_800s_10600" , "0.1_250k_800s_10600" , "0.1_500k_800s_10600"]
+file_names_lethe_data = ["0.1_120k_800s_37000" , "0.1_250k_800s_37000" , "0.1_500k_800s_37000"]
 
 #Create a solver according to case
 folder_to_save_csv = "./output_csv/all_data/"
