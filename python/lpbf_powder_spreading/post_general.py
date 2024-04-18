@@ -9,7 +9,6 @@ Date: January 13th, 2024
 '''Importing Libraries'''
 import sys
 
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -21,13 +20,33 @@ from lethe_pyvista_tools import *
 # Take case path as argument
 prm_file_names = np.array(
     [
-     #"75_01_05/75_01_05.prm",
-     #"75_01_10/75_01_10.prm",
-     #"75_01_20/75_01_20.prm"
-     "75_03_05/75_03_05.prm",
-     "75_03_10/75_03_10.prm",
-     "75_03_20/75_03_20.prm"
-     ]) # ./parameter.prm -->peut-[etre # ./parameter.prm -->peut-[etre
+        # "25_01_05/25_01_05.prm",
+        # "25_01_10/25_01_10.prm",
+        # "25_01_20/25_01_20.prm",
+        # "25_03_05/25_03_05.prm",
+        # "25_03_10/25_03_10.prm",
+        # "25_03_20/25_03_20.prm",
+        # "25_03_100/25_03_100.prm",
+        # "25_03_200/25_03_200.prm",
+        # "50_01_05/50_01_05.prm",
+        # "50_01_10/50_01_10.prm",
+        # "50_01_20/50_01_20.prm",
+        # "50_03_05/50_03_05.prm",
+        # "50_03_10/50_03_10.prm",
+        # "50_03_20/50_03_20.prm",
+        # "50_03_100/50_03_100.prm",
+         "50_03_200/50_03_200.prm",
+        # "75_01_10/75_01_05.prm",
+        # "75_01_10/75_01_10.prm",
+        # "75_01_20/75_01_20.prm",
+        # "75_03_05/75_03_05.prm",
+        # "75_03_10/75_03_10.prm",
+        # "75_03_20/75_03_20.prm",
+        #  "75_03_100/75_03_100.prm"
+        #  "75_03_200/75_03_200.prm"
+    ])   # ./parameter.prm -->peut-[etre # ./parameter.prm -->peut-[etre
+
+feeder_bool = False
 plt.figure(figsize=(10, 6))
 
 # Loop over a
@@ -88,13 +107,13 @@ for i in range(len(prm_file_names)):
     for j in range(1, number_of_layers):
         every_starting_time[j] = every_starting_time[j - 1] + time_per_layer * delta_starting_time
 
-    print(every_starting_time)
+    # print(every_starting_time)
 
     # Time step to measure the relative density off the powder on the feeder
     measuring_time_Feeder_rel_density = every_starting_time
 
     # Time step to measure the relative density off the powder on the build plate
-    measuring_time_PB_rel_density = every_starting_time + 0.9 * blade_time_per_layer
+    measuring_time_PB_rel_density = every_starting_time + 0.89 * blade_time_per_layer
 
     # Create lists of vtus we want to analyse
     vtu_measure_Feeder_slice = 0
@@ -155,42 +174,44 @@ for i in range(len(prm_file_names)):
     feeder_powder_volume_in_slices = np.zeros(len(feeder_layer_limits))
     slice_volume = n_layer_extrusion * domain_z_length * (x_max_Feeder - x_min_Feeder)
 
-    for j in range(len(x_positions)):
-        if x_min_Feeder <= x_positions[j] <= x_max_Feeder and y_positions[j] > feeder_layer_limits[-1]:
-            # Find in which bin the particle is respective to the limits and add it's volume to the right bin
-            feeder_powder_volume_in_slices[np.digitize(y_positions[j], feeder_layer_limits)] += volume_cst * (df["diameter"][j]) ** 3
-
-    feeder_slices_rel_density = feeder_powder_volume_in_slices / slice_volume
-
-    print(f"\n Feeder's slice relative density: \n{feeder_slices_rel_density} \n #######")
-
-    # Feeder relative density subsection
-    height = initial_feeder_height
-    for index, k in enumerate(vtu_measure_Feeder_rel_density[1:], start=1):
-        # Position of every particle in the X direction
-        df = particle.get_df(k)
-        x_positions = df.points[:, 0]
-
-        # Available volume
-        available_volume = -height * domain_z_length * (x_max_Feeder - x_min_Feeder)
-
-        # Loop throw all the particle
+    if feeder_bool:
         for j in range(len(x_positions)):
-            # Check if they are inside the desired range
-            if x_min_Feeder <= x_positions[j] <= x_max_Feeder:
-                volume_on_feeder[index] += volume_cst * (df["diameter"][j]) ** 3
+            if x_min_Feeder <= x_positions[j] <= x_max_Feeder and y_positions[j] > feeder_layer_limits[-1]:
+                # Find in which bin the particle is respective to the limits and add it's volume to the right bin
+                feeder_powder_volume_in_slices[np.digitize(y_positions[j], feeder_layer_limits)] += volume_cst * (
+                    df["diameter"][j]) ** 3
 
-        # Compute the relative density in the feeder
-        feeder_rel_density = np.append(feeder_rel_density,volume_on_feeder[index] / available_volume )
+        feeder_slices_rel_density = feeder_powder_volume_in_slices / slice_volume
 
-        # Adjust the vertical available space for the next layer
-        height = initial_feeder_height + first_layer_extrusion + n_layer_extrusion * (index - 1)
+        print(f"\n Feeder's slice relative density: \n{feeder_slices_rel_density} \n #######")
 
-    print(f"\n Feeder's volume of powder: \n{volume_on_feeder} \n #######")
-    print(f"\n Feeder's relative density: \n{feeder_rel_density} \n#######")
+        # Feeder relative density subsection
+        height = initial_feeder_height
+        for index, k in enumerate(vtu_measure_Feeder_rel_density[1:], start=1):
+            # Position of every particle in the X direction
+            df = particle.get_df(k)
+            x_positions = df.points[:, 0]
+
+            # Available volume
+            available_volume = -height * domain_z_length * (x_max_Feeder - x_min_Feeder)
+
+            # Loop throw all the particle
+            for j in range(len(x_positions)):
+                # Check if they are inside the desired range
+                if x_min_Feeder <= x_positions[j] <= x_max_Feeder:
+                    volume_on_feeder[index] += volume_cst * (df["diameter"][j]) ** 3
+
+            # Compute the relative density in the feeder
+            feeder_rel_density = np.append(feeder_rel_density, volume_on_feeder[index] / available_volume)
+
+            # Adjust the vertical available space for the next layer
+            height = initial_feeder_height + first_layer_extrusion + n_layer_extrusion * (index - 1)
+
+        print(f"\n Feeder's volume of powder: \n{volume_on_feeder} \n #######")
+        print(f"\n Feeder's relative density: \n{feeder_rel_density} \n#######")
+        np.save("./00_binary/" + prm_file_name.split(".")[0] + "_RelDensityFeederLayers", feeder_slices_rel_density)
 
     for index, k in enumerate(vtu_measure_BP_rel_density):
-
 
         # Load the position in df
         df = particle.get_df(k)
@@ -204,9 +225,9 @@ for i in range(len(prm_file_names)):
             if x_min_BP <= x_positions[j] <= x_max_BP:
                 volume_on_BP[index] += volume_cst * (df["diameter"][j]) ** 3
 
-        #print(f"Index: {index}")
-        #print(f"K : {k}")
-        #print(f"Volume : {volume_on_BP[index]}")
+        # print(f"Index: {index}")
+        # print(f"K : {k}")
+        # print(f"Volume : {volume_on_BP[index]}")
 
         if index != 0:
             # Total vertical displacement of the build plate
@@ -216,9 +237,9 @@ for i in range(len(prm_file_names)):
 
             BP_rel_density_cumulative = np.append(BP_rel_density_cumulative,
                                                   (volume_on_BP[index] - volume_on_BP[0]) / available_volume)
-            BP_rel_density_each_layer = np.append(BP_rel_density_each_layer, (volume_on_BP[index] - volume_on_BP[index - 1]) / (
-                    this_layer_height * build_plate_area))
-
+            BP_rel_density_each_layer = np.append(BP_rel_density_each_layer,
+                                                  (volume_on_BP[index] - volume_on_BP[index - 1]) / (
+                                                          this_layer_height * build_plate_area))
 
     print(f" Powder volume on build plate      : \n{volume_on_BP} \n ######## ")
     print(f" Powder volume in the reservoir    : \n{volume_on_feeder} \n ######## ")
@@ -228,10 +249,10 @@ for i in range(len(prm_file_names)):
 
     np.save("./00_binary/" + prm_file_name.split(".")[0] + "_PowderVolumeFeed", volume_on_feeder)
     np.save("./00_binary/" + prm_file_name.split(".")[0] + "_RelDensityFeed", feeder_rel_density)
-    np.save("./00_binary/" + prm_file_name.split(".")[0] + "_RelDensityFeederLayers", feeder_slices_rel_density)
+
     np.save("./00_binary/" + prm_file_name.split(".")[0] + "_LRD", BP_rel_density_each_layer)
     np.save("./00_binary/" + prm_file_name.split(".")[0] + "_CRD", BP_rel_density_cumulative)
-    np.save("./00_binary/" + prm_file_name.split(".")[0] + "_number_of_layers", number_of_layers-1)
+    np.save("./00_binary/" + prm_file_name.split(".")[0] + "_number_of_layers", number_of_layers - 1)
 
     print("Binary files saved!")
 
