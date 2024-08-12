@@ -41,10 +41,11 @@ for core in n_cores:
             copy_lines[copy_lines.index(line)] = line_replacement
 
         # Replace the z axis insertion box value
-        param_z_max_box = f"{tab}set insertion box maximum z"
-        if line.startswith(param_z_max_box):
-            n_space = line[len(param_z_max_box):].count(' ') - 1
-            line_replacement = line.replace(line, f"{param_z_max_box}{n_space*' '}= {str(2*core*width-d)}\n")
+        param_insert_box = f"{tab}set insertion box"
+        if line.startswith(param_insert_box):
+            n_space = line[len(param_insert_box):].count(' ') - 1
+            string_to_insert = ("-0.06, 0.10644, .00112 ; 0.06,  0.16020, "+str(2*core*width-d))
+            line_replacement = line.replace(line, f"{param_insert_box}{n_space*' '}= {string_to_insert}\n")
             copy_lines[copy_lines.index(line)] = line_replacement
 
         # Replace the output path

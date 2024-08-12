@@ -20,7 +20,7 @@ def dy(f):
 u=sin(a*x)*sin(a*x)*cos(a*y)*sin(a*y)
 v=-cos(a*x)*sin(a*x)*sin(a*y)*sin(a*y)
 
-p=x**2.*y**2.
+p=0#x**2.*y**2.
 
 print ("Verifying divergence free")
 print (dx(u)+dy(v))

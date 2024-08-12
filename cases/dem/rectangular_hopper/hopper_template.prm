@@ -42,9 +42,7 @@ end
 #---------------------------------------------------
 
 subsection lagrangian physical properties
-  set gx                       = 0.0
-  set gy                       = -9.81
-  set gz                       = 0.0
+  set g = 0 , -9.81, 0
   set number of particle types = 1
   subsection particle type 0
     set size distribution type            = uniform
@@ -72,15 +70,8 @@ subsection insertion info
   set insertion method                               = volume
   set inserted number of particles at each time step = 485
   set insertion frequency                            = 25000
-  set insertion box minimum x                        = -0.06
-  set insertion box minimum y                        = 0.10644
-  set insertion box minimum z                        = .00112
-  set insertion box maximum x                        = 0.06
-  set insertion box maximum y                        = 0.16020
-  set insertion box maximum z                        = 0.00448
-  set insertion first direction                      = 2
-  set insertion second direction                     = 0
-  set insertion third direction                      = 1
+  set insertion box = -0.06, 0.10644, .00112 : 0.06,  0.16020, 0.00448
+  set insertion direction sequence         = 2,0,1
   set insertion distance threshold                   = 1.5
   set insertion maximum offset                       = 0.1
   set insertion prn seed                             = 20
@@ -92,7 +83,7 @@ end
 
 subsection mesh
   set type                                = gmsh
-  set file name                           = hopper_structured.msh
+  set file name                           = meshes/hopper_structured_2.msh
   set initial refinement                  = 1
   set expand particle-wall contact search = false
   set check diamond cells                 = true
