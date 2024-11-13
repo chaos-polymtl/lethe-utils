@@ -29,7 +29,8 @@ subsection model parameters
   end
   subsection load balancing
     set load balance method = frequent
-    set frequency           = 50000
+    set particle weight     = 1000
+    set frequency           = 10000
   end
   set particle particle contact force method = hertz_mindlin_limit_overlap
   set particle wall contact force method     = nonlinear
@@ -131,7 +132,7 @@ end
 #---------------------------------------------------
 
 subsection post-processing
- set Lagrangian post-processing = false
+ set lagrangian post-processing = false
 end
 
 subsection timer

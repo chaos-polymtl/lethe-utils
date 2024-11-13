@@ -131,7 +131,7 @@ end
 #---------------------------------------------------
 
 subsection post-processing
- set Lagrangian post-processing = false
+ set lagrangian post-processing = false
 end
 
 subsection timer
