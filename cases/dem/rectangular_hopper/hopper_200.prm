@@ -12,7 +12,7 @@ subsection simulation control
   set time end         = 7.5
   set log frequency    = 10000
   set output frequency = 1000000
-  set output path      = ./output_40/
+  set output path      = ./output_200/
   set output name      = hopper
   set output boundaries = false
 end
@@ -47,7 +47,7 @@ subsection lagrangian physical properties
   subsection particle type 0
     set size distribution type            = uniform
     set diameter                          = 0.00224
-    set number of particles               = 543200
+    set number of particles               = 2716000
     set density particles                 = 2500
     set young modulus particles           = 1e6
     set poisson ratio particles           = 0.3
@@ -68,9 +68,9 @@ end
 
 subsection insertion info
   set insertion method                               = volume
-  set inserted number of particles at each time step = 38800
+  set inserted number of particles at each time step = 194000
   set insertion frequency                            = 25000
-  set insertion box points coordinates        = -0.06, 0.10644, .00112 : 0.06,  0.16020, 0.44688
+  set insertion box points coordinates                                    = -0.06, 0.10644, .00112 : 0.06,  0.16020, 2.23888
   set insertion direction sequence         = 2,0,1
   set insertion distance threshold                   = 1.5
   set insertion maximum offset                       = 0.1
@@ -83,7 +83,7 @@ end
 
 subsection mesh
   set type                                = gmsh
-  set file name                           = meshes/hopper_structured_80.msh
+  set file name                           = meshes/hopper_structured_400.msh
   set initial refinement                  = 1
   set expand particle-wall contact search = false
   set check diamond cells                 = true

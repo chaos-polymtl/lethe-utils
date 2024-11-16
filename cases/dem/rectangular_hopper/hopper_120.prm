@@ -29,8 +29,7 @@ subsection model parameters
   end
   subsection load balancing
     set load balance method = frequent
-    set particle weight     = 1000
-    set frequency           = 10000
+    set frequency           = 50000
   end
   set particle particle contact force method = hertz_mindlin_limit_overlap
   set particle wall contact force method     = nonlinear
@@ -71,7 +70,7 @@ subsection insertion info
   set insertion method                               = volume
   set inserted number of particles at each time step = 116400
   set insertion frequency                            = 25000
-  set insertion box points coordinates                                                                = -0.06, 0.10644, .00112 : 0.06,  0.16020, 1.34288
+  set insertion box points coordinates                      = -0.06, 0.10644, .00112 : 0.06,  0.16020, 1.34288
   set insertion direction sequence         = 2,0,1
   set insertion distance threshold                   = 1.5
   set insertion maximum offset                       = 0.1
