@@ -5,7 +5,7 @@ tab = "  "
 width = 0.0056
 d = 0.00112
 
-n_cores = [1, 2, 4, 8, 16, 32, 40, 80, 120]
+n_cores = [40, 80, 120,160,200,240]
 n_particle = 6790
 n_particle_per_step = 485
 
