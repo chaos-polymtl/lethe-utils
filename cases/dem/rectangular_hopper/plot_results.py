@@ -1,8 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
-
-
+from matplotlib.ticker import ScalarFormatter
 
 colors = ['#1b9e77', '#d95f02', '#7570b3', '#e7298a', '#66a61e', '#e6ab02']
 
@@ -32,8 +30,8 @@ plt.rcParams['font.serif']='cm'
 plt.rcParams['savefig.bbox']='tight'
 plt.rcParams['legend.handlelength']=1
 
-files = ["results_2024-11_master_2.dat"]
-labels = ["LB: 10_000 + PW: 10_000","LB: 10_000 + PW: 2_000" ]
+files = ["results_2024-11_master_pw_2k.dat",]
+labels = ["PW: 2_000", ]
 markers = ["o", "^", "s", "<", ">"]
 
 
@@ -45,20 +43,29 @@ for i, f in enumerate(files):
     x, t = np.loadtxt(f, skiprows=1, unpack=True)
     print(t)
     # Plot the primary y-axis
-    ax1.plot(x, t / 60, '--', marker=markers[i], label=labels[i],
+    ax1.plot(np.array(x/40,dtype=int), t / 60, '-', marker=markers[i], label=labels[i],
              color=colors[i])
 
 # Customize the first y-axis
-ax1.set_xlabel("Number of cores")
+ax1.legend()
+ax1.set_xlabel("Number of nodes")
 ax1.set_ylabel("Simulation time [min]")
 ax1.set_ylim([0, 650])
 
-new_tick_location = np.array([40,80,120,160,200])
+new_tick_location = np.array([1, 2, 3, 4, 5])
+new_tick_labels = [f"{.54 * tick}" for tick in new_tick_location]
+print(new_tick_labels)
 
 ax2.set_xlim(ax1.get_xlim())
 ax2.set_xticks(new_tick_location)
-ax2.set_xticklabels(np.array(new_tick_location/40,dtype=int))
-ax2.set_xlabel("Number of nodes")
+ax2.set_xticklabels(new_tick_labels)
 
-#plt.savefig("results.png", dpi=300)
+# Adjust the padding between the x-axis label and the axis
+ax2.set_xlabel(r"Number of particles $\cdot 10^6$", labelpad=10)  # Use labelpad to adjust padding
+
+
+# Optionally, adjust title padding for the second x-axis
+#ax2.set_title("Number of particles $\cdot 10^6$", pad=10)
+
+#plt.savefig("results.pdf", dpi=300)
 plt.show()
