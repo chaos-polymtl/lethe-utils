@@ -31,7 +31,7 @@ subsection model parameters
   end
   subsection load balancing
     set load balance method = frequent
-    set frequency           = 50000
+    set frequency           = 20000
   end
   set particle particle contact force method = hertz_mindlin_limit_overlap
   set particle wall contact force method     = nonlinear
@@ -148,4 +148,12 @@ subsection DEM boundary conditions
     set periodic id 1      = 5
     set periodic direction = 2
   end
+end
+
+#---------------------------------------------------
+# Timer
+#---------------------------------------------------
+
+subsection timer
+  set type = end
 end

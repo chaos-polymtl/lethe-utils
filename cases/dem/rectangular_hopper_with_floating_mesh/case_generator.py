@@ -10,7 +10,7 @@ import os
 # for the DEM weak scaling test cases.
 
 # Number of nodes used for each run
-n_proc = [1,2,3,4,5,10,15,20,25,30,35,40,45,50]
+n_proc = [1,2,3,4,5,10,15,20]
 
 # Number of particles per nodes
 n_part = 1_920_000
