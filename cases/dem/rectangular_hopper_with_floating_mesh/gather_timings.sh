@@ -1,0 +1,1 @@
+for i in $(ls *.out); echo $i ; grep "Total wall" $i | tail -1 | cut -c 50- | cut -c -10; done
