@@ -12,11 +12,10 @@ from cycler import cycler
 colors=['#1b9e77','#d95f02','#7570b3','#e7298a','#66a61e','#e6ab02']
 
 plt.rcParams['axes.prop_cycle'] = cycler(color = colors)
-plt.rcParams['figure.facecolor'] = 'white'
 plt.rcParams['figure.figsize'] = (10,8)
 plt.rcParams['lines.linewidth'] = 4
 plt.rcParams['lines.markersize'] = '11'
-plt.rcParams['markers.fillstyle'] = "none"
+plt.rcParams['markers.fillstyle'] = "full"
 plt.rcParams['lines.markeredgewidth'] = 2
 plt.rcParams['legend.columnspacing'] = 2
 plt.rcParams['legend.handlelength'] = 3
@@ -27,7 +26,7 @@ plt.rcParams['xtick.major.width'] = 2
 plt.rcParams['xtick.major.size'] = 5
 plt.rcParams['ytick.major.size'] = 5
 plt.rcParams['ytick.major.width'] = 2
-plt.rcParams['font.size'] = '25'
+plt.rcParams['font.size'] = '22'
 plt.rcParams['font.family']='DejaVu Serif'
 plt.rcParams['font.serif']='cm'
 plt.rcParams['savefig.bbox']='tight'
@@ -70,18 +69,18 @@ for i, f in enumerate(args.files):
     x, t = np.loadtxt(f, skiprows=1, unpack=True)
     print(t)
     # Plot the primary y-axis
-    ax1.plot(np.array(x,dtype=int), t / 60, '-', marker=markers[i], label=args.labels[i],
+    ax1.plot(np.array(x,dtype=int), t / 60, '--', marker=markers[i],mfc=colors[i],mec="black", label=args.labels[i],
              color=colors[i])
 
 # Customize the first y-axis
 ax1.legend()
 ax1.set_xlabel("Number of nodes")
 ax1.set_ylabel("Simulation time [min]")
-ax1.set_ylim([0, 1200])
+ax1.set_ylim([0, 1600])
 ax1.xaxis.set_major_locator(MaxNLocator(integer=True))
 
 
-new_tick_location = np.array([1, 2, 3, 4, 5, 10, 15,20])
+new_tick_location = np.array([1, 2, 3,  5, 10, 15,20,25,30,35,40]) 
 new_tick_labels = [f"{2*tick}" for tick in new_tick_location]
 print(new_tick_labels)
 
@@ -98,4 +97,5 @@ ax2.set_xlabel(r"Number of particles $\cdot 10^6$", labelpad=10)  # Use labelpad
 
 plt.tight_layout()
 plt.savefig("results.png", dpi=300)
+plt.savefig("results.pdf")
 plt.show()
